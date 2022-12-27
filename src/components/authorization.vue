@@ -37,10 +37,11 @@ export default {
         width: 60%;
         min-height: 400px;
         background-color: rgb(248, 248, 248);
+        border-radius: 20px;
     }
 
     input {
-        background-color: rgb(226, 226, 226);
+        background-color: rgb(238, 238, 238);
         width: 85%;
         padding: 5px;
     }
@@ -50,6 +51,7 @@ export default {
         padding: 5px;
         align-self: center;
         margin-top: 10px;
+        background-color: rgb(201, 201, 201);
     }
 
     .href {
