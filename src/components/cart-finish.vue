@@ -17,8 +17,9 @@
     
   <style>
     .cart-finish {
-        width: 30%;
-        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .title {
@@ -27,8 +28,10 @@
     }
 
     .btn-finish {
-        background-color: rgba(44, 116, 223, 0.589);
+        height: 4ch;
+        background-color: #00A2E8;
         border: none;
-        border-radius: 5px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        margin-bottom: 3ch;
     }
   </style>
