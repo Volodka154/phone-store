@@ -1,12 +1,12 @@
 <template>
     <div class="registration">
-        <p>Регистрация нового пользователя</p>
+        <h3>Регистрация нового пользователя</h3>
         <p>
             <input class="name" id="name" v-model="name" placeholder="Имя"/>
             <input class="surname" id="surname" v-model="surname" placeholder="Фамилия"/>
         </p>
         <p>
-            <input class="login" id="login" v-model="login" placeholder="Логин"/>
+            <input class="login" id="login" v-model="login" placeholder="Email"/>
         </p>
         <p>
             <input class="password" id="password" v-model="password" placeholder="Пароль"/>
@@ -39,6 +39,7 @@ export default {
     .registration {
         display: flex;
         flex-direction: column;
+        align-items:stretch;
         height: 80%;
         width: 60%;
         min-height: 400px;
