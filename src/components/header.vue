@@ -8,7 +8,7 @@
   
   <script>
   export default {
-    name: 'header',
+    name: 'Header',
     components: {
     }
   }
@@ -16,30 +16,33 @@
   
   <style scoped>
     .header {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
+        position: fixed;
+        height: 7%;
+        width: 100%;
+        top: 0;
+        border-bottom: 1px solid  #7B5427;
     }
 
     .catalog {
-        align-self: flex-start;
+        position: absolute;
         background: rgb(223, 174, 174);
-        color: red;
-        padding: 5px;
-        align-self: flex-start;
-        margin-right: auto
+        left: 0;
+        width: 13%;
     }
 
     .person{
+        position: absolute;
         background: rgb(191, 191, 236);
-        padding: 5px;
-        margin-right: 5px;
+        right: 13%;
+        width: 13%;
+        margin-right: 1%;
     }
 
     .cart {
+        position: absolute;
         background: rgb(193, 226, 193);
-        padding: 5px;
-        margin-right: 2px;
+        right: 0;
+        width: 13%;
     }
   </style>
   
