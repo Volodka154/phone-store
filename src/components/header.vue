@@ -1,8 +1,10 @@
 <template>
     <div class="header">
         <p class="catalog">Каталог</p>
-        <p class="person">Войти</p>
-        <p class="cart">Корзина</p>
+        <div class="right">
+            <p class="person">Войти</p>
+            <p class="cart">Корзина</p>
+        </div>
     </div>
   </template>
   
@@ -16,6 +18,10 @@
   
   <style scoped>
     .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         position: fixed;
         height: 7%;
         width: 100%;
@@ -23,26 +29,27 @@
         border-bottom: 1px solid  #7B5427;
     }
 
+    .right {
+        justify-items: center;
+        display: flex;
+        flex-direction: row;
+    
+    }
+
     .catalog {
-        position: absolute;
-        background: rgb(223, 174, 174);
-        left: 0;
+        color: red;
+        font-size: 2em;
         width: 13%;
     }
 
     .person{
-        position: absolute;
-        background: rgb(191, 191, 236);
-        right: 13%;
-        width: 13%;
-        margin-right: 1%;
+        font-size: 2em;
+        margin-right: 30px;
     }
 
     .cart {
-        position: absolute;
-        background: rgb(193, 226, 193);
-        right: 0;
-        width: 13%;
+        font-size: 2em;
+        margin-right: 30px;
     }
   </style>
   
