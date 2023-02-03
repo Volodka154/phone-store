@@ -1,8 +1,8 @@
 <template>
     <div class="authorization">
-        <p>Вход в личный аккаунт</p>
+        <h3>Вход в личный аккаунт</h3>
         <p>
-            <input id="login" v-model="login" placeholder="Логин"/>
+            <input id="login" v-model="login" placeholder="Email"/>
         </p>
         <p>
             <input id="password" v-model="password" placeholder="Пароль"/>
@@ -31,13 +31,15 @@ export default {
 
 <style>
     .authorization {
+
         display: flex;
         flex-direction: column;
+        align-items:stretch;
         height: 80%;
         width: 60%;
         min-height: 400px;
         background-color: rgb(248, 248, 248);
-        border-radius: 20px;
+        border-radius: 30px;
     }
 
     input {
