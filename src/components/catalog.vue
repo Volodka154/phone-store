@@ -1,20 +1,23 @@
 <template>
     <div class="catalog">
-        <p>Irem 1</p>
-        <p>Price: 100</p>
-        <button>Add to cart</button>
+        <catalogItem/>
     </div>
 </template>
 
 <script>
-export default {
-    name: 'catalog',
-    props: {},
-    data() {
-        return {}
-    },
-    computed: {}
-}
+
+    import catalogItem from './catalog-item.vue'
+    export default {
+        name: 'catalog',
+        components: {
+            catalogItem
+        },
+        props: {},
+        data() {
+            return {}
+        },
+        conputed: {}
+    }
 </script>
 
 <style scoped>
