@@ -1,6 +1,6 @@
 <template>
     <div class="productCard">
-        <block class="flex-container">
+        <block class="flex-container" >
             <img src="./iphone14.png" class="iphone" />
             <div class="nameDescription">
                 <h3 class="titleColor">{{ title }}</h3>
@@ -41,7 +41,7 @@ export default {
             title: "Смартфон Apple iPhone 14",
             description:
                 "В этой модели установлены три основные камеры (48 Мп, 12 Мп и 12 Мп) и фронтальный модуль(7 мп), можно записывать видео в качестве 4К с частотой 30 кадров в секунду. Основной объектив снабжен сапфировым защитным стеклом.",
-            quantity: "9",
+            quantity: "0",
             price: "115999",
             sale: "110999",
         };
@@ -61,9 +61,6 @@ export default {
     flex-direction: row;
     flex-wrap: nowrap;
     flex-basis: content;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    border-style: none none solid none;
 }
 .nameDescription {
     width: 30%;
@@ -92,6 +89,9 @@ export default {
 .quantityColorGreen {
     color: #33b75c;
     margin-top: 4em;
+}
+#borderNone{
+    border-style:none;
 }
 .iphone {
     width: 12%;
