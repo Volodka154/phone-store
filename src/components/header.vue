@@ -3,7 +3,9 @@
         <p class="catalog">Каталог</p>
         <div class="right">
             <p class="person">Войти</p>
+            <img class="ikon" src="../../content/person.png"/>
             <p class="cart">Корзина</p>
+            <img class="ikon" src="../../content/cart.png"/>
         </div>
     </div>
   </template>
@@ -50,6 +52,12 @@
     .cart {
         font-size: 2em;
         margin-right: 30px;
+    }
+
+    .ikon {
+        width: 3em;
+        height: 3em;
+        align-self: center;
     }
   </style>
   
