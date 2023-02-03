@@ -6,17 +6,17 @@
 
 <script>
     import catalogItem from './catalog-item.vue'
-export default {
-    name: 'catalog',
-    components: {
+    export default {
+        name: 'catalog',
+        components: {
             catalogItem
         },
-    props: {},
-    data() {
-        return {}
-    },
-    conputed: {}
-}
+        props: {},
+        data() {
+            return {}
+        },
+        conputed: {}
+    }
 </script>
 
 <style scoped>
