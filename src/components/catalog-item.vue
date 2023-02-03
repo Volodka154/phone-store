@@ -12,7 +12,7 @@
         <div class="box-price">
             <p class="price">20 533 р.</p>
             <button class="btn-cart">В корзину</button>
-        </div>
+
     </div>
 </template>
 
