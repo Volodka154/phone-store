@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
     import catalogItem from './catalog-item.vue'
     export default {
         name: 'catalog',
