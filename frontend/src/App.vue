@@ -1,28 +1,13 @@
 <template>
     <div id="app">
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <div class="flex-container">
-            <categoryCard class="blockClass1" />
-            <categoryCard class="blockClass1" />
-            <categoryCard class="blockClass1" />
-        </div>
+    <header></header>
     </div>
+    <router-view></router-view>
 </template>
 
 <script>
-import productCard from "./components/product-card.vue";
-import categoryCard from "./components/category-card.vue";
+import header from "@/components/header.vue";
 export default {
-    name: "App",
-    components: {
-        productCard,
-        categoryCard
-    },
 };
 </script>
 
