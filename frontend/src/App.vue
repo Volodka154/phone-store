@@ -1,13 +1,16 @@
 <template>
     <div id="app">
-    <header></header>
+    <Head/>
+    <catalog/>
     </div>
     <router-view></router-view>
 </template>
 
 <script>
-import header from "@/components/header.vue";
+import Head from "@/components/Head.vue";
+import Catalog from "@/components/catalog.vue";
 export default {
+    components: {Head, Catalog}
 };
 </script>
 

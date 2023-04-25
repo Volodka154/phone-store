@@ -1,25 +1,31 @@
 <template>
-    <div class="header">
+    <div class="head">
         <p class="catalog">Каталог</p>
         <div class="right">
-            <p class="person">Войти</p>
-            <img class="ikon" src="../../content/person.png"/>
-            <p class="cart">Корзина</p>
-            <img class="ikon" src="../../content/cart.png"/>
+            <router-link to="/authorization">
+                <p class="person">Войти</p>
+                <img class="ikon" src="../../content/person.png"/>
+            </router-link>
+            <router-link to="/cart">
+              <p class="cart">Корзина</p>
+              <img class="ikon" src="../../content/cart.png"/>
+            </router-link>
         </div>
+        <router-view></router-view>
     </div>
   </template>
   
   <script>
+
   export default {
-    name: 'Header',
+    name: 'Head',
     components: {
     }
   }
   </script>
   
   <style scoped>
-    .header {
+    .head {
         display: flex;
         flex-direction: row;
         justify-content: space-between;

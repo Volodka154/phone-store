@@ -12,7 +12,10 @@
             <input class="password" id="password" v-model="password" placeholder="Пароль"/>
         </p>
         <button>Зарегистрироваться</button>
-        <p class="href">Уже есть аккаунт? Войти</p>
+        <router-link to="/authorization">
+            <p class="href">Уже есть аккаунт? Войти</p>
+        </router-link>
+        <router-view></router-view>
     </div>
 </template>
 
