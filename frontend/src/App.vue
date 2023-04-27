@@ -1,27 +1,20 @@
 <template>
     <div id="app">
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <productCard />
-        <div class="flex-container">
-            <categoryCard class="blockClass1" />
-            <categoryCard class="blockClass1" />
-            <categoryCard class="blockClass1" />
-        </div>
+        <my-Header/>
+        <registration/>
+        <router-link to="/productPage">Перейти к Foo</router-link>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-import productCard from "./components/product-card.vue";
-import categoryCard from "./components/category-card.vue";
+import registration from "./components/registration.vue";
+import myHeader from "./components/my-header.vue";
 export default {
     name: "App",
     components: {
-        productCard,
-        categoryCard
+        registration,
+        myHeader,
     },
 };
 </script>

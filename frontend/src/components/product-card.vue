@@ -1,7 +1,7 @@
 <template>
     <div class="productCard">
         <block class="flex-container" >
-            <img src="./iphone14.png" class="iphone" />
+            <img src="" class="iphone" />
             <div class="nameDescription">
                 <h3 class="titleColor">{{ title }}</h3>
                 <h5 class="descriptionColor">{{ description }}</h5>

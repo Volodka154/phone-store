@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <div class="my-header">
         <p class="catalog">Каталог</p>
         <div class="right">
             <p class="person">Войти</p>
@@ -12,14 +12,14 @@
   
   <script>
   export default {
-    name: 'Header',
+    name: 'my-header',
     components: {
     }
   }
   </script>
   
   <style scoped>
-    .header {
+    .my-header {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -29,6 +29,7 @@
         width: 100%;
         top: 0;
         border-bottom: 1px solid  #7B5427;
+        margin: auto;
     }
 
     .right {
