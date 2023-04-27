@@ -1,7 +1,7 @@
 <template>
     <div class="productCard">
         <block class="flex-container" >
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwsXKNhGSBzmd7o4yO4_o4sdcs0st7COkADAUfLPIG&s" class="iphone" />
+            <img src="" class="iphone" />
             <div class="nameDescription">
                 <h3 class="titleColor">{{ title }}</h3>
                 <h5 class="descriptionColor">{{ description }}</h5>

@@ -1,16 +1,22 @@
 <template>
     <div id="app">
-    <Head/>
-    <catalog/>
+        <my-Header/>
+        <registration/>
+        <router-link to="/productPage">Перейти к Foo</router-link>
+        <router-view></router-view>
     </div>
     <router-view></router-view>
 </template>
 
 <script>
-import Head from "@/components/Head.vue";
-import Catalog from "@/components/catalog.vue";
+import registration from "./components/registration.vue";
+import myHeader from "./components/my-header.vue";
 export default {
-    components: {Head, Catalog}
+    name: "App",
+    components: {
+        registration,
+        myHeader,
+    },
 };
 </script>
 
