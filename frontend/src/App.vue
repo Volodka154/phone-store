@@ -5,6 +5,7 @@
         <router-link to="/productPage">Перейти к Foo</router-link>
         <router-view></router-view>
     </div>
+    <router-view></router-view>
 </template>
 
 <script>

@@ -2,7 +2,9 @@
     <div class="catalogItem">
         <img class="image" src="https://klike.net/uploads/posts/2020-07/1594278030_1.jpg"/>
         <div class="box-description">
-            <p class="title">Название телефона</p>
+            <router-link to="/product">
+                <p class="title">Название телефона</p>
+            </router-link>
             <p class="description">Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. 
                 Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. 
                 Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. Большое описание. 
@@ -12,11 +14,14 @@
         <div class="box-price">
             <p class="price">20 533 р.</p>
             <button class="btn-cart">В корзину</button>
-
+        </div>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
+
+
     export default {
         name: 'catalog-item',
         props: {},

@@ -8,7 +8,10 @@
             <input id="password" v-model="password" placeholder="Пароль"/>
         </p>
         <button>Войти</button>
-        <p class="href">Нет аккаунта? Создать</p>
+        <router-link to="/registration">
+            <p class="href">Нет аккаунта? Создать</p>
+        </router-link>
+        <router-view></router-view>
     </div>
 </template>
 
