@@ -14,6 +14,8 @@
 
 <script>
 import productCard from './product-card.vue'
+import axios from "axios";
+
 export default {
     name: "product-page",
     components: {
@@ -34,6 +36,15 @@ export default {
         };
     },
     computed: {},
+    mounted(){
+        console.log(1)
+        axios
+        .get('http://localhost:8080​/api​/catalog')
+        .then(response => (this.title = response.productDtos[1].id))
+        .then(response => console.log(response))
+        .catch(err => console.log(err));
+    },
+
     methods: {
         specificationsOnDisplay() {
                     this.specificationsClick = !this.specificationsClick

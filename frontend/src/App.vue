@@ -1,21 +1,23 @@
 <template>
     <div id="app">
         <my-Header/>
-        <registration/>
+        <!--<registration/>-->
         <router-link to="/productPage">Перейти к Foo</router-link>
         <router-view></router-view>
+        <!--<productCard/>-->
     </div>
-    <router-view></router-view>
 </template>
 
 <script>
-import registration from "./components/registration.vue";
+//import productCard from "./components/product-card.vue"
+//import registration from "./components/registration.vue";
 import myHeader from "./components/my-header.vue";
 export default {
     name: "App",
     components: {
-        registration,
+        //registration,
         myHeader,
+        //productCard
     },
 };
 </script>

@@ -2,16 +2,18 @@
     <div class="authorization">
         <h3>Вход в личный аккаунт</h3>
         <p>
-            <input id="login" v-model="login" placeholder="Email"/>
+            <input class="input-class"
+                    v-model="login" 
+                    placeholder="Email"/>
         </p>
         <p>
-            <input id="password" v-model="password" placeholder="Пароль"/>
+            <input class="input-class"
+                    v-model="password" 
+                    placeholder="Пароль"/>
         </p>
-        <button>Войти</button>
-        <router-link to="/registration">
-            <p class="href">Нет аккаунта? Создать</p>
-        </router-link>
-        <router-view></router-view>
+        <button class="btn btn-auto">Войти</button>
+        <p class="href"
+            @click="clickOnCreateAccount">Нет аккаунта? Создать</p>
     </div>
 </template>
 
@@ -19,8 +21,6 @@
 
 export default {
     name: 'authorization',
-    components: {
-    },
     props: {},
     data() {
         return {
@@ -28,41 +28,44 @@ export default {
             password: null
         }
     },
-    conputed: {}
+    methods: {
+        clickOnCreateAccount() {
+            this.$router.push({name: 'registration'})
+        },
+    }
 }
 </script>
 
 <style>
     .authorization {
-
+        z-index: 1000;
+        position: fixed;
         display: flex;
         flex-direction: column;
         align-items:stretch;
-        height: 80%;
-        width: 60%;
-        min-height: 400px;
+        width: 500px;
+        left: calc(50% - 250px);
         background-color: rgb(248, 248, 248);
         border-radius: 30px;
     }
-
+    
     input {
         background-color: rgb(238, 238, 238);
         width: 85%;
         padding: 5px;
     }
 
-    button {
-        width: 85%;
-        padding: 5px;
-        align-self: center;
-        margin-top: 10px;
-        background-color: rgb(201, 201, 201);
-    }
-
     .href {
         align-self: flex-end;
         margin-right: 15px;
-        color: blue;
+        color: rgb(0, 0, 255);
+        cursor: pointer;
+    }
+    .href:hover {
+        color: rgb(0, 0, 220);
+    }
+    .href:active {
+        color: rgb(0, 0, 180);
     }
 
 </style>

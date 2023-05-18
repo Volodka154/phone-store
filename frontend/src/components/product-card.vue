@@ -1,6 +1,6 @@
 <template>
     <div class="productCard">
-        <block class="flex-container" >
+        <div class="flex-container" >
             <img src="" class="iphone" />
             <div class="nameDescription">
                 <h3 class="titleColor">{{ title }}</h3>
@@ -21,11 +21,12 @@
                 <cart-button-gray v-if="quantity == 0" />
                 <cart-button v-else />
             </div>
-        </block>
+        </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
 import cartButtonGray from "./cart-button-gray";
 import cartButton from "./cart-button.vue";
 export default {
@@ -47,6 +48,13 @@ export default {
         };
     },
     computed: {},
+    mounted(){
+        console.log(1)
+        axios
+        .get('http://localhost:8080​/api​/catalog')
+        .then(response => (this.title = response.productDtos[1].id)).then(response => console.log(response))
+        .catch(err => console.log(err));
+    }
 };
 </script>
 

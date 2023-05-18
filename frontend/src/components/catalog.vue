@@ -18,8 +18,6 @@
         },
         conputed: {}
     }
-
-
 </script>
 
 <style scoped>
