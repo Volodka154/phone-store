@@ -1,6 +1,7 @@
-<template >
+<!-- Компонент отвечающий за модальное окно регистрации -->
+<template>
     <div class="authorization">
-        <h3>Регистрация</h3>
+        <h3>Регистрация нового пользователя</h3>
         <p>
             <input class="input-class name" 
                    v-model="name" 

@@ -1,3 +1,6 @@
+<!-- Компонент отвечающий за серую часть экрана,
+на котором появляется модальное авторизации, регистрации и т.д.
+Отвечает за логику закрывания модальных окон. -->
 <template>
     <div class="exit-back-color1" 
          @click="closeAuthorizationModal"
@@ -61,6 +64,7 @@ export default {
         align-items:stretch;
         width: 500px;
         left: calc(50% - 250px);
+        top: 100px;
         background-color: rgb(248, 248, 248);
         border-radius: 30px;
     }

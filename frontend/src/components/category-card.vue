@@ -30,20 +30,26 @@ export default {
         axios.get('http://localhost:8080/api/catalog/categories')
         .then(res =>{console.log('Все категории:\n', res.data)})
         .catch(err => {console.log('Error\n', err)})
-        // достаю токен для своего пользователя
-        axios.post('http://localhost:8080/api/auth/login', {
-            userEmail: "vova505@mail.ru",
-            userPassword: "123"
+        
+       // достаю токен для своего пользователя
+        /*axios.post('http://localhost:8080/api/auth/login', {
+            userEmail: "v@m.ru",
+            userPassword: "1"
         })
         .then(response => { console.log(response.data.accessToken)
             this.token = response.data.accessToken })
+        */
         // пытаюсь добавить первую категорию
-        axios.post('http://localhost:8080/api/admin/category', {
+        /*axios.post('http://localhost:8080/api/admin/category', {
             id: 1,
             title: "Ноутбуки"        
         })
         .then(res => console.log(res))
+        .catch(err => {console.log('Error\n', err)})*/
+        axios.get('http://localhost:8080/api/catalog')
+        .then(res =>{console.log('Все товары:\n', res.data)})
         .catch(err => {console.log('Error\n', err)})
+
     },
 };
 </script>
@@ -52,9 +58,11 @@ export default {
 .category-card{
     position:absolute;
     padding: 20px;
-    top: 71px;
+    top: 61px;
     left: 10px;
     border-radius: 5px;
-    border: 1px solid;
+    border: 1px solid  #b6b6b6;
+    background-color: #ffffff;
+    color: #000000;
 }
 </style>

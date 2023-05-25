@@ -1,3 +1,4 @@
+<!-- Компонент отвечающий за header на всех страницах -->
 <template>
     <div class="my-header">
         <span class="catalog btn-header"
@@ -9,7 +10,6 @@
             <categoryCard v-if="catalogButton"/>
         </transition>
         <div class="right">
-            
             <span class="btn-header"
                   @click="clickOnAutorization"
                   >Войти
@@ -47,7 +47,7 @@ export default {
                 }
             })
         }
-    }
+    },
   }
   </script>
   
@@ -72,26 +72,25 @@ export default {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
         position: fixed;
-        height: 60px;
+        height: 50px;
         width: 100%;
         top: 0;
         left: 0;
-        border-bottom: 1px solid  #7B5427;
+        border-bottom: 1px solid  #b6b6b6;
+        background-color: #ffffff;
+        color: #000000;
     }
 
     .right {
         justify-items: center;
         display: flex;
         flex-direction: row;
-    
     }
 
     .catalog {
-        color: rgb(255, 0, 0);
         font-size: 40px !important;
-        
+        color: rgb(255, 0, 0);        
     }
     .catalog:hover{
         color: rgb(220, 0, 0);
@@ -110,16 +109,15 @@ export default {
     }
 
     .ikon {
-        width: 3em;
-        height: 3em;
+        width: 24px;
+        height: 24px;
         align-self: center;
     }
 
     .btn-header{
-        font-size: 30px;
+        font-size: 20px;
         padding: 10px 10px; 
-        text-align: center;
-        vertical-align: bottom;
+        align-self: center;
         cursor: pointer; 
     }
 

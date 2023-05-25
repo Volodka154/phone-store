@@ -1,5 +1,6 @@
 <template>
-    <div class="cart-button">
+
+<div class="cart-button">
         <button>В корзину</button>
     </div>
 </template>

@@ -1,42 +1,15 @@
 # phoneShop
-## Перед запуском проекта:
 
-+ git clone https://github.com/Vadsxd/phoneShop.git
-+ cd phoneShop
-  
+## Стек
+SpringBoot 2.7.5, PostgreSQL 15, Docker 20.10, Java 18, Gradle 7.5.1
+
 ## Запуск:
-
-Установить переменные окружения через терминал или IDEA:
-
-*PostgreSQL:*
-+ export DB_URL=<>
-+ export DB_USERNAME=<>
-+ export DB_PASSWORD=<>
-
-*Пару ключей можно сгенерировать в com.shop.phoneshop.security.jwt.GenerateSecretKeys:*
-+ export JWT_ACCESS_SECRET=<>
-+ export JWT_REFRESH_SECRET=<>
-
-*Установить почту и пароль хоста для отправки писем о транзакциях:*
-+ export MAIL_USERNAME=<>
-+ export MAIL_PASSWORD=<>
-
-*Сборка с помощью gradle:*
-+ gradle clean bootRun
-
-## Docker
-Для Docker Compose можно использовать конфигурацию с помощью `.env` файла.
-
-См. пример `.env`
-
-Запустить контейнер:
-+ docker-compose up -d
-
-## Подробная инструкция:
-+ открываем терминал
 + git clone https://github.com/Vadsxd/phoneShop.git
++ заполняем файл ```.env``` (смотрите на мой пример, у вас он может быть другой)
 + cd phoneShop
-+ запускаем Докер
-+ включаем БД
-+ заполняем файл .env (смотрите на мой пример, у вас он может быть другой)
-+ docker-compose up -d
++ прописываем в консоль ```docker-compose up -d```
+
+*Пару ключей (JWT_ACCESS_SECRET и JWT_REFRESH_SECRET) можно сгенерировать в com.shop.phoneshop.security.jwt.GenerateSecretKeys:*
+
+## Swagger доступен по ссылке:
++ http://localhost:8080/swagger-ui/index.html#/

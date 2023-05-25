@@ -1,23 +1,17 @@
 <template>
     <div id="app">
         <my-Header/>
-        <!--<registration/>-->
-        <router-link to="/productPage">Перейти к Foo</router-link>
         <router-view></router-view>
-        <!--<productCard/>-->
+
     </div>
 </template>
 
 <script>
-//import productCard from "./components/product-card.vue"
-//import registration from "./components/registration.vue";
 import myHeader from "./components/my-header.vue";
 export default {
     name: "App",
     components: {
-        //registration,
         myHeader,
-        //productCard
     },
 };
 </script>
@@ -30,6 +24,9 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+}
+body{
+    margin: 0;
 }
 .flex-container {
     width: 99%;
