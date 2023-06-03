@@ -1,6 +1,5 @@
 <template>
     <div class="product-page"  id="borderNone">
-        <RouterLink :to="{name: 'catalog'}">go back</RouterLink>
         <div v-for="(item, index) in productsList"
         :key="index">
             <catalog-item :infoMass="item"></catalog-item>
@@ -11,17 +10,18 @@
 <script>
 import catalogItem from './catalogItem.vue'
 import axios from "axios";
-
+import { mapActions, mapGetters } from 'vuex';
 export default {
     name: "product-page",
     components: {
         'catalog-item': catalogItem
     },
-    props: {},
+    //props: ['titleIndexInCategory'],
     data() {
         return {
+            key: this.indexInCategory(),
             productsList:[
-                {
+                /*{
                     id: 1,
                     title: 'Apple IPhone 12', 
                     description: 'Дисплей представляет собой прямоугольник с закруглёнными углами. Диагональ этого прямоугольника без учёта закруглений составляет 5,42 дюйма (для iPhone 12 mini), 5,85 дюйма (для iPhone 11 Pro, iPhone XS, iPhone X), 6,06 дюйма (для iPhone 12 Pro, iPhone 12, iPhone 11, iPhone XR), 6,46 дюйма (для iPhone 11 Pro Max, iPhone XS Max) или 6,68 дюйма (для iPhone 12 Pro Max). Фактическая область просмотра меньше.',
@@ -47,18 +47,41 @@ export default {
                     price: 89000,
                     sale: 75000,
                     quantity: 22,
-                },
+                },*/
             ],
         };
     },
-    mounted(){
-        console.log(1)
-        axios
-        .get('http://localhost:8080​/api​/catalog')
-        .then(response => (this.title = response.productDtos[1].id))
-        .then(response => console.log(response))
-        .catch(err => console.log(err));
+    methods:{
+        ...mapActions([
+        'addPatInNavBarMass',
+        'removePatInNavBarMass',
+        ]),
+        ...mapGetters([
+            'indexInCategory'
+        ])
     },
+    watch: {
+        '$route.params.name': {
+            immediate: true,    // обработчик вызывается и при обновлении
+            handler() {
+                this.productsList = []
+                this.removePatInNavBarMass(1)
+                this.addPatInNavBarMass({
+                    title: this.$router.currentRoute.value.params.name,
+                    path: this.$router.currentRoute.value.fullPath
+                })
+                const categoryID = this.indexInCategory() + 1
+                axios.get('http://localhost:8080/api/catalog/category/' + categoryID)
+                .then(res =>{
+                    //console.log('Все товары:\n', res.data.productDtos)
+                    this.productsList = res.data.productDtos
+                })
+                .catch(err => {console.log('Error\n', err)})
+
+            }
+  
+        }
+    }
 };
 </script>
 

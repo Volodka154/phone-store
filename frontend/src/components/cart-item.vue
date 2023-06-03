@@ -1,5 +1,5 @@
 <template>
-    <div class="cart-item">
+    <div class="cart-item" v-for="(product,key) in products" :key="key">
         <input class="checkbox" type="checkbox" id="checkbox" v-model="checked"/>
         <img class="image" src="https://klike.net/uploads/posts/2020-07/1594278030_1.jpg"/>
         <p class="title">Смартфон</p>
@@ -16,13 +16,22 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     name: 'cart',
     props: {},
     data() {
-        return {}
+        return {
+            products:[]
+        };
     },
-    conputed: {}
+    conputed: {},
+    mounted(){
+
+        axios.get("http://localhost:8080/api/cart")
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
 }
 </script>
 

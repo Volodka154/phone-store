@@ -1,15 +1,15 @@
 <template>
-    <div class="productCard">
+    <div class="productCard" v-for="(product,key) in products" :key="key">
         <div class="flex-container" >
-            <img src="" class="iphone" />
+            <img :src="product.pictureUrl" class="iphone" />
             <div class="nameDescription">
-                <h3 class="titleColor">{{ title }}</h3>
-                <h5 class="descriptionColor">{{ description }}</h5>
+                <h3 class="titleColor">{{ product.title }}</h3>
+                <h5 class="descriptionColor">{{ product.description }}</h5>
             </div>
 
-            <h4 v-if="quantity >= 10" class="quantityColorGreen">В наличии</h4>
+            <h4 v-if="product.status == 'AVAILABLE'" class="quantityColorGreen">В наличии</h4>
             <h4
-                v-else-if="quantity <= 9 && quantity > 0"
+                v-else-if="product.status  == 'LOW'"
                 class="quantityColorYellow"
             >
                 Мало
@@ -17,8 +17,8 @@
             <h4 v-else class="quantityColorRed">Нет в наличии</h4>
 
             <div>
-                <h3>{{ price }}</h3>
-                <cart-button-gray v-if="quantity == 0" />
+                <h3>{{ product.price }}</h3>
+                <cart-button-gray v-if="product.status == 'EMPTY'" />
                 <cart-button v-else />
             </div>
         </div>
@@ -38,22 +38,23 @@ export default {
     props: {},
     data() {
         return {
-            image: "",
-            title: "Смартфон Apple iPhone 14",
-            description:
-                "В этой модели установлены три основные камеры (48 Мп, 12 Мп и 12 Мп) и фронтальный модуль(7 мп), можно записывать видео в качестве 4К с частотой 30 кадров в секунду. Основной объектив снабжен сапфировым защитным стеклом.",
-            quantity: "0",
-            price: "115999",
-            sale: "110999",
+            products:[]
         };
     },
     computed: {},
     mounted(){
-        console.log(1)
-        axios
-        .get('http://localhost:8080​/api​/catalog')
-        .then(response => (this.title = response.productDtos[1].id)).then(response => console.log(response))
-        .catch(err => console.log(err));
+        //axios.get("http://localhost:8080/api/catalog/product/1").
+        //then(res => {this.image = res.data.pictureUrl, console.log(res.data.pictureUrl),
+        //this.title = res.data.title, console.log(res.data),
+        //this.description = res.data.description , this. quantity = res.data.status,  }).
+        //catch(err => console.log(err))
+
+        axios.get("http://localhost:8080/api/catalog")
+        .then(res => {
+            for (let product in res.data.productDtos) { 
+            this.products.push(res.data.productDtos[product]);}
+        })
+        .catch(err => console.log(err))
     }
 };
 </script>

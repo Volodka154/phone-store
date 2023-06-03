@@ -4,9 +4,6 @@
             <h3>Корзина</h3>
             <cartItem class="cart-item"/>
             <cartItem/>
-            <cartItem/>
-            <cartItem/>
-            <cartItem/>
         </div>
         <cartFinish class="summ"/>
     </div>
@@ -25,7 +22,7 @@
         data() {
             return {}
         },
-        conputed: {}
+        computed: {}
     }
 </script>
 

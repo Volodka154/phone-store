@@ -6,6 +6,8 @@ import authorization from './components/authorization.vue';
 import registration from './components/registration.vue';
 import backGround from './components/backGround.vue';
 import catalogItemList from './components/catalogItemList.vue';
+import cart from './components/cart.vue'
+
 const routes = [
     {
         path: '',
@@ -19,7 +21,10 @@ const routes = [
     {
         path: '/item-list-:name',
         name: 'item-list',
-        component: catalogItemList
+        component: catalogItemList,
+        /*props: (route) => ({ 
+            titleIndexInCategory: route.query.titleIndexInCategory
+        }),*/
     },
     {
         path: '/productPage',
@@ -45,6 +50,11 @@ const routes = [
                 component: registration
             }    
         ]
+    },
+    {
+        path: '/cart',
+        name: 'cart',
+        component: cart
     }
 ];
 

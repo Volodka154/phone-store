@@ -12,14 +12,14 @@
                     v-model="password" 
                     placeholder="Пароль"/>
         </p>
-        <button class="btn btn-auto">Войти</button>
+        <button class="btn-autorisation" @click="onClick">Войти</button>
         <p class="href"
             @click="clickOnCreateAccount">Нет аккаунта? Создать</p>
     </div>
 </template>
 
 <script>
-
+import axios from "axios";
 export default {
     name: 'authorization',
     props: {},
@@ -30,9 +30,28 @@ export default {
         }
     },
     methods: {
+        onClick() {
+            axios.post('http://localhost:8080/api/auth/login', {
+                userEmail: String(this.login),
+                userPassword: String(this.password)
+
+            }).then(response => this.nameOnHeader(response))
+            .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
+            
+        },
         clickOnCreateAccount() {
             this.$router.push({name: 'registration'})
         },
+        nameOnHeader(response){
+            const token = response.data.accessToken;
+            const [headerBase64, payloadBase64] = token.split('.');
+
+            const header = JSON.parse(atob(headerBase64));
+            const payload = JSON.parse(atob(payloadBase64));
+
+            console.log(header);
+            console.log(payload); //сейчас в токене лежит id и роль, а так же время распада токена
+        }
     }
 }
 </script>
@@ -50,10 +69,11 @@ export default {
         border-radius: 30px;
     }
     
-    input {
+    input{
         background-color: rgb(238, 238, 238);
         width: 85%;
         padding: 5px;
+        border-color:rgb(97, 97, 97);
     }
 
     .href {
@@ -68,5 +88,22 @@ export default {
     .href:active {
         color: rgb(0, 0, 180);
     }
+    .btn-autorisation
+    {
+        background-color: #00a2e8;
+        color: #ffffff;
+        border-color: #00a2e8;
+        border-style: solid;
+        width: 87.5%;
+        padding: 5px;
+        align-self: center;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+    .btn-autorisation:active {
+        background-color: #0776a6;
+        border-color: #0776a6;
+        border-style: solid;
+    }   
 
 </style>

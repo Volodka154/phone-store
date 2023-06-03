@@ -1,30 +1,18 @@
 <template>
     <div class="productCard">
-        <p></p>
-        <div class="flex-container">
-            <div class="max-width-300px">
-                <img :src="image" class="iphone" />
-            </div>
+        <div class="flex-container" >
+            <img :src="this.infoMass.pictureUrl" class="iphone" />
             <div class="nameDescription">
-                <h3 class="titleColor">{{ title }}</h3>
-                <h5 class="descriptionColor">{{ description }}</h5>
+                <h3 class="titleColor">{{title }}</h3>
+                <h5 class="descriptionColor">{{description }}</h5>
             </div>
-            <h4 v-if="quantity >= 10" 
-                class="quantityColorGreen"
-                >В наличии
-            </h4>
-            <h4
-                v-else-if="quantity <= 9 && quantity > 0"
-                class="quantityColorYellow"
-            >Мало
-            </h4>
-            <h4 v-else class="quantityColorRed"
-                >Нет в наличии
-            </h4>
+            <h4 :class="quantituCalculate(quantity)">{{ allStatus[quantity] }}</h4>
+ 
+
             <div>
                 <h3>{{ price }}</h3>
-                <cart-button-gray v-if="quantity == 0" />
-                <cart-button v-else />
+                <cart-button-gray v-if="quantity == 'EMPTY'" />
+                <cart-button v-else  @click="addToCart(id)"/>
             </div>
         </div>
     </div>
@@ -43,19 +31,33 @@ export default {
     },
     data() {
         return {
-            image: this.infoMass.image,
+            allStatus: {
+                AVAILABLE: 'В наличии',
+                LOW: 'Мало',
+                EMPTY: 'Нет в наличии'
+            },
+            products:[],
+            status: "AVAILABLE",
+            image: this.infoMass.pictureUrl,
             title: this.infoMass.title,
             description: this.infoMass.description,
-            quantity: this.infoMass.quantity,
+            quantity: this.infoMass.status,
             price: this.infoMass.price,
             sale: this.infoMass.sale,
+            id: this.infoMass.id
         };
     },
-    mounted(){
-        axios
-        .get('http://localhost:8080​/api​/catalog')
-        .then(response => (this.title = response.productDtos[1].id)).then(response => console.log(response))
-        .catch(err => console.log(err));
+    methods: {
+        quantituCalculate (status) {
+            return "quantity-color-" + status
+        },
+        addToCart(id){
+            axios.post("http://localhost:8080/api/addProduct", {
+                productId:id
+            })
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
+        }
     }
 };
 </script>
@@ -80,6 +82,16 @@ export default {
     font-weight: 400;
     font-size: 12px;
     line-height: 22px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    line-clamp: 4;
+    box-orient: vertical;
 }
 .titleColor {
     color: #33b75c;
@@ -88,23 +100,31 @@ export default {
 .titleColor:active {
     color: #185b2d;
 }
-.quantityColorYellow {
+.quantity-color-LOW {
     color: #ffce29;
     margin-top: 4em;
+    min-width: 20%;
+    max-width: 20%;
 }
-.quantityColorRed {
+.quantity-color-EMPTY{
     color: #ee2a29;
     margin-top: 4em;
+    min-width: 20%;
+    max-width: 20%;
 }
-.quantityColorGreen {
+.quantity-color-AVAILABLE {
     color: #33b75c;
     margin-top: 4em;
+    min-width: 20%;
+    max-width: 20%;
 }
 #borderNone{
     border-style:none;
 }
 .iphone {
-    width: 100%;
+    align-self: center;
+    width: 10%;
+    height: 10%;
 }
 .max-width-300px{
     max-width: 180px;

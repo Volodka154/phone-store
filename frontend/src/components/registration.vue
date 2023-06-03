@@ -20,7 +20,7 @@
                    v-model="password" 
                    placeholder="Пароль"/>
         </p>
-        <button class="btn btn-auto"
+        <button class="btn-autorisation"
                 @click="onClick"
                 >Зарегистрироваться
         </button>
@@ -55,12 +55,14 @@ export default {
                 lastName: this.surname,
                 userEmail: this.login,
                 userPassword: this.password
-            }).then(response => console.log(response))
-            .catch(err => console.log(err));
+            }).then(response => alert("Успешно зарегистрированы",response))
+            .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
+            
         },
         clickOnAutorization(){
             this.$router.push({name: 'authorization'})
         }
+
 
     }
 }
