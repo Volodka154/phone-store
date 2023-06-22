@@ -1,18 +1,27 @@
+<!-- Один элемент каталога (товар) -->
 <template>
-    <div class="productCard">
+    <div>
         <div class="flex-container" >
-            <img :src="this.infoMass.pictureUrl" class="iphone" />
-            <div class="nameDescription">
-                <h3 class="titleColor">{{title }}</h3>
-                <h5 class="descriptionColor">{{description }}</h5>
+            <img :src="this.infoMass.pictureUrl" 
+                 class="iphone"
+                 @click="clickOnPhone"/>
+            <div class="name-description">
+                <h3 class="title-сolor"
+                    @click="clickOnPhone"
+                    >{{ title }}
+                </h3>
+                <h5 class="description-color">{{ description }}</h5>
             </div>
-            <h4 :class="quantituCalculate(quantity)">{{ allStatus[quantity] }}</h4>
- 
-
-            <div>
-                <h3>{{ price }}</h3>
-                <cart-button-gray v-if="quantity == 'EMPTY'" />
-                <cart-button v-else  @click="addToCart(id)"/>
+            <h4 :class="quantityCalculate(quantity)"
+                class="center-content">
+                {{ allStatus[quantity] }}
+            </h4>
+            <div class="center-content">
+                <div>
+                    <h3>{{ price }}</h3>
+                    <cart-button-gray v-if="quantity == 'EMPTY'" />
+                    <cart-button v-else  @click="addToCart(id)"/>
+                </div>
             </div>
         </div>
     </div>
@@ -23,7 +32,6 @@ import axios from "axios";
 import cartButtonGray from "./cart-button-gray";
 import cartButton from "./cart-button.vue";
 export default {
-    name: "productCard",
     props: ['infoMass'],
     components: {
         cartButton,
@@ -36,8 +44,6 @@ export default {
                 LOW: 'Мало',
                 EMPTY: 'Нет в наличии'
             },
-            products:[],
-            status: "AVAILABLE",
             image: this.infoMass.pictureUrl,
             title: this.infoMass.title,
             description: this.infoMass.description,
@@ -48,36 +54,41 @@ export default {
         };
     },
     methods: {
-        quantituCalculate (status) {
+        quantityCalculate (status) {
             return "quantity-color-" + status
         },
         addToCart(id){
             axios.post("http://localhost:8080/api/addProduct", {
                 productId:id
             })
-        .then(response => console.log(response))
-        .catch(err => console.log(err))
+            .then(response => console.log(response))
+            .catch(err => console.log(err))
+        },
+        getSlug(){
+            let slug = String(this.title).toLowerCase()
+            slug = slug.replace(/ /ig,'-')
+            slug = slug + '-' + String(this.id)
+            return slug
+        },
+        clickOnPhone(){
+            const nameInRoute = this.$router.currentRoute.value.params.name
+            this.$router.push({
+                name: 'itemPage',
+                params:{
+                    name: nameInRoute, 
+                    slug: this.getSlug()
+                }
+            })
         }
     }
 };
 </script>
 
-<style scoped>
-.blockClass1 {
-    height: 33%;
-    width: 100%;
-}
-.flex-container {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    flex-basis: content;
-}
-.nameDescription {
+<style>
+.name-description {
     width: 30%;
 }
-.descriptionColor {
+.description-color {
     color: rgba(0, 0, 0, 0.65);
     font-weight: 400;
     font-size: 12px;
@@ -93,38 +104,41 @@ export default {
     line-clamp: 4;
     box-orient: vertical;
 }
-.titleColor {
+.title-сolor {
     color: #33b75c;
 }
-
-.titleColor:active {
+.title-сolor:hover {
     color: #185b2d;
+    cursor: pointer;
+}
+.center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .quantity-color-LOW {
     color: #ffce29;
-    margin-top: 4em;
     min-width: 20%;
     max-width: 20%;
 }
 .quantity-color-EMPTY{
     color: #ee2a29;
-    margin-top: 4em;
     min-width: 20%;
     max-width: 20%;
 }
 .quantity-color-AVAILABLE {
     color: #33b75c;
-    margin-top: 4em;
     min-width: 20%;
     max-width: 20%;
 }
 #borderNone{
-    border-style:none;
+    border-style: none;
 }
 .iphone {
     align-self: center;
     width: 10%;
     height: 10%;
+    cursor: pointer;
 }
 .max-width-300px{
     max-width: 180px;

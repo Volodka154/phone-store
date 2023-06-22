@@ -41,52 +41,52 @@ export default {
 </script>
 
 <style>
-    /* Затемнение */
-    .exit-back-color1:before{
-        content: '';
-        position:fixed;
-        left: 0;
-        top: 0;
-        width:100%;
-        height:100%;
-        opacity: 0.7;
-        justify-content:center;
-        align-items:center;
-        background:rgba(120, 120, 120, 0.7);
-        z-index:999;
-    }
+/* Затемнение */
+.exit-back-color1:before{
+    content: '';
+    position:fixed;
+    left: 0;
+    top: 0;
+    width:100%;
+    height:100%;
+    opacity: 0.7;
+    justify-content:center;
+    align-items:center;
+    background:rgba(120, 120, 120, 0.7);
+    z-index: 1000;
+}
 
-    .authorization {
-        z-index: 1000;
-        position: fixed;
-        display: flex;
-        flex-direction: column;
-        align-items:stretch;
-        width: 500px;
-        left: calc(50% - 250px);
-        top: 100px;
-        background-color: rgb(248, 248, 248);
-        border-radius: 30px;
-    }
+.authorization {
+    z-index: 1001;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items:stretch;
+    width: 500px;
+    left: calc(50% - 250px);
+    top: 100px;
+    background-color: rgb(248, 248, 248);
+    border-radius: 30px;
+}
 
-    .input-class {
-        background-color: rgb(255, 255, 255);
-        padding: 5px;
-        border-radius: 5px;
-        border: 1.5px solid;
-    }
+.input-class {
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    border-radius: 5px;
+    border: 1.5px solid;
+}
 
 
-    .href {
-        align-self: flex-end;
-        margin-right: 15px;
-        color: rgb(0, 0, 255);
-        cursor: pointer;
-    }
-    .href:hover {
-        color: rgb(0, 0, 220);
-    }
-    .href:active {
-        color: rgb(0, 0, 180);
-    }
+.href {
+    align-self: flex-end;
+    margin-right: 15px;
+    color: rgb(0, 0, 255);
+    cursor: pointer;
+}
+.href:hover {
+    color: rgb(0, 0, 220);
+}
+.href:active {
+    color: rgb(0, 0, 180);
+}
 </style>

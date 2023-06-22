@@ -1,11 +1,15 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import catalogList from './components/catalogList.vue';
-//import addPosition from './components/add-position.vue';
+
+import CatalogList from './components/CatalogList.vue';
+import СatalogItemList from './components/СatalogItemList.vue';
+
 import productPage from './components/product-page.vue';
-import authorization from './components/authorization.vue';
-import registration from './components/registration.vue';
-import backGround from './components/backGround.vue';
-import catalogItemList from './components/catalogItemList.vue';
+
+import BackGround from './components/BackGround.vue';
+import Authorization from './components/Authorization.vue';
+import Registration from './components/Registration.vue';
+
+import ItemPage from './components/ItemPage.vue';
 import cart from './components/cart.vue'
 
 const routes = [
@@ -16,25 +20,28 @@ const routes = [
     {
         path: '/catalog',
         name: 'catalog',
-        component: catalogList,
+        component: CatalogList,
     },
     {
         path: '/item-list-:name',
         name: 'item-list',
-        component: catalogItemList,
-        /*props: (route) => ({ 
-            titleIndexInCategory: route.query.titleIndexInCategory
-        }),*/
+        component: СatalogItemList,
+    },
+    {
+        path: '/item-list-:name/:slug',
+        name: 'itemPage',
+        component: ItemPage,
     },
     {
         path: '/productPage',
         name: 'productPage',
         component: productPage
     },
+
     {
         path: '/back',
         name: 'back',
-        component: backGround,
+        component: BackGround,
         props: (route) => ({ 
             nameOfLink: route.query.nameOfProps
         }),
@@ -42,12 +49,12 @@ const routes = [
             {
                 path: 'authorization',
                 name: 'authorization',
-                component: authorization
+                component: Authorization
             },
             {
                 path: 'registration',
                 name: 'registration',
-                component: registration
+                component: Registration
             }    
         ]
     },

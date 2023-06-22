@@ -1,22 +1,21 @@
+<!-- Список из товаров одной категории -->
 <template>
-    <div class="product-page"  id="borderNone">
+    <div class="item-page">
         <div v-for="(item, index) in productsList"
-        :key="index">
+             :key="index">
             <catalog-item :infoMass="item"></catalog-item>
         </div>
     </div>
 </template>
 
 <script>
-import catalogItem from './catalogItem.vue'
+import CatalogItem from './CatalogItem.vue'
 import axios from "axios";
 import { mapActions, mapGetters } from 'vuex';
 export default {
-    name: "product-page",
     components: {
-        'catalog-item': catalogItem
+        CatalogItem
     },
-    //props: ['titleIndexInCategory'],
     data() {
         return {
             key: this.indexInCategory(),
@@ -52,11 +51,11 @@ export default {
         };
     },
     methods:{
-        ...mapActions([
-        'addPatInNavBarMass',
-        'removePatInNavBarMass',
+        ...mapActions('navbar', [
+            'addPatInNavBarMass',
+            'removePatInNavBarMass',
         ]),
-        ...mapGetters([
+        ...mapGetters('navbar', [
             'indexInCategory'
         ])
     },
@@ -85,22 +84,22 @@ export default {
 };
 </script>
 
-<style scoped>
-.productPage{
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.1);
-    border-style: none none none none;
+<style>
+.item-page {
+    border: 0px solid;
+    margin: 10px 60px;
 }
-.leftClass{
-    position:fixed;
-    left: 5%;
+.flex-container {
+    display: flex;
+    flex-basis: content;
+    justify-content: space-between;
 }
-p{
-    color:#ED1C24;
-    text-decoration-line: underline;
-    left: 0px;
+.flex-container-row {
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
-h4{
-    color:rgba(0, 0, 0, 0.744);
+.flex-container-column {
+    flex-direction: column;
+    flex-wrap: nowrap;
 }
 </style>

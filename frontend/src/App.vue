@@ -1,17 +1,17 @@
 <template>
-    <div id="app">
-        <my-Header/>
+    <div id="app" 
+         class="flex-container flex-container-column">
+        <my-header/>
         <router-view></router-view>
-
     </div>
 </template>
 
 <script>
-import myHeader from "./components/my-header.vue";
+import MyHeader from "./components/MyHeader.vue";
 export default {
     name: "App",
     components: {
-        myHeader,
+        MyHeader,
     },
 };
 </script>
@@ -23,16 +23,9 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    margin-top: 70px;
 }
 body{
-    margin: 0;
-}
-.flex-container {
-    width: 99%;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    flex-basis: content;
+    margin: 0px;
 }
 </style>
