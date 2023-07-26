@@ -2,12 +2,16 @@
 <template>
     <div class="item-page">
         <div class="flex-container flex-container-row"
-             style="justify-content: end;">
-            <span>Сначала дешевле</span>
-            <img src="" class="ikon">            
+             style="justify-content: end;" >
+            <div class="flex-container flex-container-row"
+                 style="justify-content: end; cursor: pointer;"
+                 @click="clickOnFilter">
+                <p>{{ isFilter ? "Сначала дороже":"Сначала дешевле" }}</p>
+                <img src="Filter.svg" class="ikon">            
+            </div>
         </div>
-        <div v-for="(item, index) in productsList"
-             :key="index">
+        <div v-for="(item) in productsList"
+             :key="item.id">
             <catalog-item :infoMass="item"></catalog-item>
         </div>
     </div>
@@ -24,8 +28,9 @@ export default {
     data() {
         return {
             key: this.indexInCategory(),
+            isFilter: false,
             productsList:[
-                /*{
+                {
                     id: 1,
                     title: 'Apple IPhone 12', 
                     description: 'Дисплей представляет собой прямоугольник с закруглёнными углами. Диагональ этого прямоугольника без учёта закруглений составляет 5,42 дюйма (для iPhone 12 mini), 5,85 дюйма (для iPhone 11 Pro, iPhone XS, iPhone X), 6,06 дюйма (для iPhone 12 Pro, iPhone 12, iPhone 11, iPhone XR), 6,46 дюйма (для iPhone 11 Pro Max, iPhone XS Max) или 6,68 дюйма (для iPhone 12 Pro Max). Фактическая область просмотра меньше.',
@@ -51,7 +56,7 @@ export default {
                     price: 89000,
                     sale: 75000,
                     quantity: 22,
-                },*/
+                },
             ],
         };
     },
@@ -61,14 +66,20 @@ export default {
             'removePatInNavBarMass',
         ]),
         ...mapGetters('navbar', [
-            'indexInCategory'
-        ])
+            'indexInCategory',
+            //'nameOfSubcategory'
+        ]),
+        clickOnFilter(){
+            this.isFilter = ! this.isFilter
+            this.isFilter ? this.productsList.sort((a,b) => (a.price < b.price) ? 1 : -1)
+                          : this.productsList.sort((a,b) => (a.price > b.price) ? 1 : -1)
+        }
     },
     watch: {
         '$route.params.name': {
             immediate: true,    // обработчик вызывается и при обновлении
             handler() {
-                this.productsList = []
+                //this.productsList = []
                 this.removePatInNavBarMass(1)
                 this.addPatInNavBarMass({
                     title: this.$router.currentRoute.value.params.name,
@@ -81,7 +92,13 @@ export default {
                     this.productsList = res.data.productDtos
                 })
                 .catch(err => {console.log('Error\n', err)})
-
+                // проверка на наличие подкатегории
+                /*if (this.nameOfSubcategory) {
+                    this.addPatInNavBarMass({
+                        title: this.nameOfSubcategory,
+                        path: this.$router.currentRoute.value.fullPath
+                    })
+                }*/
             }
   
         }

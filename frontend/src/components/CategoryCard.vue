@@ -19,7 +19,8 @@
                  v-if="indexShowSubcategories > -1">
                 <h4 v-for="(item,index) in titles[indexShowSubcategories].subcategories" 
                     :key="index"
-                    class="category-card__title">
+                    class="category-card__title"
+                    @click="clickOnSubCategory(indexShowSubcategories, index)">
                     {{ item }}
                 </h4>
             </div>  
@@ -43,8 +44,7 @@ export default {
                 { 
                     category: 'Смартфоны',
                     subcategories: [
-                        "Смартфоны",
-                        "Apple iPhone",
+                        "Apple",
                         "realme",
                         "Samsung",
                         "Huawei",
@@ -80,7 +80,6 @@ export default {
                 { 
                     category: 'Ноутбуки',
                     subcategories: [
-                        "Все ноутбуки",
                         "Ноутбуки Apple",
                         "Ноутбуки Huawei",
                         "Игровые ноутбуки",
@@ -102,7 +101,8 @@ export default {
     methods:{
         ...mapActions('navbar', [
             'changeIsModalCategoryList',
-            'setIndexByCategory'
+            'setIndexByCategory',
+            'setNameBySubcategory'
 
         ]),
         clickOnCatalogItem(propsName){
@@ -112,6 +112,17 @@ export default {
                 name: 'item-list',
                 params:{
                     name: propsName.category
+                }
+            })
+        },
+        clickOnSubCategory(categoryIndex, subcategoryIndex){
+            this.changeIsModalCategoryList()
+            this.setIndexByCategory(categoryIndex)
+            this.setNameBySubcategory(this.titles[categoryIndex].subcategories[subcategoryIndex])
+            this.$router.push({
+                name: 'item-list',
+                params:{
+                    name: this.titles[categoryIndex].category
                 }
             })
         }

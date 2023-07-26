@@ -57,7 +57,7 @@ export default {
     overflow: auto;
 }
 .review-photo img{
-    margin-right: 20px;
+    margin-right: 10px;
     border-radius: 5px;
     width: 150px;
     height: 150px;

@@ -11,9 +11,7 @@
                      @click="clickOnImg"/> 
             </div>
         </div>
-
         <div class="flex-container flex-container-row">
-
             <img :src="product.pictureUrl" 
                  class="iphone-page"
                  @click="clickOnImg"/>
@@ -66,11 +64,48 @@
             <transition-group name="slide-fade"
                               mode="out-in"
                               class="flex-container flex-container-column">
+                
+                    <div v-if="reviewsClick && tempReviewsScore"
+                         class="reviews-item">
+                    <p>Написать отзыв</p>
+                    <img v-for="index in 5"
+                         :key="index"
+                         class="star"
+                         @click="setScoreInReview(index)"
+                         :src="starInReview(index)">
+                    <p></p>
+                    <input class="input-class"
+                           v-model="tempReviewsName" 
+                           placeholder="Отображаемое имя"/>
+                    <p></p>
+                    <div class="flx-jc-start review-photo flex-container flex-container-row">
+                         <img v-for="(item,index) in tempReviewsPhoto"
+                              :key="index"
+                              :src="item"
+                              @dblclick="removetempReviewPhoto(index)">
+                    </div>
+                    <input id="fileItem"
+                           type="file"
+                           @change="handleFileSelect"
+                           accept=".img, .png, .jpg, jpeg"
+                           style="padding-left: 0px;"
+                           multiple />
+                    <p></p>
+                    <input class="input-class"
+                           v-model="tempReviewsDescription" 
+                           placeholder="Комментарий"/>
+                    <p></p>
+                    <button @click="leaveReview">
+                        Отправить
+                    </button>
+                </div>
+                
                 <div v-for="(item,index) in visibleReviewsRows"
                     :key="index"
                     class="reviews-item">
                         <ItemPageReview :propsReview="item"/>
                 </div>
+
             </transition-group>
         </div>
         <div class="cursor-noneptr">
@@ -95,6 +130,7 @@ export default {
     },
     data() {
         return {
+            
             product:{},
 
             allStatus: {
@@ -131,6 +167,12 @@ export default {
                 'Вспышка': 'Да',
                 'Оптический зум на увеличение (x)': '6'
             },
+
+            tempReviewsName: '',
+            tempReviewsScore: 1,
+            tempReviewsPhoto: [],
+
+            tempReviewsDescription: '',
             reviews: [
             {
                     name: 'NNikiTOS',
@@ -277,11 +319,61 @@ export default {
         },
         rotateIcon(status){
             return status ? 'rotate-90left' : 'rotate-90right'
+        },
+        starInReview(index){
+            return index <= this.tempReviewsScore ? "IosStar.svg" : "IosStarOutline.svg" 
+        },
+        setScoreInReview(index){
+            this.tempReviewsScore = index
+        },
+        leaveReview(){
+            if(this.tempReviewsName){
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = dd + '.' + mm + '.' + yyyy;
+                
+                this.reviews.push({
+                    name: this.tempReviewsName,
+                    score: this.tempReviewsScore,
+                    photo: this.tempReviewsPhoto,
+                    date: today,
+                    description: this.tempReviewsDescription
+                })
+                this.visibleReviewsRows.push({
+                    name: this.tempReviewsName,
+                    score: this.tempReviewsScore,
+                    photo: this.tempReviewsPhoto,
+                    date: today,
+                    description: this.tempReviewsDescription
+                })
+                this.currentIndexForReviews++
+
+                this.tempReviewsScore = 0
+            }
+        },
+        handleFileSelect(e){
+            let fileArr = Array.prototype.slice.call(e.target.files)
+            fileArr.forEach(item => {
+                if (!item.type.match('image.*')){
+                    return
+                }
+
+                let reader = new FileReader()
+                reader.onload = (e) => {
+                    this.tempReviewsPhoto.push(e.target.result)
+                }
+                reader.readAsDataURL(item)      // запуск процесса чтения файла
+            });
+        },
+        removetempReviewPhoto(index){
+            this.tempReviewsPhoto.splice(index,1)
         }
+
     },
     computed: {
         mrgnBtmTable(){
-            console.log(this.visibleRows.length)
             return this.visibleRows.length ? '' : 'margin-bottom: 0px;'
         }
     }

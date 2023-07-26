@@ -3,6 +3,7 @@ export default {
     state() {
         return{
             indexInCategory: 0,             // индекс выбранной категории для просмотра и обновления компонента с каталогом 
+            nameOfSubcategory: '',             // индекс выбранной категории для просмотра и обновления компонента с каталогом 
             isModalCategoryList: false,     // модальное окно категорий при клике на "Каталог" в хедере
             pathInNavBarMass: [
                 {
@@ -17,6 +18,9 @@ export default {
         indexInCategory(state){
             return state.indexInCategory
         },
+        nameOfSubcategory(state){
+            return state.nameOfSubcategory
+        },
         isModalCategoryList(state){
             return state.isModalCategoryList
         },
@@ -27,6 +31,9 @@ export default {
     mutations: {
         setIndexByCategory(state, newIndexByCategory){
             state.indexInCategory = newIndexByCategory
+        },
+        setNameBySubcategory(state, newNameBySubcategory){
+            state.nameOfSubcategory = newNameBySubcategory
         },
         changeIsModalCategoryList(state){
             state.isModalCategoryList = ! state.isModalCategoryList
@@ -41,6 +48,9 @@ export default {
     actions: {
         setIndexByCategory(store, payload){
             store.commit('setIndexByCategory', payload)
+        },
+        setNameBySubcategory(store, payload){
+            store.commit('setNameBySubcategory', payload)
         },
         changeIsModalCategoryList(store){
             store.commit('changeIsModalCategoryList')
