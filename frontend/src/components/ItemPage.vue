@@ -224,25 +224,29 @@ export default {
         axios.get('http://localhost:8080/api/catalog/product/' + ID)
         .then(response => {
             this.product = response.data
-            this.titleOfCategory = 'Смартфоны'
-            this.titleOfSubcategory = response.data.title.split(' ')[0]
+            // очищаем массив navbar
+            this.removePatInNavBarMass(1)
+            // устанавливаем значение категории
+            this.titleOfCategory = this.nameOfCategory() ? this.nameOfCategory() : "Категория"
+            this.addPatInNavBarMass({
+                title: this.titleOfCategory,
+                path: '/item-list-' + this.titleOfCategory
+                //path: this.$router.currentRoute.value.fullPath
+            })
+            // устанавливаем значение подкатегории
+            this.titleOfSubcategory = this.nameOfSubcategory() ? this.nameOfSubcategory() : "Подкатегория"
+            this.addPatInNavBarMass({
+                title: this.titleOfSubcategory,
+                path: '/item-list-' + this.titleOfCategory
+            })
+            // устанавливаем название
+            this.addPatInNavBarMass({
+                title: this.product.title,
+                path: this.$router.currentRoute.value.fullPath
+            })
+
         })
         .catch(err => {console.log('Error\n', err)})
-    },
-    updated(){
-        this.removePatInNavBarMass(1)
-        this.addPatInNavBarMass({
-            title: this.titleOfCategory,
-            path: this.$router.currentRoute.value.fullPath
-        })
-        this.addPatInNavBarMass({
-            title: this.titleOfSubcategory,
-            path: this.$router.currentRoute.value.fullPath
-        })
-        this.addPatInNavBarMass({
-            title: this.product.title,
-            path: this.$router.currentRoute.value.fullPath
-        })
     },
     beforeUnmount() {
         document.removeEventListener("click", this.closeImgModal);
@@ -285,7 +289,9 @@ export default {
     },
     methods: {
         ...mapGetters('navbar', [
-            'pathInNavBarMass'
+            'pathInNavBarMass',
+            'nameOfCategory',
+            'nameOfSubcategory',
         ]),
         ...mapActions('navbar', [
             'addPatInNavBarMass',

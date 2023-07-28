@@ -5,17 +5,17 @@
             <div class="one-point"
                  v-for="(item,index) in catalog"
                  :key="index"
-                 @click="clickOnCatalogItem(item)">
+                 @click="clickOnCatalogItem(item.title)">
                 <p>{{ item.title }}</p>
                 <img :src="item.picture"
-                    class="picture">
+                     class="picture">
             </div>
         </div>
     </div>
 </template>
     
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
     data(){
         return {
@@ -33,10 +33,6 @@ export default {
                     title: 'Аксессуары',
                     picture: 'https://thumbs.dreamstime.com/b/%D0%B7%D0%BD%D0%B0%D1%87%D0%BE%D0%BA-%D0%B0%D0%BA%D1%81%D0%B5%D1%81%D1%81%D1%83%D0%B0%D1%80%D0%BE%D0%B2-smartphone-%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9-%D0%BD%D0%B0-%D0%B1%D0%B5%D0%BB%D1%83%D1%8E-%D0%BF%D1%80%D0%B5%D0%B4%D0%BF%D0%BE%D1%81%D1%8B%D0%BB%D0%BA%D1%83-127452056.jpg'
 
-                },
-                {
-                    title: 'Ноутбуки',
-                    picture: 'https://img.freepik.com/premium-vector/hand-drawn-laptop-illustration_1375-5182.jpg'
                 }
             ]
         }
@@ -44,23 +40,23 @@ export default {
     methods:{
         ...mapActions('navbar', [
             'removePatInNavBarMass',
-            'setIndexByCategory'
+            'setNameByCategory',
+            'setNameBySubcategory'
         ]),
-        ...mapGetters('navbar', [
-            'indexInCategory'
-        ]),
-        clickOnCatalogItem(props){
-            this.setIndexByCategory(this.catalog.indexOf(props))
+        clickOnCatalogItem(propsCategoryName){
+            this.setNameByCategory(propsCategoryName)
             this.$router.push({
                 name: 'item-list',
                 params:{
-                    name: props.title
+                    name: propsCategoryName
                 }
             })
         }
     },
     mounted(){
         this.removePatInNavBarMass(1)       // зачистка всего в navBar 
+        this.setNameByCategory('')
+        this.setNameBySubcategory('')
     }
 }
 </script>

@@ -27,10 +27,9 @@ export default {
     },
     data() {
         return {
-            key: this.indexInCategory(),
             isFilter: false,
             productsList:[
-                {
+                /*{
                     id: 1,
                     title: 'Apple IPhone 12', 
                     description: 'Дисплей представляет собой прямоугольник с закруглёнными углами. Диагональ этого прямоугольника без учёта закруглений составляет 5,42 дюйма (для iPhone 12 mini), 5,85 дюйма (для iPhone 11 Pro, iPhone XS, iPhone X), 6,06 дюйма (для iPhone 12 Pro, iPhone 12, iPhone 11, iPhone XR), 6,46 дюйма (для iPhone 11 Pro Max, iPhone XS Max) или 6,68 дюйма (для iPhone 12 Pro Max). Фактическая область просмотра меньше.',
@@ -56,7 +55,7 @@ export default {
                     price: 89000,
                     sale: 75000,
                     quantity: 22,
-                },
+                },*/
             ],
         };
     },
@@ -66,41 +65,52 @@ export default {
             'removePatInNavBarMass',
         ]),
         ...mapGetters('navbar', [
-            'indexInCategory',
-            //'nameOfSubcategory'
+            'allCategoryList',
+            'nameOfCategory',
+            'nameOfSubcategory'
         ]),
         clickOnFilter(){
             this.isFilter = ! this.isFilter
             this.isFilter ? this.productsList.sort((a,b) => (a.price < b.price) ? 1 : -1)
                           : this.productsList.sort((a,b) => (a.price > b.price) ? 1 : -1)
+        },
+        handleCategSubcategChange(){
+            this.productsList = []
+            this.removePatInNavBarMass(1)
+            this.addPatInNavBarMass({
+                title: this.$router.currentRoute.value.params.name,
+                path: this.$router.currentRoute.value.fullPath
+            })
+            const categoryID = this.allCategoryList().findIndex(item => item.title === this.nameOfCategory()) + 1
+            axios.get('http://localhost:8080/api/catalog/category/' + categoryID)
+            .then(res =>{
+                this.productsList = res.data.productDtos
+                // проверка на наличие подкатегории
+                if (this.nameOfSubcategory()) {
+                    this.addPatInNavBarMass({
+                        title: this.nameOfSubcategory(),
+                        path: this.$router.currentRoute.value.fullPath
+                    })
+                    this.productsList = this.productsList.filter(item => item.title.toLowerCase().includes(this.nameOfSubcategory().toLowerCase()))
+                }
+            })
+            .catch(err => {console.log('Error\n', err)})
         }
     },
+    computed:{
+        watchedSubcategory(){
+            return this.$store.getters["navbar/nameOfSubcategory"]
+        }
+    },  
     watch: {
         '$route.params.name': {
             immediate: true,    // обработчик вызывается и при обновлении
             handler() {
-                //this.productsList = []
-                this.removePatInNavBarMass(1)
-                this.addPatInNavBarMass({
-                    title: this.$router.currentRoute.value.params.name,
-                    path: this.$router.currentRoute.value.fullPath
-                })
-                const categoryID = this.indexInCategory() + 1
-                axios.get('http://localhost:8080/api/catalog/category/' + categoryID)
-                .then(res =>{
-                    //console.log('Все товары:\n', res.data.productDtos)
-                    this.productsList = res.data.productDtos
-                })
-                .catch(err => {console.log('Error\n', err)})
-                // проверка на наличие подкатегории
-                /*if (this.nameOfSubcategory) {
-                    this.addPatInNavBarMass({
-                        title: this.nameOfSubcategory,
-                        path: this.$router.currentRoute.value.fullPath
-                    })
-                }*/
+                this.handleCategSubcategChange()
             }
-  
+        },
+        watchedSubcategory(){
+            this.handleCategSubcategChange()
         }
     }
 };

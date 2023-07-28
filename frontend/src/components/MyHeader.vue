@@ -8,7 +8,7 @@
                      src="IosMenu.svg">
                 
                 <span class="catalog btn-header"
-                      @click="movingByNavBar(pathInNavBarMass[0].path)"
+                      @click="movingByNavBar(pathInNavBarMass[0])"
                       >Phone-shop
                 </span>
             </div>
@@ -37,7 +37,7 @@
         <div class="nav-bar flex-container flx-jc-start">
             <span v-for="(item,index) in pathInNavBarMass"
                  :key="index"
-                 @click="movingByNavBar(item.path)"
+                 @click="movingByNavBar(item)"
                 >
                 <span v-if="index" style="margin: 0px 10px">-</span>
                 <span class="nav-bar__item">
@@ -84,17 +84,22 @@ export default {
             })
         },
         ...mapActions('navbar', [
-            'changeIsModalCategoryList'
+            'changeIsModalCategoryList',
+            'setNameBySubcategory'
         ]),
-        movingByNavBar(path){
-            this.$router.push(path)
+        movingByNavBar(itemInPath){
+            // это нужно для зануления подкатегории, если мы хотим перейти просто в категорию
+            if (this.allCategoryList.findIndex(item => item.title === itemInPath.title) !== -1){
+                this.setNameBySubcategory('')
+            }
+            this.$router.push(itemInPath.path)
         }
-
     },
     computed:{
         ...mapGetters('navbar', [
             'isModalCategoryList',
-            'pathInNavBarMass'
+            'pathInNavBarMass',
+            'allCategoryList',
         ])
     }
     }

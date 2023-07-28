@@ -3,12 +3,12 @@
 <div class="position-card position-absolute">
     <div class="flex-container flex-container-row">
         <div class="category-card">
-            <h3 v-for="(item,index) in titles" 
+            <h3 v-for="(item,index) in categoryList" 
                 :key="index"
                 class="category-card__title"
-                @click="clickOnCatalogItem(item)"
+                @click="clickOnCategory(item.title)"
                 @mouseenter="indexShowSubcategories = index">
-                {{ item.category }}
+                {{ item.title }}
             </h3>
         </div>
         <Transition name="slide-fade-fixed"
@@ -17,11 +17,11 @@
                  style="margin-left: 10px;"
                  :key="indexShowSubcategories"
                  v-if="indexShowSubcategories > -1">
-                <h4 v-for="(item,index) in titles[indexShowSubcategories].subcategories" 
+                <h4 v-for="(item,index) in categoryList[indexShowSubcategories].subcategoryDtos" 
                     :key="index"
                     class="category-card__title"
-                    @click="clickOnSubCategory(indexShowSubcategories, index)">
-                    {{ item }}
+                    @click="clickOnSubCategory(categoryList[indexShowSubcategories].title, item.title)">
+                    {{ item.title }}
                 </h4>
             </div>  
         </Transition>
@@ -31,8 +31,7 @@
 </template>
 
 <script>
-//import axios from 'axios';
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: "category-card",
@@ -40,89 +39,39 @@ export default {
     data() {
         return {
             indexShowSubcategories: -1,
-            titles: [
-                { 
-                    category: 'Смартфоны',
-                    subcategories: [
-                        "Apple",
-                        "realme",
-                        "Samsung",
-                        "Huawei",
-                        "Huawei P60 | P60 Pro",
-                        "Кнопочные телефоны",
-                    ]
-                },
-                { 
-                    category: 'Аудиотехника',
-                    subcategories: [
-                        "Портативные колонки",
-                        "Умные колонки",
-                        "MP3 плееры",
-                        "iPod",
-                        "Радио",
-                        "Диктофоны",
-                        "Магнитолы",
-                    ]
-                },
-                { 
-                    category: 'Аксессуары',
-                    subcategories: [
-                        "Беспроводные наушники",
-                        "Спортивные наушники",
-                        "Игровые наушники",
-                        "Наушники накладные",
-                        "Наушники-вкладыши",
-                        "Гарнитуры для телефонов",
-                        "Компьютерные наушники",
-                        "Аксессуары для наушников",
-                    ]
-                },
-                { 
-                    category: 'Ноутбуки',
-                    subcategories: [
-                        "Ноутбуки Apple",
-                        "Ноутбуки Huawei",
-                        "Игровые ноутбуки",
-                        "Ноутбуки-трансформеры",
-                        "Ноутбуки для бизнеса",
-                        "Ультрабуки",
-                        "Планшеты",
-                    ]
-                },
-            ]
-        };
+            categoryList: []
+        }
     },
     mounted(){
-        /*axios.get('http://localhost:8080/api/catalog/categories')
-        .then(res =>{console.log('Все категории:\n', res.data)})
-        .catch(err => {console.log('Error\n', err)})
-        */
+        this.categoryList = this.allCategoryList()
     },
     methods:{
         ...mapActions('navbar', [
             'changeIsModalCategoryList',
-            'setIndexByCategory',
+            'setNameByCategory',
             'setNameBySubcategory'
-
         ]),
-        clickOnCatalogItem(propsName){
+        ...mapGetters('navbar', [
+            'allCategoryList',
+        ]),
+        clickOnCategory(propsCategoryName){
             this.changeIsModalCategoryList()
-            this.setIndexByCategory(this.titles.indexOf(propsName))
+            this.setNameByCategory(propsCategoryName)
             this.$router.push({
                 name: 'item-list',
                 params:{
-                    name: propsName.category
+                    name: propsCategoryName
                 }
             })
         },
-        clickOnSubCategory(categoryIndex, subcategoryIndex){
+        clickOnSubCategory(propsCategoryName, propsSubcategoryName){
             this.changeIsModalCategoryList()
-            this.setIndexByCategory(categoryIndex)
-            this.setNameBySubcategory(this.titles[categoryIndex].subcategories[subcategoryIndex])
+            this.setNameByCategory(propsCategoryName)
+            this.setNameBySubcategory(propsSubcategoryName)
             this.$router.push({
                 name: 'item-list',
                 params:{
-                    name: this.titles[categoryIndex].category
+                    name: propsCategoryName
                 }
             })
         }

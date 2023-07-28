@@ -2,8 +2,9 @@ export default {
     namespaced: true,
     state() {
         return{
-            indexInCategory: 0,             // индекс выбранной категории для просмотра и обновления компонента с каталогом 
-            nameOfSubcategory: '',             // индекс выбранной категории для просмотра и обновления компонента с каталогом 
+            allCategoryList: ['1','2'],
+            nameOfCategory: '',             // название выбранной категории для просмотра и обновления компонента с каталогом 
+            nameOfSubcategory: '',             // название выбранной категории для просмотра и обновления компонента с каталогом 
             isModalCategoryList: false,     // модальное окно категорий при клике на "Каталог" в хедере
             pathInNavBarMass: [
                 {
@@ -15,8 +16,11 @@ export default {
         }
     },
     getters: {
-        indexInCategory(state){
-            return state.indexInCategory
+        allCategoryList(state){
+            return state.allCategoryList
+        },
+        nameOfCategory(state){
+            return state.nameOfCategory
         },
         nameOfSubcategory(state){
             return state.nameOfSubcategory
@@ -29,8 +33,11 @@ export default {
         }
     },
     mutations: {
-        setIndexByCategory(state, newIndexByCategory){
-            state.indexInCategory = newIndexByCategory
+        setAllCategoryList(state, payload){
+            state.allCategoryList = payload
+        },
+        setNameByCategory(state, newNameByCategory){
+            state.nameOfCategory = newNameByCategory
         },
         setNameBySubcategory(state, newNameBySubcategory){
             state.nameOfSubcategory = newNameBySubcategory
@@ -46,8 +53,11 @@ export default {
         }
     },
     actions: {
-        setIndexByCategory(store, payload){
-            store.commit('setIndexByCategory', payload)
+        setAllCategoryList(store, payload){
+            store.commit('setAllCategoryList', payload)
+        },
+        setNameByCategory(store, payload){
+            store.commit('setNameByCategory', payload)
         },
         setNameBySubcategory(store, payload){
             store.commit('setNameBySubcategory', payload)
