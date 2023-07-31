@@ -57,18 +57,18 @@ export default {
                refreshToken: this.refresh
             }).then(response => this.refresh = response)
             .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
-            console.log('!!!!!!!!!!!!!!!!!!1')
-            console.log(this.refresh)
+            //console.log('!!!!!!!!!!!!!!!!!!1')
+            //console.log(this.refresh)
             this.setRefreshToken(this.refresh)
             const [headerBase64, payloadBase64] = token.split('.');
 
             const header = JSON.parse(atob(headerBase64));
             const payload = JSON.parse(atob(payloadBase64));
-            console.log(payload)
+            //console.log(payload)
             console.log(header);
             this.setUserId(payload.username); //сейчас в токене лежит id и роль, а так же время распада токена
-            let i = this.userId
-            console.log(i)
+            //let i = this.userId
+            //console.log(i)
             if (payload.roles=='ADMIN'){
                 this.setUserId('ADMIN')
             }

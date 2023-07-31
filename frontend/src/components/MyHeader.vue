@@ -1,6 +1,6 @@
 <!-- Компонент отвечающий за header на всех страницах -->
 <template>
-    <div class="flex-container flex-container-column" >
+    <div class="flex-container flex-container-column">
         <div class="my-header flex-container flex-container-row">
             <div class="flex-container flex-container-row">
                 <img class="ikon ikon__menu"
@@ -8,7 +8,7 @@
                      src="IosMenu.svg">
                 
                 <span class="catalog btn-header"
-                      @click="movingByNavBar(pathInNavBarMass[0].path)"
+                      @click="movingByNavBar(pathInNavBarMass[0])"
                       >Phone-shop
                 </span>
                 <button v-if="this.userId=='ADMIN'" @click="clickOnChange">Добавить товар</button>
@@ -18,7 +18,7 @@
                 <category-card v-if="isModalCategoryList"/>
             </Transition>
             <div class="right">
-                <span class="btn-header" v-if="isAutorisation"
+                <span class="btn-header" v-if="!this.userId"
                       @click="clickOnAutorization">
                     Войти
                 </span>
@@ -32,19 +32,19 @@
                      src="profile.svg">
     
                 <span class="btn-header"
-                      @click="clickOnCart" :key="this.countProduct">
-                    Корзина ({{this.countProduct}})
+                      @click="clickOnCart">
+                    Корзина
                 </span>
                 <img class="ikon"
                      @click="clickOnCart"
                      src="cart.svg">
-                
+
             </div>
         </div>
         <div class="nav-bar flex-container flx-jc-start">
             <span v-for="(item,index) in pathInNavBarMass"
                  :key="index"
-                 @click="movingByNavBar(item.path)"
+                 @click="movingByNavBar(item)"
                 >
                 <span v-if="index" style="margin: 0px 10px">-</span>
                 <span class="nav-bar__item">
@@ -67,10 +67,12 @@ export default {
     },
     data() {
         return {
-            isAutorisation: false,
             id: '',
             countCart: 0
         }
+    },
+    updated(){
+        console.log('userID - \n', this.$store.getters['user/userId'])
     },
     methods: {
         clickOnAutorization(){
@@ -82,9 +84,8 @@ export default {
                 query: {
                     nameOfProps: 'authorization',
                 }
-            }),
-        
-            this.id = this.userId        
+            })
+            //this.id = this.userId
         },
         clickOnCart() {
             this.$router.push({
@@ -114,13 +115,12 @@ export default {
             }
             this.$router.push(itemInPath.path)
         }
-
     },
     computed:{
         ...mapGetters('navbar', [
             'isModalCategoryList',
             'pathInNavBarMass',
-            'allCategoryList'
+            'allCategoryList',
         ]),
         ...mapGetters('user', [
             'userId',
@@ -129,12 +129,8 @@ export default {
         ...mapGetters('cart',[
             'countProduct'
         ])
-    },
-    mounted(){
-        this.id = this.userId
     }
-
-    }
+}
 </script>
 
 <style>

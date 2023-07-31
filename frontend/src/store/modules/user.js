@@ -2,7 +2,7 @@ export default {
     namespaced: true,
     state() {
         return{
-            userId:'11',
+            userId:'',
             refreshToken: ''
         }
     },
