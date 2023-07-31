@@ -57,7 +57,7 @@ export default {
                 userPassword: this.password
             }).then(response => alert("Успешно зарегистрированы",response))
             .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
-            
+            console.log(this.name)
         },
         clickOnAutorization(){
             this.$router.push({name: 'authorization'})

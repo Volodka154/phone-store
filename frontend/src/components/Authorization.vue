@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import axios from "axios";
 export default {
     name: 'authorization',
@@ -26,10 +27,16 @@ export default {
     data() {
         return {
             login: null,
-            password: null
+            password: null,
+            refresh: ''
         }
     },
     methods: {
+        ...mapActions('user', [
+            'setUserId',
+            'removeUserId',
+            'setRefreshToken'
+        ]),
         onClick() {
             axios.post('http://localhost:8080/api/auth/login', {
                 userEmail: String(this.login),
@@ -44,14 +51,34 @@ export default {
         },
         nameOnHeader(response){
             const token = response.data.accessToken;
+            this.refresh = response.data.refreshToken;
+            console.log(this.refresh)
+            axios.post('http://localhost:8080/api/auth/refresh', {
+               refreshToken: this.refresh
+            }).then(response => this.refresh = response)
+            .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
+            console.log('!!!!!!!!!!!!!!!!!!1')
+            console.log(this.refresh)
+            this.setRefreshToken(this.refresh)
             const [headerBase64, payloadBase64] = token.split('.');
 
             const header = JSON.parse(atob(headerBase64));
             const payload = JSON.parse(atob(payloadBase64));
-
+            console.log(payload)
             console.log(header);
-            console.log(payload); //сейчас в токене лежит id и роль, а так же время распада токена
+            this.setUserId(payload.username); //сейчас в токене лежит id и роль, а так же время распада токена
+            let i = this.userId
+            console.log(i)
+            if (payload.roles=='ADMIN'){
+                this.setUserId('ADMIN')
+            }
+            this.$router.push({name: 'catalog', params:{token: this.refresh}})
         }
+    },
+    computed: {
+        ...mapGetters('user', [
+            'userId',
+        ])
     }
 }
 </script>

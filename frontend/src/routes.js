@@ -10,7 +10,8 @@ import Authorization from './components/Authorization.vue';
 import Registration from './components/Registration.vue';
 
 import ItemPage from './components/ItemPage.vue';
-import cart from './components/Cart.vue'
+import cart from './components/Cart.vue';
+import AddPosition from './components/AddPosition.vue'
 
 const routes = [
     {
@@ -62,6 +63,11 @@ const routes = [
         path: '/cart',
         name: 'cart',
         component: cart
+    },
+    {
+        path: '/addProduct',
+        name: 'addProduct',
+        component: AddPosition
     }
 ];
 

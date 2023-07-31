@@ -1,22 +1,23 @@
 <template>
-    <div class="cart-item" v-for="(product,key) in products" :key="key">
+    <div class="cart-item" v-for="(product,id) in products" :key="id">
         <input class="checkbox" type="checkbox" id="checkbox" v-model="checked"/>
-        <img class="image" src="https://klike.net/uploads/posts/2020-07/1594278030_1.jpg"/>
-        <p class="title">Смартфон</p>
+        <img class="image" :src="product.pictureUrl"/>
+        <p class="title">{{ product.title }}</p>
         <div class="count">
             <div class="amount">
-                <button class="btn-count">-</button>
+                <button class="btn-count" @click="countPlus(product.id)">-</button>
                 <p>1</p>
-                <button class="btn-count">+</button>
+                <button class="btn-count" @click="countMinus(product.id)">+</button>
             </div>
-            <p class="delete">Удалить</p>
+            <p class="delete" @click="deleteProduct(product.id)">Удалить</p>
         </div>
-        <p class="price">20 542 р.</p>
+        <p class="price">{{ product.price }}</p>
     </div>
 </template>
 
 <script>
-import axios from "axios";
+import { mapActions, mapGetters} from "vuex";
+// import axios from "axios";
 export default {
     name: 'cart',
     props: {},
@@ -25,12 +26,40 @@ export default {
             products:[]
         };
     },
-    conputed: {},
-    mounted(){
+    computed: {
+        ...mapGetters('cart',[
+            'productsInCartList'
+        ]),
+    },
+    methods: {
+        ...mapActions('cart', [
+            'addProductInCart',
+            'removeProductOutCart'
+        ]),
+     
+        /*
+       countPlus(id){
+            
+            axios.get("http://localhost:8080/api/addProduct", {
+                productId:this.id
+            })
+            .then(response => console.log(response))
+            .catch(err => console.log(err))
+        },
+        countMinus(id){
 
-        axios.get("http://localhost:8080/api/cart")
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+        },  */
+        deleteProduct(id){
+            this.removeProductOutCart(id)
+            this.products = this.productsInCartList
+        }
+    },
+    mounted(){
+        this.products = this.productsInCartList
+
+       // axios.get("http://localhost:8080/api/catalog/product/"+this.id)
+       // .then(res => console.log(res))
+       // .catch(err => console.log(err))
     }
 }
 </script>
@@ -39,6 +68,8 @@ export default {
     .cart-item {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
     }
 
 
@@ -48,6 +79,7 @@ export default {
     }
 
     .title {
+        top: 0;
         color: rgb(65, 190, 65);
         width: 45%;
         text-align: left;
@@ -79,6 +111,12 @@ export default {
 
     .delete {
         color: rgb(87, 155, 219);
+    }
+
+    
+    .checkbox{
+        width: 20px;
+        height: 20px;
     }
 
 </style>

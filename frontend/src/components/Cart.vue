@@ -3,7 +3,6 @@
         <div class="cart-list">
             <h3>Корзина</h3>
             <cartItem class="cart-item"/>
-            <cartItem/>
         </div>
         <cartFinish class="summ"/>
     </div>
@@ -12,8 +11,8 @@
 <script>
 import cartItem from './CartItem.vue'
 import cartFinish from './CartFinish.vue'
-
-import { mapActions } from 'vuex'
+import axios from 'axios'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -28,6 +27,9 @@ export default {
             'removePatInNavBarMass',
             'addPatInNavBarMass',
         ]),
+        ...mapGetters('cart', [
+            'productInCartList'
+        ])
     },
     mounted(){
         this.removePatInNavBarMass(1)
@@ -35,8 +37,10 @@ export default {
             title: 'Корзина',
             path: this.$router.currentRoute.value.fullPath
         })
-
-
+        axios.get('http://localhost:8080/api/cart')
+        .then(res => {console.log('Res',res)})
+        .then(err => {console.log('Error', err)})
+        console.log(this.productInCartList)
     }
 }
 </script>
