@@ -65,40 +65,40 @@
                               mode="out-in"
                               class="flex-container flex-container-column">
                 
-                    <div v-if="reviewsClick && tempReviewsScore"
+                    <div v-if="userReview"
                          class="reviews-item">
-                    <p>Написать отзыв</p>
-                    <img v-for="index in 5"
-                         :key="index"
-                         class="star"
-                         @click="setScoreInReview(index)"
-                         :src="starInReview(index)">
-                    <p></p>
-                    <input class="input-class"
-                           v-model="tempReviewsName" 
-                           placeholder="Отображаемое имя"/>
-                    <p></p>
-                    <div class="flx-jc-start review-photo flex-container flex-container-row">
-                         <img v-for="(item,index) in tempReviewsPhoto"
-                              :key="index"
-                              :src="item"
-                              @dblclick="removetempReviewPhoto(index)">
+                        <p>Написать отзыв</p>
+                        <img v-for="index in 5"
+                             :key="index"
+                             class="star"
+                             @click="setScoreInReview(index)"
+                             :src="starInReview(index)">
+                        <p></p>
+                        <input class="input-class"
+                               v-model="tempReviewsName" 
+                               placeholder="Отображаемое имя"/>
+                        <p></p>
+                        <div class="flx-jc-start review-photo flex-container flex-container-row">
+                            <img v-for="(item,index) in tempReviewsPhoto"
+                                :key="index"
+                                :src="item"
+                                @dblclick="removetempReviewPhoto(index)">
+                        </div>
+                        <input id="fileItem"
+                               type="file"
+                               @change="handleFileSelect"
+                               accept=".img, .png, .jpg, jpeg"
+                               style="padding-left: 0px;"
+                               multiple />
+                        <p></p>
+                        <input class="input-class"
+                               v-model="tempReviewsDescription" 
+                               placeholder="Комментарий"/>
+                        <p></p>
+                        <button @click="leaveReview">
+                            Отправить
+                        </button>
                     </div>
-                    <input id="fileItem"
-                           type="file"
-                           @change="handleFileSelect"
-                           accept=".img, .png, .jpg, jpeg"
-                           style="padding-left: 0px;"
-                           multiple />
-                    <p></p>
-                    <input class="input-class"
-                           v-model="tempReviewsDescription" 
-                           placeholder="Комментарий"/>
-                    <p></p>
-                    <button @click="leaveReview">
-                        Отправить
-                    </button>
-                </div>
                 
                 <div v-for="(item,index) in visibleReviewsRows"
                     :key="index"
@@ -224,6 +224,7 @@ export default {
         axios.get('http://localhost:8080/api/catalog/product/' + ID)
         .then(response => {
             this.product = response.data
+            console.log(this.product)
             // очищаем массив navbar
             this.removePatInNavBarMass(1)
             // устанавливаем значение категории
@@ -292,6 +293,9 @@ export default {
             'pathInNavBarMass',
             'nameOfCategory',
             'nameOfSubcategory',
+        ]),        
+        ...mapGetters('user', [
+            'userId',
         ]),
         ...mapActions('navbar', [
             'addPatInNavBarMass',
@@ -381,6 +385,13 @@ export default {
     computed: {
         mrgnBtmTable(){
             return this.visibleRows.length ? '' : 'margin-bottom: 0px;'
+        },
+        userReview(){
+            if (this.reviewsClick && this.tempReviewsScore && this.userId()){
+                return true
+            }
+            return false
+
         }
     }
 };

@@ -20,4 +20,7 @@ public class UserProductDto {
 
     @ApiModelProperty(notes = "Количество товара в магазине", required = true)
     private Long amount;
+
+    @ApiModelProperty(notes = "ID товара", required = true)
+    private Long id;
 }

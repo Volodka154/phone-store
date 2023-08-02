@@ -2,50 +2,88 @@
     <div class="add-position">
         <div class="h-information">
             <div class="wrap-category">
-                <p>Смартфоны</p>
                 <div class="category">
                     <p>Категория:</p>
-                    <select name="categ" class="category-select">
-                        <option value="1">Apple</option>
-                        <option value="2">Samsung</option>
-                        <option value="3">Huawei</option>
+                    <select name="categ" class="category-select" v-model="selectCategory" @click="getCategory">
+                        <option v-for="(number, index) in numbers" :key="index" :value="index" >{{ number }}</option>
                     </select>
+                </div>
+                <div class="flex-container">
+                <button @click="isCategoryAdd = true">Добавить новую</button>
+                <button>Редактировать</button>
+                <button >Удалить</button>
+                </div>
+                <div v-if="isCategoryAdd">
+                    <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
+                    <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
+                    <button @click="addCategory">Добавить</button>
                 </div>
             </div>
             <div class="add-new">
-                <button class="btn-new">Добавить новую</button>
+              
             </div>
         </div>
-        <div class="haract">Характеристики:</div>
-        <div class="b-information">
-            <form class="form">
-                <input class="input" type="text" id="name" placeholder="Название">
-                <input class="input description" type="text" id="description" placeholder="Описание">
-                <input class="input" type="number" id="count" placeholder="Количество">
-                <input class="input" type="number" id="price" placeholder="Цена">
-                <input class="input" type="number" id="discount" placeholder="Скидка">
-            </form>
-            <form class="form">
-                <input class="input" type="text" id="photo" placeholder="Загрузить фото">
-                <input class="input" type="text" id="model" placeholder="Модель">
-                <input class="input" type="number" id="memory" placeholder="Память">
-                <input class="input" type="text" id="color" placeholder="Цвет">
-                <input class="input" type="number" id="battery" placeholder="Емкость аккумулятора">
-                <input class="input" type="number" id="country" placeholder="Страна">
-            </form>
-        </div>
-        <button class="btn-add">Добавить товар</button>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     name: 'add-position',
     props: {},
     data() {
-        return {}
+        return {
+            categories: '',
+            numbers: [],
+            selectCategory: '',
+            isCategoryAdd: false,
+            categoryId: '',
+            categoryTitle: '',
+        }
     },
-    conputed: {}
+    computed: {
+    },
+    methods: {
+      /*  add(){
+            axios.post("http://localhost:8080/admin/product", {
+                amount: this.name,
+                description: this.description,
+                discount: true,
+                "discountPrice": 0,
+                "id": 111,
+                "pictureUrl": "string",
+                "price": 0,
+                "productPropertyRequest": {
+                    "id": 0,
+                    "propertyIds": [
+                        0
+                    ]
+                },
+                "subcategoryId": 0,
+                "title": "string"
+            })
+            .then(response => console.log(response))
+            .catch(err => console.log(err))
+        }, */
+        getCategory(){
+            this.numbers=Array()
+            axios.get("http://localhost:8080/api/catalog/categories",{})
+            .then(response => this.categories = response.data)
+            .catch(err => console.log(err))
+            console.log(this.categories.length)
+            for (let i=0; i<this.categories.length; i++){
+                this.numbers.push(this.categories[i].title)
+            }
+        },
+        addCategory(){
+            axios.post("http://localhost:8080/api/admin/category",{
+                id: this.categoryId,
+                title: this.categoryTitle
+            })
+            .then(response => console.log(response))
+            .catch(err => console.log(err))
+        }
+    }, 
 }
 </script>
 
@@ -66,10 +104,9 @@ export default {
 }
 
 .wrap-category {
-    display: flex;
     flex-direction: column;
     width: 50%;
-    align-items: baseline;
+    align-items: center;
 }
 
 .category {
@@ -131,5 +168,11 @@ export default {
     margin: 1em;
     border: none;
     align-self: center;
+}
+
+.flex-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>

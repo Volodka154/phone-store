@@ -20,7 +20,7 @@
                 <div>
                     <h3>{{ price }}</h3>
                     <cart-button-gray v-if="quantity == 'EMPTY'" />
-                    <cart-button v-else @click="addToCart(id)"/>
+                    <cart-button v-else @click="addToCart"/>
                 </div>
             </div>
         </div>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters} from "vuex";
 import axios from "axios";
 import cartButtonGray from "./CartButtonGray";
 import cartButton from "./CartButton.vue";
@@ -53,18 +54,49 @@ export default {
             id: this.infoMass.id
         };
     },
+    computed: {
+    },
     methods: {
+        ...mapActions('cart',[
+            'addProductInCart',
+            'changeTotalPrice',
+            'changeCountProduct'
+        ]),
+        ...mapGetters('cart',[
+            'productsInCartList'
+        ]),
         quantityCalculate (status) {
             return "quantity-color-" + status
         },
-        addToCart(id){
+        addToCart(){
             // проверка на то, зареган пользователь или нет
-
-            axios.post("http://localhost:8080/api/addProduct", {
-                productId:id
+            //console.log(this.infoMass)
+            
+            //this.addProductInCart(this.infoMass)
+            //console.log(this.productsInCartList())
+            //this.changeCountProduct(1)
+            //this.changeTotalPrice(this.price)
+            axios.post('http://localhost:8080/api/auth/login', {
+                userEmail: 'ww@w.ww',
+                userPassword: 'ww'
             })
-            .then(response => console.log(response))
-            .catch(err => console.log(err))
+            .then(response => {
+                if (response.status === 200) {
+                    const token = response.data.accessToken; // Получаем токен из ответа сервера
+                    axios.post("http://localhost:8080/api/addProduct", {
+                        productId: this.id
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}` // Передаем токен в заголовке запроса
+                        }
+                    })
+                    .then(response => console.log(response))
+                    .catch(err => console.log(err))
+                } else {
+                    alert("Неверно введены данные или такой email уже зарегистрирован!");
+                }
+            })
+            .catch(err => console.log(err));
         },
         getSlug(){
             let slug = String(this.title).toLowerCase()

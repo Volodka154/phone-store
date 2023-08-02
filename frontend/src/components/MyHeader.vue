@@ -11,16 +11,22 @@
                       @click="movingByNavBar(pathInNavBarMass[0])"
                       >Phone-shop
                 </span>
+                <button v-if="this.userId=='ADMIN'" @click="clickOnChange">Добавить товар</button>
             </div>
             <Transition name="slide"
                         mode="out-in">
                 <category-card v-if="isModalCategoryList"/>
             </Transition>
             <div class="right">
-                <span class="btn-header"
+                <span class="btn-header" v-if="!this.userId"
                       @click="clickOnAutorization">
                     Войти
                 </span>
+                <span class="btn-header" v-else
+                      @click="clickOnAutorization" :key="this.userId">
+                    {{ this.userId }}
+                </span>
+
                 <img class="ikon"
                      @click="clickOnAutorization"
                      src="profile.svg">
@@ -32,6 +38,7 @@
                 <img class="ikon"
                      @click="clickOnCart"
                      src="cart.svg">
+
             </div>
         </div>
         <div class="nav-bar flex-container flx-jc-start">
@@ -60,7 +67,8 @@ export default {
     },
     data() {
         return {
-
+            id: '',
+            countCart: 0
         }
     },
     methods: {
@@ -76,11 +84,24 @@ export default {
             })
         },
         clickOnCart() {
-            this.$router.push({
+            /*this.$router.push({
                 name: 'back',
                 query: {
                     nameOfProps: 'cart',
                 }
+            })*/
+            this.$router.push({
+                name: 'cart'
+            })
+
+        },
+        clickOnChange() {
+            console.log(this.refreshToken)
+            this.$router.push({
+                name: 'back',
+                query: {
+                    nameOfProps: 'addProduct',
+                },  params: {token: String(this.refreshToken)}
             })
         },
         ...mapActions('navbar', [
@@ -100,9 +121,16 @@ export default {
             'isModalCategoryList',
             'pathInNavBarMass',
             'allCategoryList',
+        ]),
+        ...mapGetters('user', [
+            'userId',
+            'refreshToken'
+        ]),
+        ...mapGetters('cart',[
+            'countProduct'
         ])
     }
-    }
+}
 </script>
 
 <style>

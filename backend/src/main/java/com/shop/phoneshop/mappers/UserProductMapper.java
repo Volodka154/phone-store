@@ -15,6 +15,7 @@ public interface UserProductMapper {
         userProductDto.setTitle(userProduct.getProduct().getTitle());
         userProductDto.setPrice(ProductUtil.getPrice(userProduct.getProduct(), authentication));
         userProductDto.setAmount(userProduct.getAmount());
+        userProductDto.setId(userProduct.getProduct().getId());
 
         return userProductDto;
     }
