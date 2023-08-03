@@ -33,8 +33,8 @@ export default {
     },
     methods: {
         ...mapActions('user', [
-            'setUserId',
-            'removeUserId',
+            'setTokenType',
+            'setAccessToken',
             'setRefreshToken'
         ]),
         onClick() {
@@ -43,41 +43,31 @@ export default {
                 userPassword: String(this.password)
 
             }).then(response => this.nameOnHeader(response))
-            .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
-            
+            .catch(err => alert("Неверно введены данные или такой email не существует!", err));
         },
         clickOnCreateAccount() {
             this.$router.push({name: 'registration'})
         },
         nameOnHeader(response){
-            const token = response.data.accessToken;
-            this.refresh = response.data.refreshToken;
-            console.log(this.refresh)
-            axios.post('http://localhost:8080/api/auth/refresh', {
-               refreshToken: this.refresh
-            }).then(response => this.refresh = response)
-            .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
-            //console.log('!!!!!!!!!!!!!!!!!!1')
-            //console.log(this.refresh)
-            this.setRefreshToken(this.refresh)
-            const [headerBase64, payloadBase64] = token.split('.');
-
+            const token = response.data;
+            this.setTokenType(token.tokenType)
+            this.setAccessToken(token.accessToken)
+            this.setRefreshToken(token.refreshToken)
+            
+            const [headerBase64, payloadBase64] = token.accessToken.split('.');
             const header = JSON.parse(atob(headerBase64));
             const payload = JSON.parse(atob(payloadBase64));
-            //console.log(payload)
-            console.log(header);
-            this.setUserId(payload.username); //сейчас в токене лежит id и роль, а так же время распада токена
-            //let i = this.userId
-            //console.log(i)
-            if (payload.roles=='ADMIN'){
+            console.log('header',header)
+            console.log('payload', payload)
+            /*if (payload.roles=='ADMIN'){
                 this.setUserId('ADMIN')
-            }
-            this.$router.push({name: 'catalog', params:{token: this.refresh}})
+            }*/
+            this.$router.push({name: 'catalog'})
         }
     },
     computed: {
         ...mapGetters('user', [
-            'userId',
+            'accessToken',
         ])
     }
 }

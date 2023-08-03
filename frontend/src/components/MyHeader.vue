@@ -11,25 +11,32 @@
                       @click="movingByNavBar(pathInNavBarMass[0])"
                       >Phone-shop
                 </span>
-                <button v-if="this.userId=='ADMIN'" @click="clickOnChange">Добавить товар</button>
+                <button v-if="this.accessToken=='ADMIN'" @click="clickOnChange">Добавить товар</button>
             </div>
             <Transition name="slide"
                         mode="out-in">
                 <category-card v-if="isModalCategoryList"/>
             </Transition>
             <div class="right">
-                <span class="btn-header" v-if="!this.userId"
+                <span class="btn-header" v-if="!this.accessToken"
                       @click="clickOnAutorization">
                     Войти
                 </span>
-                <span class="btn-header" v-else
-                      @click="clickOnAutorization" :key="this.userId">
-                    {{ this.userId }}
+
+                <span class="btn-header" v-if="this.accessToken"
+                      @click="clickOnAutorization">
+                    Выйти
                 </span>
 
                 <img class="ikon"
                      @click="clickOnAutorization"
                      src="profile.svg">
+
+                <span class="btn-header" v-if="this.accessToken"
+                      @click="clickOnAutorization">
+                    {{ this.accessToken.slice(0, 5) }}
+                </span>
+
     
                 <span class="btn-header"
                       @click="clickOnCart">
@@ -84,24 +91,22 @@ export default {
             })
         },
         clickOnCart() {
-            /*this.$router.push({
-                name: 'back',
-                query: {
-                    nameOfProps: 'cart',
-                }
-            })*/
-            this.$router.push({
-                name: 'cart'
-            })
+            if (this.accessToken) {
+                this.$router.push({
+                    name: 'cart'
+                })
+            }
+            else {
+                alert("Необходима авторизация!"); 
+            }
 
         },
         clickOnChange() {
-            console.log(this.refreshToken)
             this.$router.push({
                 name: 'back',
                 query: {
                     nameOfProps: 'addProduct',
-                },  params: {token: String(this.refreshToken)}
+                }
             })
         },
         ...mapActions('navbar', [
@@ -123,7 +128,7 @@ export default {
             'allCategoryList',
         ]),
         ...mapGetters('user', [
-            'userId',
+            'accessToken',
             'refreshToken'
         ]),
         ...mapGetters('cart',[

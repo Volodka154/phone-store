@@ -65,6 +65,10 @@ export default {
         ...mapGetters('cart',[
             'productsInCartList'
         ]),
+        ...mapGetters('user', [
+            'tokenType',
+            'accessToken'
+        ]),
         quantityCalculate (status) {
             return "quantity-color-" + status
         },
@@ -76,27 +80,19 @@ export default {
             //console.log(this.productsInCartList())
             //this.changeCountProduct(1)
             //this.changeTotalPrice(this.price)
-            axios.post('http://localhost:8080/api/auth/login', {
-                userEmail: 'ww@w.ww',
-                userPassword: 'ww'
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    const token = response.data.accessToken; // Получаем токен из ответа сервера
+            if (this.accessToken()) {
                     axios.post("http://localhost:8080/api/addProduct", {
                         productId: this.id
                     }, {
                         headers: {
-                            Authorization: `Bearer ${token}` // Передаем токен в заголовке запроса
+                            Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
                         }
                     })
                     .then(response => console.log(response))
                     .catch(err => console.log(err))
                 } else {
-                    alert("Неверно введены данные или такой email уже зарегистрирован!");
+                    alert("Необходима авторизация!");
                 }
-            })
-            .catch(err => console.log(err));
         },
         getSlug(){
             let slug = String(this.title).toLowerCase()

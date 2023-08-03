@@ -35,6 +35,10 @@ export default {
         ]),
         ...mapGetters('cart', [
             'productInCartList'
+        ]),
+        ...mapGetters('user', [
+            'tokenType',
+            'accessToken'
         ])
     },
     mounted(){
@@ -43,30 +47,21 @@ export default {
             title: 'Корзина',
             path: this.$router.currentRoute.value.fullPath
         })
-        axios.post('http://localhost:8080/api/auth/login', {
-            userEmail: 'ww@w.ww',
-            userPassword: 'ww'
-        })
-        .then(response => {
-            if (response.status === 200) {
-                const token = response.data.accessToken; // Получаем токен из ответа сервера
-                axios.get("http://localhost:8080/api/cart", {
-                    headers: {
-                        Authorization: `Bearer ${token}` // Передаем токен в заголовке запроса
-                    }
-                })
-                .then(response => {
-                    this.productInCartMass = response.data
-                    console.log(response)
-                })
-                .catch(err => console.log(err))
-            } else {
-                alert("Неверно введены данные или такой email уже зарегистрирован!");
-            }
-            
-        })
-        .catch(err => console.log(err));
-    }
+        
+        if (this.accessToken()) {
+            axios.get("http://localhost:8080/api/cart", {
+                headers: {
+                    Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
+                }
+            })
+            .then(response => {
+                this.productInCartMass = response.data
+            })
+            .catch(err => console.log(err))
+        } else {
+            alert("Необходима авторизация!");
+        }       
+    },
 }
 </script>
 

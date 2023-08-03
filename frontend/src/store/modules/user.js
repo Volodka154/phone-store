@@ -2,45 +2,61 @@ export default {
     namespaced: true,
     state() {
         return{
-            userId:'',
+            tokenType: '',
+            accessToken:'',
             refreshToken: ''
         }
     },
     getters: {
-        userId(state){
-            return state.userId
+        tokenType(state){
+            return state.tokenType
+        },
+        accessToken(state){
+            return state.accessToken
         },
         refreshToken(state){
             return state.refreshToken
         }
     },
     mutations: {
-        setUserId(state, newUserId){
-            state.userId = newUserId
+        setTokenType(state, newTokenType){
+            state.tokenType = newTokenType
         },
-        removeUserId(state){
-            state.userId = ''
+        removeTokenType(state){
+            state.tokenType = ''
         },
-        setRefreshToken(state, newToken){
-            state.refreshToken = newToken
+        setAccessToken(state, newAccessToken){
+            state.accessToken = newAccessToken
+        },
+        removeAccessToken(state){
+            state.accessToken = ''
+        },
+        setRefreshToken(state, newRefreshToken){
+            state.refreshToken = newRefreshToken
         },
         removeRefreshToken(state){
             state.refreshToken = ''
         }
     },
     actions: {
-        setUserId(store, payload){
-            store.commit('setUserId', payload)
+        setTokenType(store, payload){
+            store.commit('setTokenType', payload)
         },
-        removeUserId(store, payload){
-            store.commit('removeUserId', payload)
+        removeTokenType(store, payload){
+            store.commit('removeTokenType', payload)
+        },
+        setAccessToken(store, payload){
+            store.commit('setAccessToken', payload)
+        },
+        removeAccessToken(store, payload){
+            store.commit('removeAccessToken', payload)
         },
         setRefreshToken(store, payload){
-            store.commit('setRefreshToken',payload)
+            store.commit('setRefreshToken', payload)
         },
-        removeRefreshToken(store,payload){
+        removeRefreshToken(store, payload){
             store.commit('removeRefreshToken', payload)
-        }
+        },
     },
     strict: true,
 }
