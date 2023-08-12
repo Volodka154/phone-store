@@ -28,11 +28,7 @@ export default {
             productInCartMass: {}
         }
     },
-    methods: {
-        ...mapActions('navbar', [
-            'removePatInNavBarMass',
-            'addPatInNavBarMass',
-        ]),
+    computed: {
         ...mapGetters('cart', [
             'productInCartList'
         ]),
@@ -41,6 +37,12 @@ export default {
             'accessToken'
         ])
     },
+    methods: {
+        ...mapActions('navbar', [
+            'removePatInNavBarMass',
+            'addPatInNavBarMass',
+        ]),
+    },
     mounted(){
         this.removePatInNavBarMass(1)
         this.addPatInNavBarMass({
@@ -48,10 +50,10 @@ export default {
             path: this.$router.currentRoute.value.fullPath
         })
         
-        if (this.accessToken()) {
+        if (this.accessToken) {
             axios.get("http://localhost:8080/api/cart", {
                 headers: {
-                    Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
+                    Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
             })
             .then(response => {
@@ -70,7 +72,6 @@ export default {
         align-self: flex-start;
         width: 70%;
     }
-
     .summ {
         align-self: flex-end;
         align-self: center;

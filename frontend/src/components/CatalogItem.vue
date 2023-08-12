@@ -54,8 +54,6 @@ export default {
             id: this.infoMass.id
         };
     },
-    computed: {
-    },
     methods: {
         ...mapActions('cart',[
             'addProductInCart',
@@ -73,26 +71,19 @@ export default {
             return "quantity-color-" + status
         },
         addToCart(){
-            // проверка на то, зареган пользователь или нет
-            //console.log(this.infoMass)
-            
-            //this.addProductInCart(this.infoMass)
-            //console.log(this.productsInCartList())
-            //this.changeCountProduct(1)
-            //this.changeTotalPrice(this.price)
             if (this.accessToken()) {
-                    axios.post("http://localhost:8080/api/addProduct", {
-                        productId: this.id
-                    }, {
-                        headers: {
-                            Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
-                        }
-                    })
-                    .then(response => console.log(response))
-                    .catch(err => console.log(err))
-                } else {
-                    alert("Необходима авторизация!");
-                }
+                axios.post("http://localhost:8080/api/addProduct", {
+                    productId: this.id
+                }, {
+                    headers: {
+                        Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
+                    }
+                })
+                .then(response => console.log(response))
+                .catch(err => console.log('err', err))
+            } else {
+                alert("Необходима авторизация!");
+            }
         },
         getSlug(){
             let slug = String(this.title).toLowerCase()

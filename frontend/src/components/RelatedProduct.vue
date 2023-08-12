@@ -1,46 +1,70 @@
+<!-- Один элемент "соответсвующих товаров" на странице любого продукта -->
 <template>
-    <div id="related-product">
-        <h5 class="title">чехол для Iphone 12</h5>
-        <img src="https://c.dns-shop.ru/thumb/st4/fit/500/500/9c060b3cb478ddb0fb6ed8807b7f7066/5e73e844939e1ad8fa591a74bcd742506d9a2b22d428eb546fcfc85679e76e39.jpg.webp" 
-                 class="imgRelatedProductClass">
+    <div class="flex-container flex-container-column"
+         @click="clickOnPhone()">
+        <h5 class="title-сolor max-str-2 mrgn-top-0">{{ relatedItem.title }}</h5>
+        <div class="review-photo">
+            <img :src="relatedItem.pictureUrl"
+            class="related-photo">
+        </div>
+        <h4>{{ relatedItem.price }} руб.</h4>
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
 export default {
     name: 'related-product',
-    props: {},
+    props: ['propsRelated'],
     data() {
         return {
-        };
+            relatedItem: this.propsRelated
+        }
     },
-    computed: {
-
-    },
-    mounted(){
+    methods: {
+        getSlug(){
+            let slug = String(this.relatedItem.title).toLowerCase()
+            slug = slug.replace(/ /ig,'-')
+            slug = slug + '-' + String(this.relatedItem.id)
+            return slug
+        },
+        clickOnPhone(){
+            const nameInRoute = this.$router.currentRoute.value.params.name
+            this.$router.push({
+                name: 'itemPage',
+                params:{
+                    name: nameInRoute, 
+                    slug: this.getSlug()
+                }
+            })
+        }
 
     }
 }
-  </script>
-    
-  <style>
-    .related-product {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .imgRelatedProductClass{
-        align-self: center;
-        width: 10%;
-        height: 10%;
-        cursor: pointer;
-    }
-    .title{
-        color: #33b75c;
-    }
-    .title:hover {
-        color: #185b2d;
-        cursor: pointer;
-    }   
-    
-  </style>
+</script>
+
+<style>
+.max-str-2{
+    line-height: 1.1rem;
+    text-overflow: ellipsis; /* Добавление многоточия, если текст обрезан */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.mrgn-top-0{
+    margin-top: 0px !important;
+}
+.related-item {
+    margin: 5px 10px;
+    text-align: left;
+    padding: 10px;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, rgba(240, 240, 240, 1), rgba(240, 240, 240, 0.5));
+}
+.related-item:first-child{
+    margin-left: 0px;
+}
+.related-photo{
+    object-fit: contain !important;
+}
+</style>

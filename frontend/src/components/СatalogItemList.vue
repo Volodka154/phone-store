@@ -118,8 +118,8 @@ export default {
 
 <style>
 .item-page {
-    border: 1px solid;
-    margin: 10px 60px;
+    border: 0px solid;
+    margin: 30px 60px;
 }
 .flex-container {
     display: flex;

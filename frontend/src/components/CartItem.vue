@@ -42,6 +42,10 @@ export default {
     computed: {
         ...mapGetters('cart',[
             'productsInCartList'
+        ]),        
+        ...mapGetters('user', [
+            'tokenType',
+            'accessToken',
         ]),
     },
     methods: {
@@ -50,82 +54,38 @@ export default {
             'removeProductOutCart'
         ]),
         countPlus(id){
-            //this.removeProductOutCart(id)
-            axios.post('http://localhost:8080/api/auth/login', {
-                userEmail: 'ww@w.ww',
-                userPassword: 'ww'
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    const token = response.data.accessToken; // Получаем токен из ответа сервера
-                    axios.put('http://localhost:8080/api/cart/addAmount',{
-                        productId: id
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}` // Передаем токен в заголовке запроса
-                        }
-                    }).then(res => console.log(res))
-                    .catch(err => console.log(err))
-                } else {
-                    alert("Неверно введены данные или такой email уже зарегистрирован!");
+            console.log(this.tokenType)
+            axios.put('http://localhost:8080/api/cart/addAmount',{
+                productId: id
+            }, {
+                headers: {
+                    Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
-            })
-            .catch(err => console.log(err));
+            }).then(res => console.log(res))
+            .catch(err => console.log(err))
+                
         },
         countMinus(id){
-            //this.removeProductOutCart(id)
-            axios.post('http://localhost:8080/api/auth/login', {
-                userEmail: 'ww@w.ww',
-                userPassword: 'ww'
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    const token = response.data.accessToken; // Получаем токен из ответа сервера
-                    axios.post('http://localhost:8080/api/cart/reduceAmount',{
-                        productId: id
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}` // Передаем токен в заголовке запроса
-                        }
-                    }).then(res => console.log(res))
-                    .catch(err => console.log(err))
-                } else {
-                    alert("Неверно введены данные или такой email уже зарегистрирован!");
+            axios.post('http://localhost:8080/api/cart/reduceAmount',{
+                productId: id
+            }, {
+                headers: {
+                    Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
-            })
-            .catch(err => console.log(err));
+            }).then(res => console.log(res))
+            .catch(err => console.log(err))
         },
         deleteProduct(id){
-            console.log(id)
-            axios.post('http://localhost:8080/api/auth/login', {
-                userEmail: 'ww@w.ww',
-                userPassword: 'ww'
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    const token = response.data.accessToken; // Получаем токен из ответа сервера
-                    axios.delete('http://localhost:8080/api/cart/deleteProduct', {
-                        data: {
-                            productId: id
-                        },
-                        headers: {
-                            Authorization: `Bearer ${token}` // Передаем токен в заголовке запроса
-                        }
-                    }).then(res => console.log(res))
-                    .catch(err => console.log(err))
-                } else {
-                    alert("Неверно введены данные или такой email уже зарегистрирован!");
+            axios.delete('http://localhost:8080/api/cart/deleteProduct', {
+                data: {
+                    productId: id
+                },
+                headers: {
+                    Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
-            })
-            .catch(err => console.log(err));
+            }).then(res => console.log(res))
+            .catch(err => console.log(err))
         }
-    },
-    mounted(){
-        //this.products = this.productsInCartList
-        //console.log('this.products \n', this.product)
-       // axios.get("http://localhost:8080/api/catalog/product/"+this.id)
-       // .then(res => console.log(res))
-       // .catch(err => console.log(err))
     }
 }
 </script>

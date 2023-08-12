@@ -60,6 +60,10 @@
     
             </span>
         </div>
+        <p></p>
+        <div class="nav-bar flex-container flx-jc-start">
+            <button @click="clickOnAddProduct">Добавить продукт</button>
+        </div>
     </div>
 </template>
     
@@ -67,6 +71,8 @@
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 import CategoryCard from './CategoryCard.vue'
+
+import axios from 'axios'
 export default {
     name: 'my-header',
     components: {
@@ -79,6 +85,51 @@ export default {
         }
     },
     methods: {
+        clickOnAddProduct(){
+            console.log('Добавить продукт')
+            axios.post('http://localhost:8080/api/auth/login', {
+                userEmail: 'ww@w.ww',
+                userPassword: 'ww'
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    const token = response.data.accessToken; // Получаем токен из ответа сервера
+
+                    axios.post('http://localhost:8080/api/admin/product',{
+                        amount: 5,
+                        description: "string",
+                        discount: true,
+                        discountPrice: 50,
+                        id: 2000,
+                        pictureUrl: "string",
+                        price: 3000,
+                        productPropertyRequest: {
+                            id: 111,
+                            propertyIds: [
+                                1,2
+                            ]
+                        },
+                        subcategoryId: 11,
+                        title: "string"
+                    },{
+                        headers: {
+                            Authorization: `Bearer ${token}` // Передаем токен в заголовке запроса
+                        }       
+                    })
+                    .then(res =>{console.log(res)})
+                    .catch(err => {console.log(err)})
+                } else {
+                    alert("Неверно введены данные или такой email уже зарегистрирован!");
+                }
+            })
+            .catch(err => console.log(err));
+        },
+
+
+
+
+
+
         clickOnAutorization(){
             if(this.isModalCategoryList){
                 this.changeIsModalCategoryList()

@@ -1,10 +1,9 @@
 <!-- Отзывы на странице товара -->
 <template>
     <div>
-        <div class="review-title flex-container flex-container-row">
+        <!--<div class="review-title flex-container flex-container-row">
             <h4 class="review-title__name">{{review.name}}</h4>
-            <span class="review-title__date">{{review.date}}</span>
-        </div>
+        </div>-->
         <div class="all-stars">
             <img v-for="index in 5"
                  :key="index"
@@ -12,11 +11,11 @@
                  :src="starInReview(index)">
         </div>
         <div class="flx-jc-start review-photo flex-container flex-container-row">
-            <img v-for="(item,index) in review.photo"
+            <img v-for="(item,index) in review.picturesUrls"
                  :key="index"
                  :src="item">
         </div>
-        <h5 class="review-desc">{{review.description}}</h5>
+        <h5 class="review-desc">{{review.comment}}</h5>
     </div>
 </template>
 
@@ -30,7 +29,7 @@ export default {
     },
     methods: {
         starInReview(index){
-            return index <= this.review.score ? "IosStar.svg" : "IosStarOutline.svg" 
+            return index <= this.review.feedback ? "IosStar.svg" : "IosStarOutline.svg" 
         }
     }
 }
@@ -42,9 +41,6 @@ export default {
 }
 .review-title__name {
     margin-bottom: 0px;
-}
-.review-title__date {
-    font-size: 12px;
 }
 .all-stars {
     margin: 20px 0px;
@@ -68,5 +64,6 @@ export default {
 }
 .review-desc {
     font-size: 14px;
+    text-align: left;
 }
 </style>

@@ -11,6 +11,7 @@
                      @click="clickOnImg"/> 
             </div>
         </div>
+        <!-- Описание товара -->
         <div class="flex-container flex-container-row">
             <img :src="product.pictureUrl" 
                  class="iphone-page"
@@ -28,18 +29,19 @@
                         {{ allStatus[product.status] }}
                     </h4>
                     <cart-button-gray v-if="product.status == 'EMPTY'" />
-                    <cart-button v-else  @click="addToCart(id)"/>
+                    <cart-button v-else  @click="addToCart"/>
                 </div>
             </div>
         </div>
+        <!-- Характеристики -->
         <div>
             <div @click="specificationsOnDisplay"
-                  class="option-item-page"
-                  :style="mrgnBtmTable">
+                 class="option-item-page"
+                 :style="mrgnBtmTable">
                 Характеристики
                 <img src="KeyboardArrowRightOutlined.svg"
-                        class="icon-item-page"
-                        :class="rotateIcon(specificationsClick)">
+                     class="icon-item-page"
+                     :class="rotateIcon(specificationsClick)">
             </div>
             <transition-group tag="table" 
                               name="slide-fade"
@@ -52,37 +54,34 @@
                 </tr>
             </transition-group>
         </div>
-
+        <!-- Отзывы -->
         <div>
             <div @click="reviewsOnDisplay"
-                  class="option-item-page">
+                 class="option-item-page">
                 Отзывы
                 <img src="KeyboardArrowRightOutlined.svg"
-                        class="icon-item-page"
-                        :class="rotateIcon(reviewsClick)">
+                     class="icon-item-page"
+                     :class="rotateIcon(reviewsClick)">
             </div>
             <transition-group name="slide-fade"
                               mode="out-in"
                               class="flex-container flex-container-column">
                 
-                    <div v-if="userReview"
-                         class="reviews-item">
-                        <p>Написать отзыв</p>
+                <div v-if="userReview"
+                     class="reviews-item">
+                    <p>Написать отзыв</p>
+                    <div class="all-stars">
                         <img v-for="index in 5"
                              :key="index"
                              class="star"
                              @click="setScoreInReview(index)"
                              :src="starInReview(index)">
                         <p></p>
-                        <input class="input-class"
-                               v-model="tempReviewsName" 
-                               placeholder="Отображаемое имя"/>
-                        <p></p>
                         <div class="flx-jc-start review-photo flex-container flex-container-row">
                             <img v-for="(item,index) in tempReviewsPhoto"
-                                :key="index"
-                                :src="item"
-                                @dblclick="removetempReviewPhoto(index)">
+                                 :key="index"
+                                 :src="item"
+                                 @dblclick="removetempReviewPhoto(index)">
                         </div>
                         <input id="fileItem"
                                type="file"
@@ -95,22 +94,30 @@
                                v-model="tempReviewsDescription" 
                                placeholder="Комментарий"/>
                         <p></p>
-                        <button @click="leaveReview">
+                        <button @click="sendFeedback">
                             Отправить
                         </button>
                     </div>
+                </div>
                 
                 <div v-for="(item,index) in visibleReviewsRows"
-                    :key="index"
-                    class="reviews-item">
-                        <ItemPageReview :propsReview="item"/>
+                     :key="index"
+                     class="reviews-item">
+                        <item-page-review :propsReview="item"/>
                 </div>
-
             </transition-group>
         </div>
-        <div class="cursor-noneptr">
-            <div class="option-item-page">
+        <!-- Соответсвующие товары -->
+        <div>
+            <div class="cursor-noneptr option-item-page">
                 Сопутствующие товары
+            </div>
+            <div class="review-photo flex-container flex-container-row">
+                <div v-for="item in massForRelatedProducts"
+                     :key="item.id"
+                     class="related-item">
+                     <related-product :propsRelated="item"/>
+                </div>
             </div>
         </div>
     </div>
@@ -121,16 +128,17 @@ import axios from 'axios';
 import cartButtonGray from "./CartButtonGray";
 import cartButton from "./CartButton.vue";
 import ItemPageReview from "./ItemPageReview.vue";
+import RelatedProduct from "./RelatedProduct.vue";
 import { mapActions, mapGetters } from 'vuex'
 export default {
     components: {
         cartButton,
         cartButtonGray,
-        ItemPageReview
+        ItemPageReview,
+        RelatedProduct
     },
     data() {
         return {
-            
             product:{},
 
             allStatus: {
@@ -140,7 +148,7 @@ export default {
             },
 
             visibleRows: [],
-            currentIndex: -1,
+            currentIndexForSpecifications: -1,
             visibleReviewsRows: [],
             currentIndexForReviews: -1,
 
@@ -150,6 +158,8 @@ export default {
 
             titleOfCategory: 'Смартфоны',
             titleOfSubcategory: '',
+
+            massForRelatedProducts: [],
 
             specifications: {
                 'Операционная система': 'iOS',
@@ -168,139 +178,136 @@ export default {
                 'Оптический зум на увеличение (x)': '6'
             },
 
-            tempReviewsName: '',
             tempReviewsScore: 1,
-            tempReviewsPhoto: [],
-
+            tempReviewsPhoto: ['https://c.dns-shop.ru/thumb/st1/fit/0/0/1cc5440fcbbaae8e5697e61f15d0980f/0a5d4dcd76ccf1183e108eab7b641de4b90111291756c7685498824cbf867f17.jpg.webp'],
             tempReviewsDescription: '',
-            reviews: [
-            {
-                    name: 'NNikiTOS',
-                    score: 5,
-                    photo: [
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                    ],
-                    date: "05.04.2023",
-                    description: 'В целом норм, но можно было и лучше.'
-                },
-                {
-                    name: 'Fialka',
-                    score: 1,
-                    photo: [
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIQzvLBWKeyXFYm3-ELXQJTqytGX4c15Jpg&usqp=CAU',
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIQzvLBWKeyXFYm3-ELXQJTqytGX4c15Jpg&usqp=CAU',
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIQzvLBWKeyXFYm3-ELXQJTqytGX4c15Jpg&usqp=CAU',
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIQzvLBWKeyXFYm3-ELXQJTqytGX4c15Jpg&usqp=CAU',
-                    ],
-                    date: "06.04.2023",
-                    description: 'В целом норм, но можно было и лучше.'
-                },
-                {
-                    name: 'LopiTalk',
-                    score: 2,
-                    photo: [
-                        'https://icdn.lenta.ru/images/2021/07/30/11/20210730113026240/square_320_cbd61957ca82963760b8544edfd20b31.jpg',
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIQzvLBWKeyXFYm3-ELXQJTqytGX4c15Jpg&usqp=CAU'
-                    ],
-                    date: "07.04.2023",
-                    description: 'В целом норм, но можно было и лучше.'
-                }
-            ]
         };
     },
     beforeMount(){
         document.addEventListener("click", this.closeImgModal);
         document.addEventListener("keydown", this.closeImgModal);
     },
-    mounted(){
-        let ID = this.$router.currentRoute.value.params.slug
-        ID = ID.split('-').pop()
-        axios.get('http://localhost:8080/api/catalog/product/' + ID)
-        .then(response => {
-            this.product = response.data
-            console.log(this.product)
-            // очищаем массив navbar
-            this.removePatInNavBarMass(1)
-            // устанавливаем значение категории
-            this.titleOfCategory = this.nameOfCategory() ? this.nameOfCategory() : "Категория"
-            this.addPatInNavBarMass({
-                title: this.titleOfCategory,
-                path: '/item-list-' + this.titleOfCategory
-                //path: this.$router.currentRoute.value.fullPath
-            })
-            // устанавливаем значение подкатегории
-            this.titleOfSubcategory = this.nameOfSubcategory() ? this.nameOfSubcategory() : "Подкатегория"
-            this.addPatInNavBarMass({
-                title: this.titleOfSubcategory,
-                path: '/item-list-' + this.titleOfCategory
-            })
-            // устанавливаем название
-            this.addPatInNavBarMass({
-                title: this.product.title,
-                path: this.$router.currentRoute.value.fullPath
-            })
-
-        })
-        .catch(err => {console.log('Error\n', err)})
-    },
     beforeUnmount() {
         document.removeEventListener("click", this.closeImgModal);
         document.removeEventListener("keydown", this.closeImgModal);
     },
     watch:{
-        currentIndex(){
+        '$route.params.slug': {
+            immediate: true,    // обработчик вызывается и при обновлении
+            handler() {
+                this.handleMountedPhone()
+            }
+        },
+        currentIndexForSpecifications(){
             if(this.specificationsClick){
                 const newMass = Object.entries(this.specifications)
-                if(this.currentIndex < newMass.length){
+                if(this.currentIndexForSpecifications < newMass.length){
                     setTimeout(() => {
-                        this.visibleRows.push(newMass[this.currentIndex])
-                        this.currentIndex++
-                    }, 25)
+                        this.visibleRows.push(newMass[this.currentIndexForSpecifications])
+                        this.currentIndexForSpecifications++
+                    }, 10)
                 }
             }
             else if(!this.specificationsClick && this.visibleRows.length){
                 setTimeout(() => {
                     this.visibleRows.pop()
-                    this.currentIndex--
-                }, 25)
+                    this.currentIndexForSpecifications--
+                }, 10)
             }
         },
         currentIndexForReviews(){
             if(this.reviewsClick){
-                if(this.currentIndexForReviews < this.reviews.length){
+                if(this.currentIndexForReviews < this.product.userFeedbackDtos.length){
                     setTimeout(() => {
-                        this.visibleReviewsRows.push(this.reviews[this.currentIndexForReviews])
+                        this.visibleReviewsRows.push(this.product.userFeedbackDtos[this.currentIndexForReviews])
                         this.currentIndexForReviews++
-                    }, 50)
+                    }, 10)
                 }
             }
             else if(!this.reviewsClick && this.visibleReviewsRows.length){
                 setTimeout(() => {
                     this.visibleReviewsRows.pop()
                     this.currentIndexForReviews--
-                }, 50)
+                }, 10)
             }
         }
     },
     methods: {
         ...mapGetters('navbar', [
-            'pathInNavBarMass',
             'nameOfCategory',
             'nameOfSubcategory',
         ]),        
         ...mapGetters('user', [
-            'userId',
+            'accessToken',
+            'tokenType'
         ]),
         ...mapActions('navbar', [
             'addPatInNavBarMass',
             'removePatInNavBarMass',
         ]),
+        handleMountedPhone(){
+            let ID = this.$router.currentRoute.value.params.slug
+            ID = ID.split('-').pop()
+            axios.get('http://localhost:8080/api/catalog/product/' + ID)
+            .then(response => {
+                this.product = response.data
+                console.log('this.product', this.product)
+                // очищаем массив navbar
+                this.removePatInNavBarMass(1)
+                // устанавливаем значение категории
+                this.titleOfCategory = this.nameOfCategory() ? this.nameOfCategory() : "Категория"
+                this.addPatInNavBarMass({
+                    title: this.titleOfCategory,
+                    path: '/item-list-' + this.titleOfCategory
+                    //path: this.$router.currentRoute.value.fullPath
+                })
+                // устанавливаем значение подкатегории
+                this.titleOfSubcategory = this.nameOfSubcategory() ? this.nameOfSubcategory() : "Подкатегория"
+                this.addPatInNavBarMass({
+                    title: this.titleOfSubcategory,
+                    path: '/item-list-' + this.titleOfCategory
+                })
+                // устанавливаем название
+                this.addPatInNavBarMass({
+                    title: this.product.title,
+                    path: this.$router.currentRoute.value.fullPath
+                })
+
+            })
+            .catch(err => {console.log('Error\n', err)})
+
+            // устанавлвиваем соответсвующие товары 
+            axios.get('http://localhost:8080/api/catalog')
+            .then(response => {
+                this.massForRelatedProducts = response.data.productDtos.filter(item => {
+                    let firstWord = this.product.title.split(' ')[0]
+                    let secondWord = this.product.title.split(' ')[1]
+                    if (item.id == this.product.id){
+                        return false
+                    }
+                    else if (item.title.includes(firstWord) || item.title.includes(secondWord)) {
+                        return true
+                    }
+                    return false
+                })
+            })
+            .catch(err => {console.log('Error\n', err)})
+        },
+        addToCart(){
+            if (this.accessToken()) {
+                axios.post("http://localhost:8080/api/addProduct", {
+                    productId: this.product.id
+                }, {
+                    headers: {
+                        Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
+                    }
+                })
+                .then(response => console.log(response))
+                .catch(err => console.log('err', err))
+            } else {
+                alert("Необходима авторизация!");
+            }
+        },
         clickOnImg() {
             this.isClickOnImg = ! this.isClickOnImg
         },
@@ -316,13 +323,14 @@ export default {
             return "quantity-color-" + status
         },
         specificationsOnDisplay() {
-            if ((this.currentIndex == -1) || (this.currentIndex == Object.entries(this.specifications).length)){
-                this.specificationsClick ? this.currentIndex-- : this.currentIndex++
+            if ((this.currentIndexForSpecifications == -1) || (this.currentIndexForSpecifications == Object.entries(this.specifications).length)){
+                this.specificationsClick ? this.currentIndexForSpecifications-- : this.currentIndexForSpecifications++
                 this.specificationsClick = !this.specificationsClick
             }
         },
         reviewsOnDisplay() {
-            if ((this.currentIndexForReviews == -1) || (this.currentIndexForReviews == this.reviews.length)){
+            console.log('this.currentIndexForReviews', this.currentIndexForReviews)
+            if ((this.currentIndexForReviews == -1) || (this.currentIndexForReviews == this.product.userFeedbackDtos.length)){
                 this.reviewsClick ? this.currentIndexForReviews-- : this.currentIndexForReviews++
                 this.reviewsClick = !this.reviewsClick
             }
@@ -336,29 +344,26 @@ export default {
         setScoreInReview(index){
             this.tempReviewsScore = index
         },
-        leaveReview(){
-            if(this.tempReviewsName){
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                var yyyy = today.getFullYear();
-                today = dd + '.' + mm + '.' + yyyy;
-                
-                this.reviews.push({
-                    name: this.tempReviewsName,
-                    score: this.tempReviewsScore,
-                    photo: this.tempReviewsPhoto,
-                    date: today,
-                    description: this.tempReviewsDescription
-                })
+        sendFeedback(){
+            if(this.tempReviewsDescription){                
                 this.visibleReviewsRows.push({
-                    name: this.tempReviewsName,
-                    score: this.tempReviewsScore,
-                    photo: this.tempReviewsPhoto,
-                    date: today,
-                    description: this.tempReviewsDescription
+                    comment: this.tempReviewsDescription,
+                    feedback: this.tempReviewsScore,
+                    picturesUrls: this.tempReviewsPhoto,
                 })
                 this.currentIndexForReviews++
+
+                axios.post(`http://localhost:8080/api/catalog/product/${this.product.id}/addFeedback`,{
+                    comment: this.tempReviewsDescription,
+                    feedback: this.tempReviewsScore,
+                    picturesUrls: this.tempReviewsPhoto
+                }, {
+                    headers:{
+                        Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
+                    }
+                })
+                .then(res => {this.product = res.data})
+                .catch(err => {console.log('Error\n', err)})
 
                 this.tempReviewsScore = 0
             }
@@ -380,18 +385,16 @@ export default {
         removetempReviewPhoto(index){
             this.tempReviewsPhoto.splice(index,1)
         }
-
     },
     computed: {
         mrgnBtmTable(){
             return this.visibleRows.length ? '' : 'margin-bottom: 0px;'
         },
         userReview(){
-            if (this.reviewsClick && this.tempReviewsScore && this.userId()){
+            if (this.reviewsClick && this.tempReviewsScore && this.accessToken()){
                 return true
             }
             return false
-
         }
     }
 };
@@ -452,28 +455,8 @@ export default {
 .cursor-noneptr {
     pointer-events: none;
 }
-/*
-.tr-item-page-old {
-    animation: tableRowAnimation 0.6s;
-    transition-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-}
-@keyframes tableRowAnimation {
-  from {
-    opacity: 0;
-    border-bottom:#fcfcfc;
-    transform: translateY(-15px);
-  }
-  to {
-    opacity: 1;
-    border-bottom: 1px solid #f2f2f2;
-    transform: translateY(0);
-  }
-}
- */
 .reviews-item {
     margin-top: 20px;
-    text-align: left;
     padding: 10px;
     border-radius: 5px;
     background-color: rgb(240, 240, 240, 1);
