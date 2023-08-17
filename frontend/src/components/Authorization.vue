@@ -67,7 +67,7 @@ export default {
             console.log(payload.username)
             let i = this.userId
             console.log(i)
-            if (payload.roles == 'ADMIN'){
+            if (payload.roles.includes('ADMIN')){
                 this.setUserId('ADMIN')
             }
             this.setUserRole(payload.roles)

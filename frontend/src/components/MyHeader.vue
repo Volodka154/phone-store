@@ -11,7 +11,7 @@
                       @click="movingByNavBar(pathInNavBarMass[0])"
                       >Phone-shop
                 </span>
-                <button v-if="this.accessToken=='ADMIN'" @click="clickOnChange">Добавить товар</button>
+                <button v-if="this.userRole=='ADMIN'" @click="clickOnChange">Добавить товар</button>
             </div>
             <Transition name="slide"
                         mode="out-in">
@@ -24,7 +24,7 @@
                 </span>
 
                 <span class="btn-header" v-if="this.accessToken"
-                      @click="clickOnAutorization">
+                      @click="clickOnUnautorization">
                     Выйти
                 </span>
 
@@ -32,9 +32,11 @@
                      @click="clickOnAutorization"
                      src="profile.svg">
 
-                <span class="btn-header" v-if="this.accessToken"
+                <span v-if="this.accessToken"
+                      class="color-blue btn-header" 
+                      style="margin-right: 10px;"
                       @click="clickOnAutorization">
-                    {{ this.accessToken.slice(0, 5) }}
+                    {{ this.userId }} 
                 </span>
 
     
@@ -141,6 +143,21 @@ export default {
                 }
             })
         },
+        clickOnUnautorization(){
+            axios.post('http://localhost:8080/api/auth/logout',
+            {},{
+                headers: {
+                    Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
+                }       
+            })
+            .then(res =>{console.log(res)})
+            .catch(err => {console.log(err)})
+            this.removeUserId()
+            this.removeAccessToken()
+            this.removeUserRole()
+            this.removeRefreshToken()
+            this.removeTokenType()
+        },
         clickOnCart() {
             if (this.accessToken) {
                 this.$router.push({
@@ -164,6 +181,13 @@ export default {
             'changeIsModalCategoryList',
             'setNameBySubcategory'
         ]),
+        ...mapActions('user', [
+            'removeUserId',
+            'removeAccessToken',
+            'removeUserRole',
+            'removeRefreshToken',
+            'removeTokenType',
+        ]),
         movingByNavBar(itemInPath){
             // это нужно для зануления подкатегории, если мы хотим перейти просто в категорию
             if (this.allCategoryList.findIndex(item => item.title === itemInPath.title) !== -1){
@@ -181,7 +205,9 @@ export default {
         ...mapGetters('user', [
             'accessToken',
             'refreshToken',
-            'userRole'
+            'userRole',
+            'userId',
+            'tokenType'
         ]),
         ...mapGetters('cart',[
             'countProduct'
@@ -271,7 +297,7 @@ export default {
 
 .btn-header{
     font-size: 20px;
-    padding: 0px 0px; 
+    padding: 0px; 
     align-self: center;
     cursor: pointer; 
 }
@@ -298,6 +324,8 @@ export default {
     background-color: #4c8fc8; /* Задаем цвет фона */
     margin: 0px 31px;
 }
-
+.color-blue {
+    color: #11d9fc;
+}
 </style>
     

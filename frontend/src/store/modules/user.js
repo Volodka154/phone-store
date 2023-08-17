@@ -5,7 +5,8 @@ export default {
             userId:'',
             accessToken: '',
             refreshToken: '',
-            userRole: ''
+            userRole: '',
+            tokenType: ''
         }
     },
     getters: {
@@ -20,6 +21,9 @@ export default {
         },
         refreshToken(state){
             return state.refreshToken
+        },
+        tokenType(state){
+            return state.tokenType
         }
     },
     mutations: {
@@ -46,6 +50,12 @@ export default {
         },
         removeRefreshToken(state){
             state.refreshToken = ''
+        },
+        setTokenType(state, newToken){
+            state.tokenType = newToken
+        },
+        removeTokenType(state){
+            state.tokenType = ''
         }
     },
     actions: {
@@ -72,6 +82,12 @@ export default {
         },
         removeRefreshToken(store, payload){
             store.commit('removeRefreshToken', payload)
+        },
+        setTokenType(store, payload){
+            store.commit('setTokenType', payload)
+        },
+        removeTokenType(store, payload){
+            store.commit('removeTokenType', payload)
         }
     },
     strict: true,
