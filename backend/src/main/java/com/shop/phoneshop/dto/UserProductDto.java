@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserProductDto {
+    @ApiModelProperty(notes = "ID товара", required = true)
+    private Long productId;
+
     @ApiModelProperty(notes = "Ссылка на картинку для товара", required = true)
     private String pictureUrl;
 
@@ -20,7 +23,4 @@ public class UserProductDto {
 
     @ApiModelProperty(notes = "Количество товара в магазине", required = true)
     private Long amount;
-
-    @ApiModelProperty(notes = "ID товара", required = true)
-    private Long id;
 }

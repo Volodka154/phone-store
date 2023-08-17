@@ -34,7 +34,10 @@ export default {
     methods: {
         ...mapActions('user', [
             'setTokenType',
+            'setUserId',
+            'setUserRole',
             'setAccessToken',
+            'removeUserId',
             'setRefreshToken'
         ]),
         onClick() {
@@ -43,7 +46,8 @@ export default {
                 userPassword: String(this.password)
 
             }).then(response => this.nameOnHeader(response))
-            .catch(err => alert("Неверно введены данные или такой email не существует!", err));
+            .catch(err => alert("Неверно введены данные", err));
+            
         },
         clickOnCreateAccount() {
             this.$router.push({name: 'registration'})
@@ -53,21 +57,27 @@ export default {
             this.setTokenType(token.tokenType)
             this.setAccessToken(token.accessToken)
             this.setRefreshToken(token.refreshToken)
-            
-            const [headerBase64, payloadBase64] = token.accessToken.split('.');
+            const [headerBase64, payloadBase64] = this.accessToken.split('.');
+
             const header = JSON.parse(atob(headerBase64));
             const payload = JSON.parse(atob(payloadBase64));
-            console.log('header',header)
-            console.log('payload', payload)
-            /*if (payload.roles=='ADMIN'){
+            console.log(payload)
+            console.log(header);
+            this.setUserId(payload.username + ' ' + payload.usersurname[0] +'.'); //сейчас в токене лежит id и роль, а так же время распада токена
+            console.log(payload.username)
+            let i = this.userId
+            console.log(i)
+            if (payload.roles == 'ADMIN'){
                 this.setUserId('ADMIN')
-            }*/
+            }
+            this.setUserRole(payload.roles)
             this.$router.push({name: 'catalog'})
         }
     },
     computed: {
         ...mapGetters('user', [
-            'accessToken',
+            'userId',
+            'accessToken'
         ])
     }
 }

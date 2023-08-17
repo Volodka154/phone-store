@@ -61,7 +61,7 @@
             </span>
         </div>
         <p></p>
-        <div class="nav-bar flex-container flx-jc-start">
+        <div class="nav-bar flex-container flx-jc-start" v-if="this.userRole=='ADMIN'">
             <button @click="clickOnAddProduct">Добавить продукт</button>
         </div>
     </div>
@@ -180,7 +180,8 @@ export default {
         ]),
         ...mapGetters('user', [
             'accessToken',
-            'refreshToken'
+            'refreshToken',
+            'userRole'
         ]),
         ...mapGetters('cart',[
             'countProduct'
