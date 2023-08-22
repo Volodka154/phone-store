@@ -1,9 +1,9 @@
 <!-- Отзывы на странице товара -->
 <template>
     <div>
-        <!--<div class="review-title flex-container flex-container-row">
-            <h4 class="review-title__name">{{review.name}}</h4>
-        </div>-->
+        <div class="review-title flex-container flex-container-row">
+            <h4 class="review-title__name">{{review.lastName + ' ' + review.firstName}}</h4>
+        </div>
         <div class="all-stars">
             <img v-for="index in 5"
                  :key="index"

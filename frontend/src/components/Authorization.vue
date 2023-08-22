@@ -28,7 +28,8 @@ export default {
         return {
             login: null,
             password: null,
-            refresh: ''
+            refresh: '',
+            product: []
         }
     },
     methods: {
@@ -39,6 +40,9 @@ export default {
             'setAccessToken',
             'removeUserId',
             'setRefreshToken'
+        ]),
+        ...mapActions('cart', [
+            'addCart'
         ]),
         onClick() {
             axios.post('http://localhost:8080/api/auth/login', {
@@ -72,6 +76,17 @@ export default {
             }
             this.setUserRole(payload.roles)
             this.$router.push({name: 'catalog'})
+            axios.get("http://localhost:8080/api/cart", {
+                headers: {
+                    Authorization: `Bearer ${response.data.accessToken}` // Передаем токен в заголовке запроса
+                }
+            })
+            .then(res => { 
+                this.product = res.data.count
+                console.log(this.product)
+                this.addCart(this.product)
+            })
+            .catch(err => console.log(err))            
         }
     },
     computed: {

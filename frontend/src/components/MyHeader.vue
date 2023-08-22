@@ -11,7 +11,6 @@
                       @click="movingByNavBar(pathInNavBarMass[0])"
                       >Phone-shop
                 </span>
-                <button v-if="this.userRole=='ADMIN'" @click="clickOnChange">Добавить товар</button>
             </div>
             <Transition name="slide"
                         mode="out-in">
@@ -42,7 +41,7 @@
     
                 <span class="btn-header"
                       @click="clickOnCart">
-                    Корзина
+                    Корзина ({{ this.countCart }})
                 </span>
                 <img class="ikon"
                      @click="clickOnCart"
@@ -64,7 +63,7 @@
         </div>
         <p></p>
         <div class="nav-bar flex-container flx-jc-start" v-if="this.userRole=='ADMIN'">
-            <button @click="clickOnAddProduct">Добавить продукт</button>
+            <button class="add-button" @click="clickOnChange">Администрирование</button>
         </div>
     </div>
 </template>
@@ -83,7 +82,6 @@ export default {
     data() {
         return {
             id: '',
-            countCart: 0
         }
     },
     methods: {
@@ -157,6 +155,8 @@ export default {
             this.removeUserRole()
             this.removeRefreshToken()
             this.removeTokenType()
+            this.nullCart()
+
         },
         clickOnCart() {
             if (this.accessToken) {
@@ -188,6 +188,9 @@ export default {
             'removeRefreshToken',
             'removeTokenType',
         ]),
+        ...mapActions('cart', [
+            'nullCart'
+        ]),
         movingByNavBar(itemInPath){
             // это нужно для зануления подкатегории, если мы хотим перейти просто в категорию
             if (this.allCategoryList.findIndex(item => item.title === itemInPath.title) !== -1){
@@ -210,8 +213,21 @@ export default {
             'tokenType'
         ]),
         ...mapGetters('cart',[
-            'countProduct'
+            'countCart'
         ])
+    },
+    mounted(){
+        axios.get("http://localhost:8080/api/cart", {
+                    headers: {
+                        Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
+                    }
+                })
+                .then(response => { 
+                    this.countCart =  response.data.count
+                    
+            
+                    console.log(response.data);
+                })
     }
 }
 </script>
@@ -326,6 +342,22 @@ export default {
 }
 .color-blue {
     color: #11d9fc;
+}
+
+.add-button{
+    background-color: #00a2e8;
+    color: #ffffff;
+    border: 1px solid #00a2e8;
+    padding: 10px;
+    border-radius: 5px;
+}
+button:hover {
+    background-color: #0098d9;
+    border-color: #0098d9;
+}
+button:active {
+    background-color: #0776a6;
+    border-color: #0776a6;
 }
 </style>
     

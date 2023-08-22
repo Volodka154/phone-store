@@ -60,6 +60,10 @@ export default {
             'changeTotalPrice',
             'changeCountProduct'
         ]),
+        ...mapActions('cart', [
+            'addCart',
+            'removeCart',
+        ]),
         ...mapGetters('cart',[
             'productsInCartList'
         ]),
@@ -79,7 +83,7 @@ export default {
                         Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
                     }
                 })
-                .then(response => console.log(response))
+                .then(() => this.addCart(1))
                 .catch(err => console.log('err', err))
             } else {
                 alert("Необходима авторизация!");

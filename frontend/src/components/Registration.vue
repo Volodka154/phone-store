@@ -6,6 +6,7 @@
             <input class="input-class name" 
                    v-model="name" 
                    placeholder="Имя"/>
+                   
             <input class="input-class surname" 
                    v-model="surname" 
                    placeholder="Фамилия"/>

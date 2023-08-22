@@ -2,13 +2,15 @@
     <div class="item-page flex-container flex-container-row">
         <div class="cart-list">
             <h3>Корзина</h3>
-            <div v-for="(item) in productInCartMass.userProductDtos"
+            <div v-for="(item) in productMass"
                  :key="item.id">
-                <cart-item :infoItem="item"/>
+                 <cart-item :infoItem="item" 
+                            @update="handleMountedCart()"/>
             </div>
         </div>
         <cart-finish :propsCount="productInCartMass.count"
-                     :propsPrice="productInCartMass.fullPrice"/>
+                     :propsPrice="productInCartMass.fullPrice" 
+                     @update="handleMountedCart()"/>
     </div>
 </template>
 
@@ -25,7 +27,8 @@ export default {
     },
     data() {
         return {
-            productInCartMass: {}
+            productInCartMass: {},
+            productMass: []
         }
     },
     computed: {
@@ -42,27 +45,34 @@ export default {
             'removePatInNavBarMass',
             'addPatInNavBarMass',
         ]),
+        handleMountedCart(){
+            this.removePatInNavBarMass(1)
+            this.addPatInNavBarMass({
+                title: 'Корзина',
+                path: this.$router.currentRoute.value.fullPath
+            })
+            
+            if (this.accessToken) {
+                axios.get("http://localhost:8080/api/cart", {
+                    headers: {
+                        Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
+                    }
+                })
+                .then(response => { 
+                    this.productInCartMass = response.data
+                    this.productMass = this.productInCartMass.userProductDtos
+                    console.log(this.productMass);
+                })
+
+                .catch(err => console.log(err))
+            } else {
+                alert("Необходима авторизация!");
+            }   
+        }
     },
-    mounted(){
-        this.removePatInNavBarMass(1)
-        this.addPatInNavBarMass({
-            title: 'Корзина',
-            path: this.$router.currentRoute.value.fullPath
-        })
-        
-        if (this.accessToken) {
-            axios.get("http://localhost:8080/api/cart", {
-                headers: {
-                    Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
-                }
-            })
-            .then(response => {
-                this.productInCartMass = response.data
-            })
-            .catch(err => console.log(err))
-        } else {
-            alert("Необходима авторизация!");
-        }       
+    mounted(){    
+        this.handleMountedCart()
+
     },
 }
 </script>

@@ -49,8 +49,8 @@
                 <tr v-for="(value, key) in visibleRows" 
                     :key="key"
                     class="tr-item-page">
-                    <td class="td-item-page">{{ value[0] }}</td>
-                    <td class="td-item-page">{{ value[1] }}</td>
+                    <td class="td-item-page">{{ value[1].name }}</td>
+                    <td class="td-item-page">{{ value[1].value }}</td>
                 </tr>
             </transition-group>
         </div>
@@ -103,6 +103,13 @@
                 <div v-for="(item,index) in visibleReviewsRows"
                      :key="index"
                      class="reviews-item">
+                        <div class="flex" v-if="this.userId=='ADMIN'">
+                
+                            <button class="button-class" @click="deleteText(index)">Удалить текст</button>
+                            <button class="button-class" @click="deletePicture(index)">Удалить фото</button>
+                            <button class="button-class" @click="deleteReview(index)">Удалить отзыв</button>
+
+                        </div>
                         <item-page-review :propsReview="item"/>
                 </div>
             </transition-group>
@@ -162,20 +169,6 @@ export default {
             massForRelatedProducts: [],
 
             specifications: {
-                'Операционная система': 'iOS',
-                'Разрешение экрана': '2796x1290 Пикс',
-                'Экран': '6.7"/2796x1290 Пикс',
-                'Технология экрана': 'OLED',
-                'Тип экрана': 'Super Retina XDR Pro Motion',
-                'Частота обновления': '120 Гц',
-                'Яркость': '2000 кд/кв.м',
-                'Тип процессора': 'A16 Bionic',
-                'Количество ядер': '6',
-                'Встроенная память (ROM)': '128 ГБ',
-                'Количество основных камер': '3 шт',
-                'Основная камера МПикс': '48/12/12',
-                'Вспышка': 'Да',
-                'Оптический зум на увеличение (x)': '6'
             },
 
             tempReviewsScore: 1,
@@ -199,6 +192,7 @@ export default {
             }
         },
         currentIndexForSpecifications(){
+            this.specifications = this.product.properties
             if(this.specificationsClick){
                 const newMass = Object.entries(this.specifications)
                 if(this.currentIndexForSpecifications < newMass.length){
@@ -216,6 +210,7 @@ export default {
             }
         },
         currentIndexForReviews(){
+            console.log(this.userId)
             if(this.reviewsClick){
                 if(this.currentIndexForReviews < this.product.userFeedbackDtos.length){
                     setTimeout(() => {
@@ -233,17 +228,12 @@ export default {
         }
     },
     methods: {
-        ...mapGetters('navbar', [
-            'nameOfCategory',
-            'nameOfSubcategory',
-        ]),        
-        ...mapGetters('user', [
-            'accessToken',
-            'tokenType'
-        ]),
         ...mapActions('navbar', [
             'addPatInNavBarMass',
             'removePatInNavBarMass',
+        ]),
+        ...mapActions('cart', [
+            'addCart'
         ]),
         handleMountedPhone(){
             let ID = this.$router.currentRoute.value.params.slug
@@ -251,21 +241,23 @@ export default {
             axios.get('http://localhost:8080/api/catalog/product/' + ID)
             .then(response => {
                 this.product = response.data
-                console.log('this.product', this.product)
+                const categoryTemp = this.allCategoryList.filter(item => (item.id === this.product.categoryId) ? true : false)
+                const subcategoryTemp = categoryTemp[0].subcategoryDtos.filter(item => (item.id === this.product.subcategoryId) ? true: false)
+
                 // очищаем массив navbar
                 this.removePatInNavBarMass(1)
                 // устанавливаем значение категории
-                this.titleOfCategory = this.nameOfCategory() ? this.nameOfCategory() : "Категория"
+                this.titleOfCategory = this.nameOfCategory ? this.nameOfCategory : "Категория"
                 this.addPatInNavBarMass({
-                    title: this.titleOfCategory,
-                    path: '/item-list-' + this.titleOfCategory
+                    title: categoryTemp[0].title,
+                    path: '/item-list-' + categoryTemp[0].title
                     //path: this.$router.currentRoute.value.fullPath
                 })
                 // устанавливаем значение подкатегории
-                this.titleOfSubcategory = this.nameOfSubcategory() ? this.nameOfSubcategory() : "Подкатегория"
+                this.titleOfSubcategory = this.nameOfSubcategory ? this.nameOfSubcategory : "Подкатегория"
                 this.addPatInNavBarMass({
-                    title: this.titleOfSubcategory,
-                    path: '/item-list-' + this.titleOfCategory
+                    title: subcategoryTemp[0].title,
+                    path: '/item-list-' + categoryTemp[0].title
                 })
                 // устанавливаем название
                 this.addPatInNavBarMass({
@@ -294,15 +286,15 @@ export default {
             .catch(err => {console.log('Error\n', err)})
         },
         addToCart(){
-            if (this.accessToken()) {
+            if (this.accessToken) {
                 axios.post("http://localhost:8080/api/addProduct", {
                     productId: this.product.id
                 }, {
                     headers: {
-                        Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
+                        Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                     }
                 })
-                .then(response => console.log(response))
+                .then(() => this.addCart(1) )
                 .catch(err => console.log('err', err))
             } else {
                 alert("Необходима авторизация!");
@@ -359,7 +351,7 @@ export default {
                     picturesUrls: this.tempReviewsPhoto
                 }, {
                     headers:{
-                        Authorization: `${this.tokenType()} ${this.accessToken()}` // Передаем токен в заголовке запроса
+                        Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                     }
                 })
                 .then(res => {this.product = res.data})
@@ -381,21 +373,73 @@ export default {
                 }
                 reader.readAsDataURL(item)      // запуск процесса чтения файла
             });
+            console.log(this.tempReviewsPhoto)
         },
         removetempReviewPhoto(index){
             this.tempReviewsPhoto.splice(index,1)
-        }
+        },
+        deletePicture(index){
+            console.log(this.product)
+            axios.delete('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deletePhotosFeedback', 
+            {
+                data:{
+                    feedbackId: this.product.userFeedbackDtos[index].userFeedbackId//id отзыва сюда
+                },
+                headers: {
+                            Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
+                        }
+            })
+            .then(response => alert("Фотография удалена",response))
+            .catch(err => alert("Товара или отзыва не существует",err)) 
+        },
+        deleteText(index){
+            axios.put('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deleteCommentFeedback', { //id товара сюда
+                feedbackId: this.product.userFeedbackDtos[index].userFeedbackId //id отзыва сюда
+            },
+            {
+                headers: {
+                            Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
+                        }
+            })
+            .then(response => alert("Текст удален",response))
+            .catch(err => alert("Товара или отзыва не существует",err))
+        },
+        deleteReview(index){
+            axios.delete('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deleteFeedback',            
+            {
+                data:{
+                    feedbackId: this.product.userFeedbackDtos[index].userFeedbackId//id отзыва сюда
+                },
+                headers: {
+                            Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
+                        }
+            })
+            .then(response => alert("Отзыв удален",response))
+            .catch(err => alert("Товара или отзыва не существует",err))
+            console.log()
+        } 
+
     },
     computed: {
         mrgnBtmTable(){
             return this.visibleRows.length ? '' : 'margin-bottom: 0px;'
         },
         userReview(){
-            if (this.reviewsClick && this.tempReviewsScore && this.accessToken()){
+            if (this.reviewsClick && this.tempReviewsScore && this.accessToken){
                 return true
             }
             return false
-        }
+        },
+        ...mapGetters('navbar', [
+            'nameOfCategory',
+            'nameOfSubcategory',
+            'allCategoryList'
+        ]),        
+        ...mapGetters('user', [
+            'accessToken',
+            'tokenType',
+            'userId'
+        ])
     }
 };
 </script>
@@ -521,5 +565,14 @@ export default {
 }
 .option-item-page:hover {
     color: rgb(110, 110, 110);
+}
+
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    justify-items: center;
+    width: 30%;
 }
 </style>

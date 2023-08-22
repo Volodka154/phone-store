@@ -9,22 +9,22 @@
         </p>
         <div class="count__cart">
             <div class="amount__cart">
-                <button @click="countMinus(product.id)"
+                <button @click="countMinus"
                         class="btn-count"
                     >-
                 </button>
                 <p>{{ product.amount }}</p>
-                <button @click="countPlus(product.id)"
+                <button @click="countPlus"
                         class="btn-count"
                     >+
                 </button>
             </div>
-            <p @click="deleteProduct(product.id)"
+            <p @click="deleteProduct"
                class="delete__cart"
                 >Удалить
             </p>
         </div>
-        <p class="price__cart">{{ product.price }}</p>
+        <p class="price__cart">{{ product.price * product.amount }}</p>
     </div>
 </template>
 
@@ -39,10 +39,7 @@ export default {
             product: this.infoItem ? this.infoItem : []
         };
     },
-    computed: {
-        ...mapGetters('cart',[
-            'productsInCartList'
-        ]),        
+    computed: {      
         ...mapGetters('user', [
             'tokenType',
             'accessToken',
@@ -50,42 +47,45 @@ export default {
     },
     methods: {
         ...mapActions('cart', [
-            'addProductInCart',
-            'removeProductOutCart'
+            'addCart',
+            'removeCart'
         ]),
-        countPlus(id){
-            console.log(this.tokenType)
+        countPlus(){
             axios.put('http://localhost:8080/api/cart/addAmount',{
-                productId: id
+                productId: this.product.productId
             }, {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
-            }).then(res => console.log(res))
+            }).then(() => {this.$emit('update'), this.addCart(1)})
             .catch(err => console.log(err))
                 
         },
-        countMinus(id){
+        countMinus(){
             axios.post('http://localhost:8080/api/cart/reduceAmount',{
-                productId: id
+                productId: this.product.productId
             }, {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
-            }).then(res => console.log(res))
+            }).then(() => {this.$emit('update'), this.removeCart(1)})
             .catch(err => console.log(err))
         },
-        deleteProduct(id){
+        deleteProduct(){
             axios.delete('http://localhost:8080/api/cart/deleteProduct', {
                 data: {
-                    productId: id
+                    productId: this.product.productId
                 },
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
-            }).then(res => console.log(res))
+            }).then(() => {this.$emit('update'), this.removeCart(this.product.amount)})
             .catch(err => console.log(err))
+            
         }
+    },
+    updated(){
+        this.product = this.infoItem
     }
 }
 </script>

@@ -3,7 +3,6 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import CatalogList from './components/CatalogList.vue';
 import СatalogItemList from './components/СatalogItemList.vue';
 
-import productPage from './components/ProductPage.vue';
 
 import BackGround from './components/BackGround.vue';
 import Authorization from './components/Authorization.vue';
@@ -33,11 +32,7 @@ const routes = [
         name: 'itemPage',
         component: ItemPage,
     },
-    {
-        path: '/productPage',
-        name: 'productPage',
-        component: productPage
-    },
+   
 
     {
         path: '/back',

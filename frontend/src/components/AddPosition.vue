@@ -2,124 +2,165 @@
     <div class="add-position">
         <div class="h-information">
             <div class="wrap-category">
-                <div class="category">
+                
+                <div class="container">
                     <p>Категория:</p>
-                    <select name="categ" class="category-select" v-model="selectCategory" @click="getCategory">
-                        <option v-for="(number, index) in numbers" :key="index" :value="index" >{{ number }}</option>
-                    </select>
                 </div>
+
                 <div class="flex-container">
-                <button @click = "isCategoryAdd = true">Добавить новую</button>
-                <button @click = "isRedact = true">Редактировать</button>
-                <button @click = "isDeleteCategory = true">Удалить</button>
+                    <button class="button-class" @click = "isCategoryAdd = !isCategoryAdd">Добавить</button>
+                    <button class="button-class" @click = "isRedact = !isRedact">Редактировать</button>
+                    <button class="button-class" @click = "isDeleteCategory = !isDeleteCategory">Удалить</button>
                 </div>
-                <div v-if="isCategoryAdd">
-                    <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
-                    <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
-                    <button @click="addCategory">Добавить</button>
+
+                <div class="container">
+                    <div v-if="isCategoryAdd">
+                        <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
+                        <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
+                        <button class="button-class" @click="addCategory">Добавить</button>
+                    </div>
+
+                    <div v-if="isRedact">
+                        <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
+                        <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
+                        <button class="button-class" @click="redact">Сохранить изменения</button>
+                    </div>
+
+                    <div v-if="isDeleteCategory">
+                        <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
+                        <button class="button-class" @click="deleteCategory">Удалить</button>
+                    </div>
                 </div>
-                <div v-if="isRedact">
-                    <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
-                    <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
-                    <button @click="redact">Сохранить изменения</button>
+
+                <div class="container">
+                    <p>Подкатегория:</p>
                 </div>
-                <div v-if="isDeleteCategory">
-                    <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
-                    <button @click="deleteCategory">Удалить</button>
+
+                <div class="flex-container">
+                    <button class="button-class" @click = "isSubCategoryAdd = !isSubCategoryAdd">Добавить</button>
+                    <button class="button-class" @click = "isSubRedact = !isSubRedact">Редактировать</button>
+                    <button class="button-class" @click = "isDeleteSubCategory = !isDeleteSubCategory">Удалить</button>
+                    <button class="button-class" @click = "isMoveSub = !isMoveSub">Переместить</button>
                 </div>
-                <p>Подкатегория:</p>
-                    <select name="subcateg" class="category-select" v-model="selectSubCategory" @click="getSubCategory">
-                        <option v-for="(subCategory, index) in subCategories" :key="index" :value="index" >{{ subCategory }}</option>
-                    </select>
-                    <div class="flex-container">
-                <button @click = "isSubCategoryAdd = true">Добавить новую</button>
-                <button @click = "isSubRedact = true">Редактировать</button>
-                <button @click = "isDeleteSubCategory = true">Удалить</button>
-                <button @click = "isMoveSub = true">Переместить</button>
+
+                <div class="container">
+                    <div v-if="isSubCategoryAdd">
+                        <input class="input-class" v-model="categoryId" placeholder="id Подкатегории"/>
+                        <input class="input-class" v-model="categoryIdForSub" placeholder="id Категории для подкатегории"/>
+                        <input class="input-class" v-model="parentId" placeholder="id родительской подкатегории"/>
+                        <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
+                        <button class="button-class" @click="addSubCategory">Добавить</button>
+                    </div>
+
+                    <div v-if="isSubRedact">
+                        <input class="input-class" v-model="categoryId" placeholder="id Подкатегории"/>
+                        <input class="input-class" v-model="categoryIdForSub" placeholder="id Категории для подкатегории"/>
+                        <input class="input-class" v-model="parentId" placeholder="id родительской подкатегории"/>
+                        <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
+                        <button class="button-class" @click="subRedact">Сохранить изменения</button>
+                    </div>
+
+                    <div v-if="isDeleteSubCategory">
+                        <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
+                        <button class="button-class" @click="deleteSubCategory">Удалить</button>
+                    </div>
+
+                    <div v-if="isMoveSub">
+                        <input class="input-class" v-model="categoryIdForSub" placeholder="id Категории, в которую вы хотите переместить"/>
+                        <input class="input-class" v-model="categoryId" placeholder="id Подкатегории"/>
+                        <button class="button-class" @click="moveSub">Добавить</button>
+                    </div>
                 </div>
-                <div v-if="isSubCategoryAdd">
-                    <input class="input-class" v-model="categoryId" placeholder="id Подкатегории"/>
-                    <input class="input-class" v-model="categoryIdForSub" placeholder="id Категории для подкатегории"/>
-                    <input class="input-class" v-model="parentId" placeholder="id родительской подкатегории"/>
-                    <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
-                    <button @click="addSubCategory">Добавить</button>
+
+                <div class="container">
+                    <p>Товар:</p>
                 </div>
-                <div v-if="isSubRedact">
-                    <input class="input-class" v-model="categoryId" placeholder="id Подкатегории"/>
-                    <input class="input-class" v-model="categoryIdForSub" placeholder="id Категории для подкатегории"/>
-                    <input class="input-class" v-model="parentId" placeholder="id родительской подкатегории"/>
-                    <input class="input-class" v-model="categoryTitle" placeholder="Название Категории"/>
-                    <button @click="subRedact">Сохранить изменения</button>
+
+                <div class="flex-container">
+                    <button class="button-class" @click = "isProductAdd = !isProductAdd" >Добавить</button>
+                    <button class="button-class" @click = "isProductRedact = !isProductRedact">Редактировать</button>
+                    <button class="button-class" @click = "isDeleteProduct = !isDeleteProduct">Удалить</button>
+                    <button class="button-class" @click = "isRedactProductProperty = !isRedactProductProperty">Редактировать характеристику</button>
+                    <button class="button-class" @click = "isAddProperty = !isAddProperty">Добавить характеристику</button>
                 </div>
-                <div v-if="isDeleteSubCategory">
-                    <input class="input-class" v-model="categoryId" placeholder="id Категории"/>
-                    <button @click="deleteSubCategory">Удалить</button>
-                </div>
-                <div v-if="isMoveSub">
-                    <input class="input-class" v-model="categoryIdForSub" placeholder="id Категории, в которую вы хотите переместить"/>
-                    <input class="input-class" v-model="categoryId" placeholder="id Подкатегории"/>
-                    <button @click="moveSub">Добавить</button>
-                </div>
-                <p>Товар:</p>
-                <button @click = "isProductAdd = !isProductAdd" >Добавить</button>
-                <button @click = "isProductRedact = true">Редактировать</button>
-                <button @click = "isDeleteProduct = true">Удалить</button>
-                </div>
+
+                <div class="container">
                     <div v-if="isProductAdd">
-                    <input class="input-class" v-model="productAmount" placeholder="Количество товара"/>
-                    <input class="input-class" v-model="productDescription" placeholder="Описание товара"/>
-                    <p>Есть ли скидка на товар: </p>
-                    <select name="categ" class="category-select" v-model="productDiscount">
-                    <option>{{ true }}</option>
-                    <option>{{ false }}</option>
-                    </select>
-                    <input class="input-class" v-model="productDiscountPrice" placeholder="Скидочная цена"/>
-                    <input class="input-class" v-model="productId" placeholder="Id товара"/>
-                    <input class="input-class" v-model="productPictureUrl" placeholder="Ссылка на картинку товара"/>
-                    <input class="input-class" v-model="productPrice" placeholder="Цена без скидки"/>
-                    <input class="input-class" v-model="productSubcategoryId" placeholder="Id подкатегории"/>
-                    <input class="input-class" v-model="productTitle" placeholder="Название товара"/>
-                    <button @click="addProduct">Добавить</button>
+                        <input class="input-class" v-model="productAmount" placeholder="Количество товара"/>
+                        <input class="input-class" v-model="productDescription" placeholder="Описание товара"/>
+                        <div class="category-select">
+                            <p>Есть ли скидка на товар: </p>
+                            <select name="categ" v-model="productDiscount">
+                            <option>{{ true }}</option>
+                            <option>{{ false }}</option>
+                            </select>
+                        </div>
+                        <input class="input-class" v-model="productDiscountPrice" placeholder="Скидочная цена"/>
+                        <input class="input-class" v-model="productId" placeholder="Id товара"/>
+                        <input class="input-class" v-model="productPictureUrl" placeholder="Ссылка на картинку товара"/>
+                        <input class="input-class" v-model="productPrice" placeholder="Цена без скидки"/>
+                        <input class="input-class" v-model="productSubcategoryId" placeholder="Id подкатегории"/>
+                        <input class="input-class" v-model="productPropertyId" placeholder="Id набора характеристик"/>
+                        <input class="input-class" v-model="productTitle" placeholder="Название товара"/>
+                        <button class="button-class" @click="addProduct">Добавить</button>
+                    </div>
+
+                    <div v-if="isProductRedact">
+                        <input class="input-class" v-model="productAmount" placeholder="Количество товара"/>
+                        <input class="input-class" v-model="productDescription" placeholder="Описание товара"/>
+                        <div class="category-select">
+                            <p>Есть ли скидка на товар: </p>
+                            <select name="categ" v-model="productDiscount">
+                            <option>{{ true }}</option>
+                            <option>{{ false }}</option>
+                            </select>
+                        </div>
+                        <input class="input-class" v-model="productDiscountPrice" placeholder="Скидочная цена"/>
+                        <input class="input-class" v-model="productId" placeholder="Id товара"/>
+                        <input class="input-class" v-model="productPictureUrl" placeholder="Ссылка на картинку товара"/>
+                        <input class="input-class" v-model="productPrice" placeholder="Цена без скидки"/>
+                        <input class="input-class" v-model="productSubcategoryId" placeholder="Id подкатегории"/>
+                        <input class="input-class" v-model="productPropertyId" placeholder="Id набора характеристик"/>
+                        <input class="input-class" v-model="productTitle" placeholder="Название товара"/>
+                        <button class="button-class" @click="redactProduct">Сохранить изменения</button>
+                    </div>
+
+                    <div v-if="isDeleteProduct">
+                        <input class="input-class" v-model="productId" placeholder="id Категории"/>
+                        <button class="button-class" @click="deleteProduct">Удалить</button>
+                    </div>
+
+                    <div v-if="isRedactProductProperty">
+                        <input class="input-class" v-model="productPropertyRedactId" placeholder="id Свойства"/>
+                        <input class="input-class" v-model="productPropertyId" placeholder="id набора свойств"/>
+                        <input class="input-class" v-model="productPropertyRedactName" placeholder="Название свойства"/>
+                        <input class="input-class" v-model="productPropertyRedactValue" placeholder="Значение свойства"/>
+                        <button class="button-class" @click="productPropertyRedact">Сохранить изменения</button>
+                    </div>
+
+                    <div v-if="isAddProperty">
+                        <input class="input-class" v-model="productPropertyId" placeholder="id свойства"/>
+                        <input class="input-class" v-model="productPropertyRedactId" placeholder="id набора свойств"/>
+                        <input class="input-class" v-model="productPropertyRedactName" placeholder="Название свойства"/>
+                        <input class="input-class" v-model="productPropertyRedactValue" placeholder="Значение свойства"/>
+                        <button class="button-class" @click="addProperty">Сохранить изменения</button>
+                    </div>
                 </div>
-                <div v-if="isProductRedact">
-                    <input class="input-class" v-model="productAmount" placeholder="Количество товара"/>
-                    <input class="input-class" v-model="productDescription" placeholder="Описание товара"/>
-                    <p>Есть ли скидка на товар: </p>
-                    <select name="categ" class="category-select" v-model="productDiscount">
-                    <option>{{ true }}</option>
-                    <option>{{ false }}</option>
-                    </select>
-                    <input class="input-class" v-model="productDiscountPrice" placeholder="Скидочная цена"/>
-                    <input class="input-class" v-model="productId" placeholder="Id товара"/>
-                    <input class="input-class" v-model="productPictureUrl" placeholder="Ссылка на картинку товара"/>
-                    <input class="input-class" v-model="productPrice" placeholder="Цена без скидки"/>
-                    <input class="input-class" v-model="productSubcategoryId" placeholder="Id подкатегории"/>
-                    <input class="input-class" v-model="productTitle" placeholder="Название товара"/>
-                    <button @click="redactProduct">Сохранить изменения</button>
-                </div>
-                <div v-if="isDeleteProduct">
-                    <input class="input-class" v-model="productId" placeholder="id Категории"/>
-                    <button @click="deleteProduct">Удалить</button>
-                </div>
-            </div>
-            <div class="add-new">
-              
+
             </div>
         </div>
+    </div>
     
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions} from 'vuex';
 import axios from 'axios';
 export default {
     name: 'add-position',
     props: {},
     data() {
         return {
-            categories: '',
-            numbers: [],
-            subCategories: [],
             selectCategory: '',
             isCategoryAdd: false,
             categoryId: '',
@@ -145,34 +186,31 @@ export default {
             productPrice: '',
             productSubcategoryId: '',
             productTitle: '',
+            productPropertyId: '',
+            isRedactProductProperty: false,
+            productPropertyRedactId: '',
+            productPropertyRedactName: '',
+            productPropertyRedactValue: '',
+            isAddProperty: false,
         }
     },
     computed: {
         ...mapGetters('user',[
             'accessToken',
-            'refreshToken'
+            'tokenType'
         ])
     },
     methods: {
-        getCategory(){
-            this.numbers=Array()
-            axios.get("http://localhost:8080/api/catalog/categories",{})
-            .then(response => this.categories = response.data)
-            .catch(err => console.log(err))
-            console.log(this.categories.length)
-            for (let i=0; i<this.categories.length; i++){
-                this.numbers.push(this.categories[i].title)
-            }
-        },
-        getSubCategory(){
-            this.subCategories = Array()
-            axios.get("http://localhost:8080/api/catalog/subcategories",{})
-            .then(response => this.categories = response.data)
-            .catch(err => console.log(err))
-            console.log(this.categories.length)
-            for (let i=0; i<this.categories.length; i++){
-                this.subCategories.push(this.categories[i].title)
-            }
+        ...mapActions('navbar', [
+            'setAllCategoryList'
+        ]),
+        updateCategoryListInStore(){
+                // записываем массив категорий в стор
+            axios.get('http://localhost:8080/api/catalog/categories')
+            .then(res =>{
+                this.setAllCategoryList(res.data)
+            })
+            .catch(err => {console.log('Error\n', err)})
         },
         addCategory(){
             axios.post("http://localhost:8080/api/admin/category",{
@@ -181,10 +219,10 @@ export default {
             },
             {
                 headers: {
-                            Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
+                            Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                         }
             })
-            .then(response => alert("Категория добавлена",response))
+            .then(response => alert("Категория добавлена",response), this.updateCategoryListInStore())
             .catch(err => alert("Ошибка",err))
             this.isCategoryAdd = false
         },
@@ -198,7 +236,7 @@ export default {
                             Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
                         }
             })
-            .then(response => alert("Категория отредактирована",response))
+            .then(response => alert("Категория отредактирована",response), this.updateCategoryListInStore())
             .catch(err => alert("Категории с таким id не существует",err))
             this.isRedact = false
         },
@@ -210,7 +248,7 @@ export default {
                             Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
                         }
             })
-            .then(response => alert("Категория удалена",response))
+            .then(response => alert("Категория удалена",response), this.updateCategoryListInStore())
             .catch(err => alert("Категории с таким id не существует",err))
             this.isDeleteCategory= false
         },
@@ -226,7 +264,7 @@ export default {
                             Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
                         }
             })
-            .then(response => alert("Подкатегория добавлена",response))
+            .then(response => alert("Подкатегория добавлена",response), this.updateCategoryListInStore())
             .catch(err => alert("Ошибка",err))
             this.isSubCategoryAdd = false
         },
@@ -242,7 +280,7 @@ export default {
                             Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
                         }
             })
-            .then(response => alert("Подкатегория отредактирована",response))
+            .then(response => alert("Подкатегория отредактирована",response), this.updateCategoryListInStore())
             .catch(err => alert("Ошибка",err))
             this.isSubRedact = false
         },
@@ -254,7 +292,7 @@ export default {
                             Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
                         }
             })
-            .then(response => alert("Подкатегория удалена",response))
+            .then(response => alert("Подкатегория удалена",response), this.updateCategoryListInStore())
             .catch(err => alert("Подкатегории с таким id не существует",err))
             this.isDeleteSubCategory= false
         },
@@ -268,7 +306,7 @@ export default {
                             Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
                         }
             })
-            .then(response => alert("Подкатегория перемещена",response))
+            .then(response => alert("Подкатегория перемещена",response), this.updateCategoryListInStore())
             .catch(err => alert("Ошибка",err))
             this.isMoveSub = false
         },
@@ -281,12 +319,7 @@ export default {
                     id: this.productId,
                     pictureUrl: this.productPictureUrl,
                     price: this.productPrice,
-                    productPropertyRequest: {
-                        id: 1,
-                        propertyIds: [
-                            111
-                        ]
-                    },
+                    productPropertyId: this.productPropertyId ,
                     subcategoryId: this.productSubcategoryId,
                     title: this.productTitle
             },
@@ -320,16 +353,7 @@ export default {
                     id: this.productId,
                     pictureUrl: this.productPictureUrl,
                     price: this.productPrice,
-                    productPropertyRequest: {
-                        id: this.productPropertyId,
-                        propertyIds: [
-                            {
-                            id: 0,
-                            name: 0,
-                            value: 0
-                            }
-                        ]
-                    },
+                    productPropertyId: this.productPropertyId ,
                     subcategoryId: this.productSubcategoryId,
                     title: this.productTitle
             },
@@ -340,9 +364,41 @@ export default {
             })
             .then(response => alert("Товар добавлен",response), this.isProductRedact = false)
             .catch(err => alert("Ошибка",err), this.isProductRedact = true)
+        },
+        productPropertyRedact(){
+            axios.put('http://localhost:8080/api/admin/property', {
+                id: this.productPropertyRedactId,
+                name: this.productPropertyRedactName,
+                prodPropId: this.productPropertyId,
+                value: this.productPropertyRedactValue
+            },
+            {
+                headers: {
+                            Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
+                        }
+            })
+            .then(response => alert("Характеристика отредактирована",response))
+            .catch(err => alert("Товара или свойства не существует",err))
+            this.isRedactProductProperty = false
+        },
+        addProperty(){
+            axios.post('http://localhost:8080/api/admin/property', {
+                id: this.productPropertyId,
+                name: this.productPropertyRedactName,
+                prodPropId: this.productPropertyRedactId,
+                value: this.productPropertyRedactValue
+            },
+            {
+                headers: {
+                            Authorization: `Bearer ${this.accessToken}` // Передаем токен в заголовке запроса
+                        }
+            })
+            .then(response => alert("Характеристика добавлена",response))
+            .catch(err => alert("Неверный id набора свойств",err))
+            this.isRedactProductProperty = false
         }
 
-    }, 
+    }
 }
 </script>
 
@@ -363,75 +419,54 @@ export default {
 }
 
 .wrap-category {
+    display:flex;
     flex-direction: column;
-    width: 50%;
-    align-items: center;
-}
-
-.category {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.category-select {
-    width: 20em;
-    height: 2em;
-    margin-left: 3em;
-}
-
-.btn-new {
-    background-color: #7f7f7f;
-    color: black;
-    width: 15em;
-    height: 3em;
-    border: none;
-}
-
-.b-information {
-    display: flex;
-    flex-direction: row;
     width: 100%;
-    height: 20em;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
 }
-
-.form {
-    margin-top: 1em;
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    justify-content: space-between;
-}
-
 .input {
     color: #7f7f7f;
     height: 2em;
     width: 90%;
 }
 
-.description {
-    height: 5em;
+.button-class{
+    background-color: #00a2e8;
+    color: #ffffff;
+    border: 1px solid #00a2e8;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px;
 }
-
-.haract{
-    text-align: left;
+button:hover {
+    background-color: #0098d9;
+    border-color: #0098d9;
 }
-
-.btn-add {
-    background-color: #00A2E8;
-    color: black;
-    width: 20em;
-    height: 2em;
-    margin: 1em;
-    border: none;
-    align-self: center;
+button:active {
+    background-color: #0776a6;
+    border-color: #0776a6;
 }
 
 .flex-container{
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    width: 50%;
+}
+
+.container{
+    margin: 1%;
+    width: 50%;
+}
+
+.category-select{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
 }
 </style>
