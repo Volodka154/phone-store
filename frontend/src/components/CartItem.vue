@@ -1,14 +1,15 @@
+<!-- Один элемент корзины (товар) -->
 <template>
-    <div class="flex-container center-content one-item">
-        <!--<input class="checkbox" type="checkbox" id="checkbox" v-model="checked"/>-->
+    <div class="flex-container center-content one-item justify-content-space-between">
         <img :src="product.pictureUrl"
              class="iphone"
-             style="cursor: default;"/>
-        <p class="title__cart"
+             @click="clickOnPhone"/>
+        <p class="title-сolor"
+           @click="clickOnPhone"
            >{{ product.title }}
         </p>
         <div class="count__cart">
-            <div class="amount__cart">
+            <div class="flex-container flex-container-row align-items-baseline justify-content-center">
                 <button @click="countMinus"
                         class="btn-count"
                     >-
@@ -29,26 +30,28 @@
 </template>
 
 <script>
-import { mapActions, mapGetters} from "vuex";
 import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 export default {
-    name: 'cart',
     props: ['infoItem'],
     data() {
         return {
             product: this.infoItem ? this.infoItem : []
-        };
+        }
     },
-    computed: {      
-        ...mapGetters('user', [
-            'tokenType',
-            'accessToken',
-        ]),
+    updated(){
+        this.product = this.infoItem
     },
     methods: {
         ...mapActions('cart', [
             'addCart',
             'removeCart'
+        ]),
+        ...mapActions('navbar', [
+            'addPatInNavBarMass',
+            'removePatInNavBarMass',
+            'setNameByCategory',
+            'setNameBySubcategory'
         ]),
         countPlus(){
             axios.put('http://localhost:8080/api/cart/addAmount',{
@@ -81,53 +84,58 @@ export default {
                 }
             }).then(() => {this.$emit('update'), this.removeCart(this.product.amount)})
             .catch(err => console.log(err))
-            
+        },
+        getSlug(){
+            let slug = String(this.product.title).toLowerCase()
+            slug = slug.replace(/ /ig,'-')
+            slug = slug + '-' + String(this.product.productId)
+            return slug
+        },
+        clickOnPhone(){
+            // запрос на товар
+            axios.get('http://localhost:8080/api/catalog/product/' + this.product.productId)
+            .then(response => {
+                const productByAxios = response.data
+                const categoryTemp = this.allCategoryList.filter(item => (item.id === productByAxios.categoryId) ? true : false)
+                const subcategoryTemp = categoryTemp[0].subcategoryDtos.filter(item => (item.id === productByAxios.subcategoryId) ? true: false)
+                // очищаем массив navbar
+                this.removePatInNavBarMass(1)
+                // устанавливаем значение категории
+                this.setNameByCategory(categoryTemp[0].title)
+                this.addPatInNavBarMass({
+                    title: categoryTemp[0].title,
+                    path: '/item-list-' + categoryTemp[0].title
+                })
+                // устанавливаем значение подкатегории
+                this.setNameBySubcategory(subcategoryTemp[0].title)
+                this.addPatInNavBarMass({
+                    title: subcategoryTemp[0].title,
+                    path: '/item-list-' + categoryTemp[0].title
+                })
+                // устанавливаем название
+                this.addPatInNavBarMass({
+                    title: this.product.title,
+                    path: this.$router.currentRoute.value.fullPath
+                })
+                this.$router.push({
+                    name: 'itemPage',
+                    params:{
+                        name: categoryTemp[0].title, 
+                        slug: this.getSlug()
+                    }
+                })
+            })
+            .catch(err => {console.log('Error\n', err)})
         }
     },
-    updated(){
-        this.product = this.infoItem
+    computed: {      
+        ...mapGetters('user', [
+            'tokenType',
+            'accessToken',
+        ]),
+        ...mapGetters('navbar', [
+            'allCategoryList'
+        ])
     }
 }
 </script>
-
-<style scoped>
-    .amount__cart {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-        justify-content: center;
-    }
-
-    .title__cart {
-        color: #33b75c;
-    }
-    .count__cart {
-        width: 25%;
-        align-items: center;
-    }
-
-    .btn-count {
-        height: 20px;
-        width: 20px;
-        margin: 1ch;
-    }
-
-    .price__cart {
-        font-size: smaller;
-        width: 20%;
-    }
-
-    .delete__cart {
-        color: rgb(87, 155, 219);
-        cursor: pointer;
-        margin: 0px 0px;
-    }
-    .delete__cart:hover {
-        color: rgb(39, 107, 171);
-    }
-    
-    .checkbox{
-        width: 20px;
-        height: 20px;
-    }
-</style>

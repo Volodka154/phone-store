@@ -2,7 +2,7 @@ export default {
     namespaced: true,
     state() {
         return{
-            userId:'',
+            userName:'',
             accessToken: '',
             refreshToken: '',
             userRole: '',
@@ -10,8 +10,8 @@ export default {
         }
     },
     getters: {
-        userId(state){
-            return state.userId
+        userName(state){
+            return state.userName
         },
         accessToken(state){
             return state.accessToken
@@ -27,11 +27,11 @@ export default {
         }
     },
     mutations: {
-        setUserId(state, newUserId){
-            state.userId = newUserId
+        setUserName(state, newUserName){
+            state.userName = newUserName
         },
-        removeUserId(state){
-            state.userId = ''
+        removeUserName(state){
+            state.userName = ''
         },
         setAccessToken(state, newToken){
             state.accessToken = newToken
@@ -59,11 +59,11 @@ export default {
         }
     },
     actions: {
-        setUserId(store, payload){
-            store.commit('setUserId', payload)
+        setUserName(store, payload){
+            store.commit('setUserName', payload)
         },
-        removeUserId(store, payload){
-            store.commit('removeUserId', payload)
+        removeUserName(store, payload){
+            store.commit('removeUserName', payload)
         },
         setAccessToken(store, payload){
             store.commit('setAccessToken',payload)

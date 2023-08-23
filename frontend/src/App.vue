@@ -1,7 +1,7 @@
 <template>
     <div id="app" 
          class="flex-container flex-container-column">
-        <my-header/>
+        <my-header id="myHeader"/>
         <router-view></router-view>
     </div>
 </template>
@@ -38,7 +38,7 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 70px;
+    /*margin-top: 70px;*/
 }
 body{
     margin: 0px;

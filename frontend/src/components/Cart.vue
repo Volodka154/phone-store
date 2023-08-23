@@ -15,11 +15,10 @@
 </template>
 
 <script>
-import cartItem from './CartItem.vue'
-import cartFinish from './CartFinish.vue'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
-
+import cartItem from './CartItem.vue'
+import cartFinish from './CartFinish.vue'
 export default {
     components: {
         cartItem,
@@ -61,7 +60,6 @@ export default {
                 .then(response => { 
                     this.productInCartMass = response.data
                     this.productMass = this.productInCartMass.userProductDtos
-                    console.log(this.productMass);
                 })
 
                 .catch(err => console.log(err))
@@ -72,23 +70,6 @@ export default {
     },
     mounted(){    
         this.handleMountedCart()
-
-    },
+    }
 }
 </script>
-
-<style scoped>
-    .cart-list {
-        align-self: flex-start;
-        width: 70%;
-    }
-    .summ {
-        align-self: flex-end;
-        align-self: center;
-        margin-left:3%;
-        width: 25%;
-        height: 60%;
-        background-color: white;
-        border-radius: 20px;
-    }
-</style>

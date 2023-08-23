@@ -2,27 +2,26 @@
 <template>
     <div class="authorization">
         <h3>Регистрация нового пользователя</h3>
-        <p>
-            <input class="input-class name" 
+        <p style="justify-content: space-between; display: flex;">
+            <input class="width-45" 
                    v-model="name" 
-                   placeholder="Имя"/>
-                   
-            <input class="input-class surname" 
+                   placeholder="Имя"
+                   @input="replaceOnEngWords($event, 'name')"/>
+            <input class="width-45" 
                    v-model="surname" 
-                   placeholder="Фамилия"/>
+                   placeholder="Фамилия"
+                   @input="replaceOnEngWords($event, 'surname')"/>
         </p>
         <p>
-            <input class="input-class login" 
-                   v-model="login" 
+            <input v-model="login" 
                    placeholder="Email"/>
         </p>
         <p>
-            <input class="input-class password" 
-                   v-model="password" 
+            <input v-model="password" 
                    placeholder="Пароль"/>
         </p>
         <button class="btn-autorisation"
-                @click="onClick"
+                @click="clickOnRegistration"
                 >Зарегистрироваться
         </button>
         <p class="href" 
@@ -34,12 +33,7 @@
 
 <script>
 import axios from "axios";
-
 export default {
-    name: 'registration',
-    components: {
-    },
-    props: {},
     data() {
         return {
             name: null,
@@ -48,9 +42,12 @@ export default {
             password: null
         }
     },
-    computed: {},
     methods: {
-        onClick() {
+        replaceOnEngWords(e, data){
+            e.target.value = e.target.value.replace(/[^A-Za-z]/ig, '')
+            this[data] = e.target.value
+        },
+        clickOnRegistration() {
             axios.post("http://localhost:8080/api/auth/register", {
                 firstName: this.name,
                 lastName: this.surname,
@@ -66,15 +63,3 @@ export default {
     }
 }
 </script>
-
-<style>
-.form{
-    align-content: center;
-}
-    .name,
-    .surname {
-        width: 40%;
-        margin: 1.5%;
-    }
-
-</style>
