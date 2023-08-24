@@ -80,13 +80,14 @@
                         <div class="flex-container flex-container-row justify-content-start review-photo">
                             <img v-for="(item,index) in tempReviewsPhoto"
                                  :key="index"
-                                 :src="item"
+                                 :src="item.dataUrl"
                                  @dblclick="removetempReviewPhoto(index)">
                         </div>
-                        <input type="file"
-                               @change="handleFileSelect"
-                               accept=".img, .png, .jpg, jpeg"
-                               multiple/>
+                        <input id="file"
+                               type="file"
+                                @change="handleFileSelect"
+                                accept=".img, .png, .jpg, jpeg"
+                                multiple/>
                         <p></p>
                         <input class="input-class"
                                v-model="tempReviewsDescription" 
@@ -133,6 +134,9 @@ import cartButtonGray from "./CartButtonGray";
 import cartButton from "./CartButton.vue";
 import ItemPageReview from "./ItemPageReview.vue";
 import RelatedProduct from "./RelatedProduct.vue";
+import { storage } from '../firebase.js'
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 export default {
     components: {
         cartButton,
@@ -164,7 +168,7 @@ export default {
             specifications: {},
 
             tempReviewsScore: 1,
-            tempReviewsPhoto: ['https://c.dns-shop.ru/thumb/st1/fit/0/0/1cc5440fcbbaae8e5697e61f15d0980f/0a5d4dcd76ccf1183e108eab7b641de4b90111291756c7685498824cbf867f17.jpg.webp'],
+            tempReviewsPhoto: [],
             tempReviewsDescription: '',
         }
     },
@@ -284,19 +288,39 @@ export default {
             this.tempReviewsScore = index
         },
         sendFeedback(){
-            if(this.tempReviewsDescription){                
+            const urlPromise = this.tempReviewsPhoto.map(file => {
+                // отправка на облако firebase
+                const mountainsRef = ref(storage, file.name)
+                return uploadBytes(mountainsRef, file.file)
+                .then(() => {
+                    // получение url 
+                    return getDownloadURL(mountainsRef)
+                    .then(url => {
+                        return url
+                    })
+                    .catch(err => {
+                        console.log('Error:', err)
+                        return null  
+                    })
+                })
+                .catch(err => {
+                    console.log('Error:', err)
+                    return null
+                })
+            })
+            Promise.all(urlPromise).then(urlMass => {
                 this.visibleReviewsRows.push({
                     firstName: this.userName, 
                     lastName: '',
                     comment: this.tempReviewsDescription,
                     feedback: this.tempReviewsScore,
-                    picturesUrls: this.tempReviewsPhoto,
+                    picturesUrls: this.tempReviewsPhoto.map(file => file.dataUrl),
                 })
                 this.currentIndexForReviews++
                 axios.post(`http://localhost:8080/api/catalog/product/${this.product.id}/addFeedback`,{
                     comment: this.tempReviewsDescription,
                     feedback: this.tempReviewsScore,
-                    picturesUrls: this.tempReviewsPhoto
+                    picturesUrls: urlMass
                 }, {
                     headers:{
                         Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
@@ -305,20 +329,23 @@ export default {
                 .then(res => {this.product = res.data})
                 .catch(err => {console.log('Error\n', err)})
                 this.tempReviewsScore = 0
-            }
+            })
         },
         handleFileSelect(e){
-            let fileArr = Array.prototype.slice.call(e.target.files)
-            fileArr.forEach(item => {
-                if (!item.type.match('image.*')){
-                    return
+            const fileArr = Array.from(e.target.files)
+            fileArr.forEach(file => {
+                let reader = new FileReader();
+                reader.onload = event => {
+                    const nameOfFile = new Date() + ' - ' + file.name
+                    const dataUrl = event.target.result;
+                    this.tempReviewsPhoto.push({
+                        name: nameOfFile,
+                        file: file,
+                        dataUrl: dataUrl
+                    })
                 }
-                let reader = new FileReader()
-                reader.onload = (e) => {
-                    this.tempReviewsPhoto.push(e.target.result)
-                }
-                reader.readAsDataURL(item)      // запуск процесса чтения файла
-            });
+                reader.readAsDataURL(file);
+            })            
         },
         removetempReviewPhoto(index){
             this.tempReviewsPhoto.splice(index,1)
