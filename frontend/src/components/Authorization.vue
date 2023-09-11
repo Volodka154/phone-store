@@ -10,7 +10,7 @@
             <input v-model="password" 
                    placeholder="Пароль"/>
         </p>
-        <button class="btn-autorisation" @click="onClick">Войти</button>
+        <button class="btn-autorisation" @click="setAuthData">Войти</button>
         <p class="href"
             @click="clickOnCreateAccount">Нет аккаунта? Создать</p>
     </div>
@@ -21,7 +21,6 @@ import axios from "axios"
 import { mapActions, mapGetters } from 'vuex'
 export default {
     name: 'authorization',
-    props: {},
     data() {
         return {
             login: null,
@@ -42,7 +41,7 @@ export default {
         ...mapActions('cart', [
             'addCart'
         ]),
-        onClick() {
+        setAuthData() {
             axios.post('http://localhost:8080/api/auth/login', {
                 userEmail: String(this.login),
                 userPassword: String(this.password)
