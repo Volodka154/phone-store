@@ -100,7 +100,7 @@ export default {
         clickOnCart() {
             if (this.accessToken) {
                 this.$router.push({
-                    name: 'cart'
+                    name: 'cartPage'
                 })
             }
             else {

@@ -1,24 +1,40 @@
-# lerning-29
+# frontend
 
-## Project setup
+## Стек
+Node.js 9.8.1, Vue.js 3.2.47, Firebase 10.3.0
+
+## заполнить базу
+
+В IDEA или Data Grip необходимо подключиться к базе:
+host: localhost
+port: 5432
+user: postgres
+password: postgres
+database: phone_shop_db
+
+После успешного подключения необходимо выполнить в консоли приложения файл ./backend/init_bd.sql
+
+## установить необходимые зависимости
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## запустить проект
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+## Compiles and minifies for production
 ```
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Комментарий
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+В данном проекте фильтрация товаров по стоимости работает только для категории "Смартфоны", потому что в остальных запросом из бд прилетает лишняя информация, которая этому препятствует. Однако для проверки функциональности этой функции хватает и одной категории.
+
+В остальном все должно работать.
+
+Также для просмотра отзывов можно самостоятельно создать пользователя, а потом и отзыв. 
+
+Для просмотра административной части необходимо создать пользователя и в IDEA или Data Grip в таблице user_role сменить его роль на "ADMIN"

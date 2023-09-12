@@ -1,19 +1,19 @@
 <template>
     <div id="app" 
          class="flex-container flex-container-column">
-        <my-header id="myHeader"/>
+        <main-header id="mainHeader"/>
         <router-view></router-view>
     </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import MyHeader from "./components/MyHeader.vue";
+import MainHeader from "./components/MainHeader.vue";
 import axios from 'axios'
 export default {
     name: "App",
     components: {
-        MyHeader,
+        MainHeader,
     },
     methods:{
         ...mapActions('navbar', [
