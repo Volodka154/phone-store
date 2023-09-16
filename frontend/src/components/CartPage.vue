@@ -44,13 +44,12 @@ export default {
             'removePatInNavBarMass',
             'addPatInNavBarMass',
         ]),
-        handleMountedCart(){
+        handleMountedCart() {
             this.removePatInNavBarMass(1)
             this.addPatInNavBarMass({
                 title: 'Корзина',
                 path: this.$router.currentRoute.value.fullPath
             })
-            
             if (this.accessToken) {
                 axios.get("http://localhost:8080/api/cart", {
                     headers: {
@@ -68,7 +67,7 @@ export default {
             }   
         }
     },
-    mounted(){    
+    mounted() {    
         this.handleMountedCart()
     }
 }

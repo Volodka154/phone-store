@@ -43,7 +43,7 @@ export default {
         }
     },
     methods: {
-        replaceOnEngWords(e, data){
+        replaceOnEngWords(e, data) {
             e.target.value = e.target.value.replace(/[^A-Za-z]/ig, '')
             this[data] = e.target.value
         },
@@ -53,12 +53,20 @@ export default {
                 lastName: this.surname,
                 userEmail: this.login,
                 userPassword: this.password
-            }).then(response => alert("Успешно зарегистрированы",response))
+            })
+            .then(response => {
+                alert("Успешно зарегистрированы", response)
+                this.clickOnAutorization()
+            })
             .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
-            this.$router.push({name: 'authorization'})
         },
-        clickOnAutorization(){
-            this.$router.push({name: 'authorization'})
+        clickOnAutorization() {
+            this.$router.push({
+                name: 'authorization',
+                query: {
+                    nameOfProps: 'authorization',
+                }
+            })
         },
     }
 }

@@ -144,7 +144,7 @@ export default {
     },
     data() {
         return {
-            product:{},
+            product: {},
 
             allStatus: {
                 AVAILABLE: 'В наличии',
@@ -170,7 +170,7 @@ export default {
             tempReviewsDescription: '',
         }
     },
-    beforeMount(){
+    beforeMount() {
         document.addEventListener("click", this.closeImgModal);
         document.addEventListener("keydown", this.closeImgModal);
     },
@@ -188,7 +188,7 @@ export default {
         ...mapActions('cart', [
             'addCart'
         ]),
-        handleMountedPhone(){
+        handleMountedPhone() {
             let ID = this.$router.currentRoute.value.params.slug
             ID = ID.split('-').pop()
             axios.get('http://localhost:8080/api/catalog/product/' + ID)
@@ -224,10 +224,9 @@ export default {
                 this.massForRelatedProducts = response.data.productDtos.filter(item => {
                     let firstWord = this.product.title.split(' ')[0]
                     let secondWord = this.product.title.split(' ')[1]
-                    if (item.id == this.product.id){
+                    if (item.id == this.product.id) {
                         return false
-                    }
-                    else if (item.title.includes(firstWord) || item.title.includes(secondWord)) {
+                    } else if (item.title.includes(firstWord) || item.title.includes(secondWord)) {
                         return true
                     }
                     return false
@@ -235,7 +234,7 @@ export default {
             })
             .catch(err => {console.log('Error\n', err)})
         },
-        addToCart(){
+        addToCart() {
             if (this.accessToken) {
                 axios.post("http://localhost:8080/api/addProduct", {
                     productId: this.product.id
@@ -253,7 +252,7 @@ export default {
         clickOnImg() {
             this.isClickOnImg = ! this.isClickOnImg
         },
-        closeImgModal(event){
+        closeImgModal(event) {
             if (event.target === this.$refs.modalBackdrop) {
                 this.clickOnImg()
             }
@@ -276,16 +275,16 @@ export default {
                 this.reviewsClick = !this.reviewsClick
             }
         },
-        rotateIcon(status){
+        rotateIcon(status) {
             return status ? 'rotate-90left' : 'rotate-90right'
         },
-        starInReview(index){
+        starInReview(index) {
             return index <= this.tempReviewsScore ? "IosStar.svg" : "IosStarOutline.svg" 
         },
-        setScoreInReview(index){
+        setScoreInReview(index) {
             this.tempReviewsScore = index
         },
-        sendFeedback(){
+        sendFeedback() {
             const urlPromise = this.tempReviewsPhoto.map(file => {
                 // отправка на облако firebase
                 const mountainsRef = ref(storage, file.name)
@@ -329,7 +328,7 @@ export default {
                 this.tempReviewsScore = 0
             })
         },
-        handleFileSelect(e){
+        handleFileSelect(e) {
             const fileArr = Array.from(e.target.files)
             fileArr.forEach(file => {
                 let reader = new FileReader();
@@ -345,10 +344,10 @@ export default {
                 reader.readAsDataURL(file);
             })            
         },
-        removetempReviewPhoto(index){
+        removetempReviewPhoto(index) {
             this.tempReviewsPhoto.splice(index,1)
         },
-        deletePicture(index){
+        deletePicture(index) {
             axios.delete('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deletePhotosFeedback', 
             {
                 data:{
@@ -361,7 +360,7 @@ export default {
             .then(response => alert("Фотография удалена",response))
             .catch(err => alert("Товара или отзыва не существует",err)) 
         },
-        deleteText(index){
+        deleteText(index) {
             axios.put('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deleteCommentFeedback', { //id товара сюда
                 feedbackId: this.product.userFeedbackDtos[index].userFeedbackId //id отзыва сюда
             },
@@ -373,7 +372,7 @@ export default {
             .then(response => alert("Текст удален",response))
             .catch(err => alert("Товара или отзыва не существует",err))
         },
-        deleteReview(index){
+        deleteReview(index) {
             axios.delete('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deleteFeedback',            
             {
                 data:{
@@ -388,10 +387,10 @@ export default {
         } 
     },
     computed: {
-        mrgnBtmTable(){
+        mrgnBtmTable() {
             return this.visibleRows.length ? '' : 'margin-bottom: 0px;'
         },
-        userReview(){
+        userReview() {
             if (this.reviewsClick && this.tempReviewsScore && this.accessToken){
                 return true
             }
@@ -413,34 +412,32 @@ export default {
                 this.handleMountedPhone()
             }
         },
-        currentIndexForSpecifications(){
+        currentIndexForSpecifications() {
             this.specifications = this.product.properties
-            if(this.specificationsClick){
+            if (this.specificationsClick){
                 const newMass = Object.entries(this.specifications)
-                if(this.currentIndexForSpecifications < newMass.length){
+                if (this.currentIndexForSpecifications < newMass.length) {
                     setTimeout(() => {
                         this.visibleRows.push(newMass[this.currentIndexForSpecifications])
                         this.currentIndexForSpecifications++
                     }, 10)
                 }
-            }
-            else if(!this.specificationsClick && this.visibleRows.length){
+            } else if (!this.specificationsClick && this.visibleRows.length) {
                 setTimeout(() => {
                     this.visibleRows.pop()
                     this.currentIndexForSpecifications--
                 }, 10)
             }
         },
-        currentIndexForReviews(){
-            if(this.reviewsClick){
-                if(this.currentIndexForReviews < this.product.userFeedbackDtos.length){
+        currentIndexForReviews() {
+            if (this.reviewsClick) {
+                if (this.currentIndexForReviews < this.product.userFeedbackDtos.length) {
                     setTimeout(() => {
                         this.visibleReviewsRows.push(this.product.userFeedbackDtos[this.currentIndexForReviews])
                         this.currentIndexForReviews++
                     }, 10)
                 }
-            }
-            else if(!this.reviewsClick && this.visibleReviewsRows.length){
+            } else if (!this.reviewsClick && this.visibleReviewsRows.length) {
                 setTimeout(() => {
                     this.visibleReviewsRows.pop()
                     this.currentIndexForReviews--

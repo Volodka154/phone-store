@@ -32,7 +32,13 @@ import axios from "axios"
 import { mapActions, mapGetters} from "vuex"
 import cartButton from "./ui/CartButton.vue"
 export default {
-    props: ['infoItem'],
+    props: {
+        infoItem: {
+            type: Object,
+            required: () => true,
+            default: () => {}
+        }
+    },
     components: {
         cartButton,
     },
@@ -43,17 +49,17 @@ export default {
                 LOW: 'Мало',
                 EMPTY: 'Нет в наличии'
             },
-            product: this.infoItem ? this.infoItem : [],
+            product: this.infoItem,
         }
     },
     methods: {
         ...mapActions('cart', [
             'addCart',
         ]),
-        quantityCalculate (status) {
+        quantityCalculate(status) {
             return "quantity-color-" + status
         },
-        addToCart(){
+        addToCart() {
             if (this.accessToken) {
                 axios.post("http://localhost:8080/api/addProduct", {
                     productId: this.product.id
@@ -68,13 +74,13 @@ export default {
                 alert("Необходима авторизация!");
             }
         },
-        getSlug(){
+        getSlug() {
             let slug = String(this.title).toLowerCase()
             slug = slug.replace(/ /ig,'-')
             slug = slug + '-' + String(this.product.id)
             return slug
         },
-        clickOnPhone(){
+        clickOnPhone() {
             const categoryTemp = this.allCategoryList.filter(item => (item.id === this.product.categoryId) ? true : false)
             this.$router.push({
                 name: 'itemPage',

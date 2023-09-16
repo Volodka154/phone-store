@@ -70,8 +70,8 @@ export default {
         CategoryCard
     },
     methods: {
-        clickOnAutorization(){
-            if(this.isModalCategoryList){
+        clickOnAutorization() {
+            if(this.isModalCategoryList) {
                 this.changeIsModalCategoryList()
             }
             this.$router.push({
@@ -81,7 +81,7 @@ export default {
                 }
             })
         },
-        clickOnUnautorization(){
+        clickOnUnautorization() {
             axios.post('http://localhost:8080/api/auth/logout',
             {},{
                 headers: {
@@ -102,8 +102,7 @@ export default {
                 this.$router.push({
                     name: 'cartPage'
                 })
-            }
-            else {
+            } else {
                 alert("Необходима авторизация!"); 
             }
         },
@@ -129,9 +128,9 @@ export default {
         ...mapActions('cart', [
             'nullCart'
         ]),
-        movingByNavBar(itemInPath){
+        movingByNavBar(itemInPath) {
             // это нужно для зануления подкатегории, если мы хотим перейти просто в категорию
-            if (this.allCategoryList.findIndex(item => item.title === itemInPath.title) !== -1){
+            if (this.allCategoryList.findIndex(item => item.title === itemInPath.title) !== -1) {
                 this.setNameBySubcategory('')
             }
             this.$router.push(itemInPath.path)
@@ -150,7 +149,7 @@ export default {
             'userName',
             'tokenType'
         ]),
-        ...mapGetters('cart',[
+        ...mapGetters('cart', [
             'countCart'
         ])
     }

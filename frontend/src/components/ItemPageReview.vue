@@ -23,14 +23,20 @@
 
 <script>
 export default {
-    props: ["propsReview"],
+    props: {
+        propsReview: {
+            type: Object,
+            required: () => true,
+            default: () => {}
+        }
+    },
     data(){
         return {
             review: this.propsReview,
         }
     },
     methods: {
-        starInReview(index){
+        starInReview(index) {
             return index <= this.review.feedback ? "IosStar.svg" : "IosStarOutline.svg" 
         }
     }

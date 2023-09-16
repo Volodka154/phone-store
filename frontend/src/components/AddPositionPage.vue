@@ -155,8 +155,6 @@
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 export default {
-    name: 'add-position',
-    props: {},
     data() {
         return {
             selectCategory: '',
@@ -204,7 +202,7 @@ export default {
             'setNameByCategory',
             'setNameBySubcategory'
         ]),
-        updateCategoryListInStore(){
+        updateCategoryListInStore() {
             // записываем массив категорий в стор
             axios.get('http://localhost:8080/api/catalog/categories')
             .then(res =>{
@@ -212,7 +210,7 @@ export default {
             })
             .catch(err => {console.log('Error\n', err)})
         },
-        addCategory(){
+        addCategory() {
             axios.post("http://localhost:8080/api/admin/category",{
                 id: this.categoryId,
                 title: this.categoryTitle
@@ -226,7 +224,7 @@ export default {
             .catch(err => alert("Ошибка",err))
             this.isCategoryAdd = false
         },
-        redact(){
+        redact() {
             axios.put("http://localhost:8080/api/admin/category",{
                 id: this.categoryId,
                 title: this.categoryTitle
@@ -240,7 +238,7 @@ export default {
             .catch(err => alert("Категории с таким id не существует",err))
             this.isRedact = false
         },
-        deleteCategory(){
+        deleteCategory() {
             let id = this.categoryId
             axios.delete('http://localhost:8080/api/admin/deleteCategory/' + id,
             {
@@ -252,7 +250,7 @@ export default {
             .catch(err => alert("Категории с таким id не существует",err))
             this.isDeleteCategory= false
         },
-        addSubCategory(){
+        addSubCategory() {
             axios.post("http://localhost:8080/api/admin/subcategory",{
                 categoryId: this.categoryIdForSub,
                 parentId: this.parentId,
@@ -268,7 +266,7 @@ export default {
             .catch(err => alert("Ошибка",err))
             this.isSubCategoryAdd = false
         },
-        subRedact(){
+        subRedact() {
                 axios.put("http://localhost:8080/api/admin/subcategory",{
                 categoryId: this.categoryIdForSub,
                 parentId: this.parentId,
@@ -284,7 +282,7 @@ export default {
             .catch(err => alert("Ошибка",err))
             this.isSubRedact = false
         },
-        deleteSubCategory(){
+        deleteSubCategory() {
             let id = this.categoryId
             axios.delete('http://localhost:8080/api/admin/deleteSubcategory/' + id,
             {
@@ -296,7 +294,7 @@ export default {
             .catch(err => alert("Подкатегории с таким id не существует",err))
             this.isDeleteSubCategory= false
         },
-        moveSub(){
+        moveSub() {
                 axios.put("http://localhost:8080/api/admin/moveSubcategoryToCategory",{
                     catId: this.categoryIdForSub,
                     subId: this.categoryId
@@ -310,7 +308,7 @@ export default {
             .catch(err => alert("Ошибка",err))
             this.isMoveSub = false
         },
-        addProduct(){
+        addProduct() {
                 axios.post("http://localhost:8080/api/admin/product",{
                     amount: this.productAmount,
                     description: this.productDescription,
@@ -331,7 +329,7 @@ export default {
             .then(response => alert("Товар добавлен",response), this.isProductAdd = false)
             .catch(err => alert("Ошибка",err), this.isProductAdd = true)
         },
-        deleteProduct(){
+        deleteProduct() {
             let id = this.productId
             axios.delete('http://localhost:8080/api/admin/deleteProduct/' + id,
             {
@@ -343,7 +341,7 @@ export default {
             .catch(err => alert("Товара с таким id не существует",err))
             this.isDeleteProduct = false
         },
-        redactProduct(){
+        redactProduct() {
                 axios.put("http://localhost:8080/api/admin/product",{
                     amount: this.productAmount,
                     description: this.productDescription,
@@ -364,7 +362,7 @@ export default {
             .then(response => alert("Товар добавлен",response), this.isProductRedact = false)
             .catch(err => alert("Ошибка",err), this.isProductRedact = true)
         },
-        productPropertyRedact(){
+        productPropertyRedact() {
             axios.put('http://localhost:8080/api/admin/property', {
                 id: this.productPropertyRedactId,
                 name: this.productPropertyRedactName,
@@ -380,7 +378,7 @@ export default {
             .catch(err => alert("Товара или свойства не существует",err))
             this.isRedactProductProperty = false
         },
-        addProperty(){
+        addProperty() {
             axios.post('http://localhost:8080/api/admin/property', {
                 id: this.productPropertyId,
                 name: this.productPropertyRedactName,

@@ -14,7 +14,16 @@ import axios from "axios"
 import { mapActions, mapGetters } from 'vuex'
 import cartButton from "./ui/CartButton.vue"
 export default {
-    props: ['propsCount', 'propsPrice'],
+    props: {
+        propsCount: {
+            type: Number,
+            default: () => 0
+        },
+        propsPrice: {
+            type: Number,
+            default: () => 0
+        },
+    },
     components: {
         cartButton,
     },
@@ -22,13 +31,17 @@ export default {
         ...mapActions('cart', [
             'nullCart'
         ]),
-        doTransaction(){
+        doTransaction() {
             axios.post('http://localhost:8080/api/cart/transaction', 
             {}, {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }
-            }).then(()=> {this.$emit('update'), alert("Покупка оформлена!"), this.nullCart()})
+            }).then(()=> {
+                this.$emit('update') 
+                alert("Покупка оформлена!") 
+                this.nullCart()
+            })
             .catch(err => alert("Неверно введены данные", err));
         }
     },
@@ -37,10 +50,10 @@ export default {
             'accessToken',
             'tokenType'
         ]),
-        computedCount(){
+        computedCount() {
             return this.propsCount
         },
-        computedPrice(){
+        computedPrice() {
             return this.propsPrice
         }
     },

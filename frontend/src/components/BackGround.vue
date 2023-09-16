@@ -11,9 +11,19 @@
 
 <script>
 export default {
-    props: ['nameOfLink'],
-    mounted(){
-        this.$router.push({ name: this.nameOfLink })
+    props: {
+        nameOfLink: {
+            type: String,
+            required: () => true,
+        }
+    },
+    mounted() {
+        this.$router.push({
+            name: this.nameOfLink,
+            query: {
+                nameOfProps: this.nameOfLink,
+            }
+        })
         document.addEventListener("click", this.closeAuthorizationModal);
         document.addEventListener("keydown", this.closeAuthorizationModal);
     },  
@@ -22,7 +32,7 @@ export default {
         document.removeEventListener("keydown", this.closeAuthorizationModal);
     },
     methods: {
-        closeAuthorizationModal(event){
+        closeAuthorizationModal(event) {
             if (event.target === this.$refs.modalBackdrop) {
                 this.$router.push('/')
             }

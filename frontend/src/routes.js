@@ -1,16 +1,15 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 
-import CatalogList from './components/CatalogList.vue';
-import СatalogItemList from './components/СatalogItemList.vue';
-
+import CatalogListPage from './components/CatalogListPage.vue';
+import СatalogItemListPage from './components/СatalogItemListPage.vue';
 
 import BackGround from './components/BackGround.vue';
 import Authorization from './components/Authorization.vue';
 import Registration from './components/Registration.vue';
 
 import ItemPage from './components/ItemPage.vue';
-import cartPage from './components/CartPage.vue'
-import AddPosition from './components/AddPosition.vue'
+import CartPage from './components/CartPage.vue'
+import AddPositionPage from './components/AddPositionPage.vue'
 
 const routes = [
     {
@@ -20,20 +19,18 @@ const routes = [
     {
         path: '/catalog',
         name: 'catalog',
-        component: CatalogList,
+        component: CatalogListPage,
     },
     {
         path: '/item-list-:name',
         name: 'item-list',
-        component: СatalogItemList,
+        component: СatalogItemListPage,
     },
     {
         path: '/item-list-:name/:slug',
         name: 'itemPage',
         component: ItemPage,
     },
-   
-
     {
         path: '/back',
         name: 'back',
@@ -57,12 +54,12 @@ const routes = [
     {
         path: '/cartPage',
         name: 'cartPage',
-        component: cartPage
+        component: CartPage
     },
     {
         path: '/addProduct',
         name: 'addProduct',
-        component: AddPosition
+        component: AddPositionPage
     }
 ];
 

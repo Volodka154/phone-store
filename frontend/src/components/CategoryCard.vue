@@ -38,18 +38,19 @@ export default {
             categoryList: []
         }
     },
-    mounted(){
+    mounted() {
         this.categoryList = this.allCategoryList
     },
-    methods:{
+    methods: {
         ...mapActions('navbar', [
             'changeIsModalCategoryList',
             'setNameByCategory',
             'setNameBySubcategory'
         ]),
-        clickOnCategory(propsCategoryName){
+        clickOnCategory(propsCategoryName) {
             this.changeIsModalCategoryList()
             this.setNameByCategory(propsCategoryName)
+            this.setNameBySubcategory('')
             this.$router.push({
                 name: 'item-list',
                 params:{
@@ -57,7 +58,7 @@ export default {
                 }
             })
         },
-        clickOnSubCategory(propsCategoryName, propsSubcategoryName){
+        clickOnSubCategory(propsCategoryName, propsSubcategoryName) {
             this.changeIsModalCategoryList()
             this.setNameByCategory(propsCategoryName)
             this.setNameBySubcategory(propsSubcategoryName)

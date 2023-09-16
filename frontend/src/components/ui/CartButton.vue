@@ -15,11 +15,8 @@ export default{
     props: {
         isDisabled: {
             type: Boolean,
-            default: false,
+            default: () => false,
         }
     },
-    data() {
-
-    }
 }
 </script>

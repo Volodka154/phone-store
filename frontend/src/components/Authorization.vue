@@ -20,7 +20,6 @@
 import axios from "axios"
 import { mapActions, mapGetters } from 'vuex'
 export default {
-    name: 'authorization',
     data() {
         return {
             login: null,
@@ -47,13 +46,17 @@ export default {
                 userPassword: String(this.password)
 
             }).then(response => this.nameOnHeader(response))
-            .catch(err => alert("Неверно введены данные", err));
-            
+            .catch(err => alert("Неверно введены данные", err))
         },
         clickOnCreateAccount() {
-            this.$router.push({name: 'registration'})
+            this.$router.push({
+                name: 'registration',
+                query: {
+                    nameOfProps: 'registration',
+                }
+            })
         },
-        nameOnHeader(response){
+        nameOnHeader(response) {
             const token = response.data;
             this.setTokenType(token.tokenType)
             this.setAccessToken(token.accessToken)
@@ -61,7 +64,7 @@ export default {
             const [ , payloadBase64] = this.accessToken.split('.');
             const payload = JSON.parse(atob(payloadBase64));
             this.setUserName(payload.username + ' ' + payload.usersurname[0] +'.'); //сейчас в токене лежит id и роль, а так же время распада токена
-            if (payload.roles.includes('ADMIN')){
+            if (payload.roles.includes('ADMIN')) {
                 this.setUserName('ADMIN')
             }
             this.setUserRole(payload.roles)

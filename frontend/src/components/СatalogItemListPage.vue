@@ -2,7 +2,8 @@
 <template>
     <div class="item-page">
         <div class="flex-container flex-container-row justify-content-end">
-            <div class="flex-container flex-container-row justify-content-end cursor-pointer"
+            <div v-if="productsList.length"
+                 class="flex-container flex-container-row justify-content-end cursor-pointer"
                  @click="clickOnFilter">
                 <p>{{ isFilter ? "Сначала дороже" : "Сначала дешевле" }}</p>
                 <img src="Filter.svg" class="ikon">            
@@ -27,19 +28,19 @@ export default {
         return {
             isFilter: false,
             productsList: [],
-        };
+        }
     },
     methods:{
         ...mapActions('navbar', [
             'addPatInNavBarMass',
             'removePatInNavBarMass',
         ]),
-        clickOnFilter(){
+        clickOnFilter() {
             this.isFilter = ! this.isFilter
             this.isFilter ? this.productsList.sort((a,b) => (a.price < b.price) ? 1 : -1)
                           : this.productsList.sort((a,b) => (a.price > b.price) ? 1 : -1)
         },
-        handleCategSubcategChange(){
+        handleCategSubcategChange() {
             this.productsList = []
             this.removePatInNavBarMass(1)
             this.addPatInNavBarMass({
@@ -52,24 +53,36 @@ export default {
                 this.productsList = res.data.productDtos
                 // проверка на наличие подкатегории
                 if (this.nameOfSubcategory) {
-                    this.addPatInNavBarMass({
+                    const obj = {
                         title: this.nameOfSubcategory,
                         path: this.$router.currentRoute.value.fullPath
+                    }
+                    // функция handleCategSubcategChange отрабатывает два раза при переходе в подкатегорию другой категории, поэтому добавляет подкатегорию два раза
+                    // здесь мы проверяем наличие подкатегории в массиве всех путей
+                    let isObjInArr = false
+                    this.pathInNavBarMass.filter(item => {
+                        if (obj.title == item.title && obj.path == item.path) {
+                            isObjInArr = true
+                        }
                     })
+                    if (!isObjInArr) {
+                        this.addPatInNavBarMass(obj)
+                    }
                     this.productsList = this.productsList.filter(item => item.title.toLowerCase().includes(this.nameOfSubcategory.toLowerCase()))
                 }
             })
             .catch(err => {console.log('Error\n', err)})
         }
     },
-    computed:{
-        watchedSubcategory(){
+    computed: {
+        watchedSubcategory() {
             return this.$store.getters["navbar/nameOfSubcategory"]
         },
         ...mapGetters('navbar', [
             'allCategoryList',
             'nameOfCategory',
-            'nameOfSubcategory'
+            'nameOfSubcategory',
+            'pathInNavBarMass'
         ])
     },  
     watch: {
@@ -79,7 +92,7 @@ export default {
                 this.handleCategSubcategChange()
             }
         },
-        watchedSubcategory(){
+        watchedSubcategory() {
             this.handleCategSubcategChange()
         }
     }

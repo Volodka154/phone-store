@@ -33,13 +33,22 @@
 import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 export default {
-    props: ['infoItem'],
-    data() {
-        return {
-            product: this.infoItem ? this.infoItem : []
+    props: {
+        infoItem: {
+            type: Object,
+            required: () => true,
+            default: () => {}
         }
     },
-    updated(){
+    data() {
+        return {
+            product: this.infoItem
+        }
+    },
+    mounted() {
+        console.log('product', this.product)
+    },
+    updated() {
         this.product = this.infoItem
     },
     methods: {
@@ -53,7 +62,7 @@ export default {
             'setNameByCategory',
             'setNameBySubcategory'
         ]),
-        countPlus(){
+        countPlus() {
             axios.put('http://localhost:8080/api/cart/addAmount',{
                 productId: this.product.productId
             }, {
@@ -64,7 +73,7 @@ export default {
             .catch(err => console.log(err))
                 
         },
-        countMinus(){
+        countMinus() {
             axios.post('http://localhost:8080/api/cart/reduceAmount',{
                 productId: this.product.productId
             }, {
@@ -74,7 +83,7 @@ export default {
             }).then(() => {this.$emit('update'), this.removeCart(1)})
             .catch(err => console.log(err))
         },
-        deleteProduct(){
+        deleteProduct() {
             axios.delete('http://localhost:8080/api/cart/deleteProduct', {
                 data: {
                     productId: this.product.productId
@@ -85,13 +94,13 @@ export default {
             }).then(() => {this.$emit('update'), this.removeCart(this.product.amount)})
             .catch(err => console.log(err))
         },
-        getSlug(){
+        getSlug() {
             let slug = String(this.product.title).toLowerCase()
             slug = slug.replace(/ /ig,'-')
             slug = slug + '-' + String(this.product.productId)
             return slug
         },
-        clickOnPhone(){
+        clickOnPhone() {
             // запрос на товар
             axios.get('http://localhost:8080/api/catalog/product/' + this.product.productId)
             .then(response => {
@@ -135,7 +144,7 @@ export default {
         ]),
         ...mapGetters('navbar', [
             'allCategoryList'
-        ])
+        ]),
     }
 }
 </script>

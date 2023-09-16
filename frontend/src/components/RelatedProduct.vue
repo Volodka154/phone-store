@@ -15,20 +15,26 @@
   
 <script>
 export default {
-    props: ['propsRelated'],
+    props: {
+        propsRelated: {
+            type: Object,
+            required: () => true,
+            default: () => {}
+        }
+    },
     data() {
         return {
             relatedItem: this.propsRelated
         }
     },
     methods: {
-        getSlug(){
+        getSlug() {
             let slug = String(this.relatedItem.title).toLowerCase()
             slug = slug.replace(/ /ig,'-')
             slug = slug + '-' + String(this.relatedItem.id)
             return slug
         },
-        clickOnPhone(){
+        clickOnPhone() {
             const nameInRoute = this.$router.currentRoute.value.params.name
             this.$router.push({
                 name: 'itemPage',

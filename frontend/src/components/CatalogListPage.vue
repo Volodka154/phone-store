@@ -41,7 +41,7 @@ export default {
             'setNameByCategory',
             'setNameBySubcategory'
         ]),
-        clickOnCatalogItem(propsCategoryName){
+        clickOnCatalogItem(propsCategoryName) {
             this.setNameByCategory(propsCategoryName)
             this.$router.push({
                 name: 'item-list',
