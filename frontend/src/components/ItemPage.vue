@@ -28,7 +28,7 @@
                     <h4 :class="quantityCalculate(product.status)">
                         {{ allStatus[product.status] }}
                     </h4>
-                    <cart-button-gray v-if="product.status == 'EMPTY'">В корзину</cart-button-gray>
+                    <cart-button :isDisabled="true" v-if="product.status == 'EMPTY'">В корзину</cart-button>
                     <cart-button v-else  @click="addToCart">В корзину</cart-button>
                 </div>
             </div>
@@ -130,8 +130,7 @@
 <script>
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex'
-import cartButtonGray from "./CartButtonGray";
-import cartButton from "./CartButton.vue";
+import cartButton from "./ui/CartButton.vue";
 import ItemPageReview from "./ItemPageReview.vue";
 import RelatedProduct from "./RelatedProduct.vue";
 import { storage } from '../firebase.js'
@@ -140,7 +139,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export default {
     components: {
         cartButton,
-        cartButtonGray,
         ItemPageReview,
         RelatedProduct
     },

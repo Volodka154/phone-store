@@ -4,21 +4,19 @@
         <p class="title-finish-cart">Ваш заказ:</p>
         <p class="count">Кол-во товаров: {{ computedCount }}</p>
         <p class="finish">Итого: {{ computedPrice }} руб.</p>
-        <cart-button-gray v-if="!computedCount">Оформить заказ</cart-button-gray>
-        <cart-button v-else @click="addToCart">Оформить заказ</cart-button>
+        <cart-button :isDisabled="false" v-if="!computedCount">Оформить заказ</cart-button>
+        <cart-button v-else @click="doTransaction">Оформить заказ</cart-button>
     </div>
 </template>
   
 <script>
 import axios from "axios"
 import { mapActions, mapGetters } from 'vuex'
-import cartButtonGray from "./CartButtonGray.vue"
-import cartButton from "./CartButton.vue"
+import cartButton from "./ui/CartButton.vue"
 export default {
     props: ['propsCount', 'propsPrice'],
     components: {
         cartButton,
-        cartButtonGray,
     },
     methods:{
         ...mapActions('cart', [

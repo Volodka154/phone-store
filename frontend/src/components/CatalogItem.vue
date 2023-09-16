@@ -19,7 +19,7 @@
             <div class="center-content">
                 <div>
                     <h3>{{ product.price }}</h3>
-                    <cart-button-gray v-if="product.status == 'EMPTY'">В корзину</cart-button-gray>
+                    <cart-button :isDisabled="true" v-if="product.status == 'EMPTY'">В корзину</cart-button>
                     <cart-button v-else @click="addToCart">В корзину</cart-button>
                 </div>
             </div>
@@ -30,13 +30,11 @@
 <script>
 import axios from "axios"
 import { mapActions, mapGetters} from "vuex"
-import cartButtonGray from "./CartButtonGray.vue"
-import cartButton from "./CartButton.vue"
+import cartButton from "./ui/CartButton.vue"
 export default {
     props: ['infoItem'],
     components: {
         cartButton,
-        cartButtonGray,
     },
     data() {
         return {
