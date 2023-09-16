@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import { axiosInstance } from '../index.js'
 import { mapActions, mapGetters } from 'vuex'
 export default {
     data() {
@@ -41,7 +41,7 @@ export default {
             'addCart'
         ]),
         setAuthData() {
-            axios.post('http://localhost:8080/api/auth/login', {
+            axiosInstance.post('/auth/login', {
                 userEmail: String(this.login),
                 userPassword: String(this.password)
 
@@ -57,19 +57,19 @@ export default {
             })
         },
         nameOnHeader(response) {
-            const token = response.data;
+            const token = response.data
             this.setTokenType(token.tokenType)
             this.setAccessToken(token.accessToken)
             this.setRefreshToken(token.refreshToken)
-            const [ , payloadBase64] = this.accessToken.split('.');
-            const payload = JSON.parse(atob(payloadBase64));
-            this.setUserName(payload.username + ' ' + payload.usersurname[0] +'.'); //сейчас в токене лежит id и роль, а так же время распада токена
+            const [ , payloadBase64] = this.accessToken.split('.')
+            const payload = JSON.parse(atob(payloadBase64))
+            this.setUserName(payload.username + ' ' + payload.usersurname[0] +'.') //сейчас в токене лежит id и роль, а так же время распада токена
             if (payload.roles.includes('ADMIN')) {
                 this.setUserName('ADMIN')
             }
             this.setUserRole(payload.roles)
             this.$router.push({name: 'catalog'})
-            axios.get("http://localhost:8080/api/cart", {
+            axiosInstance.get("/cart", {
                 headers: {
                     Authorization: `Bearer ${response.data.accessToken}` // Передаем токен в заголовке запроса
                 }

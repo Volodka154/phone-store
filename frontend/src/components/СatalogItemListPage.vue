@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import { mapActions, mapGetters } from 'vuex';
+import { axiosInstance } from '../index.js'
+import { mapActions, mapGetters } from 'vuex'
 import CatalogItem from './CatalogItem.vue'
 export default {
     components: {
@@ -48,7 +48,7 @@ export default {
                 path: this.$router.currentRoute.value.fullPath
             })
             const categoryID = this.allCategoryList.findIndex(item => item.title === this.nameOfCategory) + 1
-            axios.get('http://localhost:8080/api/catalog/category/' + categoryID)
+            axiosInstance.get('/catalog/category/' + categoryID)
             .then(res =>{
                 this.productsList = res.data.productDtos
                 // проверка на наличие подкатегории

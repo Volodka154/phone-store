@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { axiosInstance } from '../index.js'
 import { mapActions, mapGetters } from 'vuex'
 import cartItem from './CartItem.vue'
 import cartFinish from './CartFinish.vue'
@@ -51,7 +51,7 @@ export default {
                 path: this.$router.currentRoute.value.fullPath
             })
             if (this.accessToken) {
-                axios.get("http://localhost:8080/api/cart", {
+                axiosInstance.get("/cart", {
                     headers: {
                         Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                     }
@@ -63,7 +63,7 @@ export default {
 
                 .catch(err => console.log(err))
             } else {
-                alert("Необходима авторизация!");
+                alert("Необходима авторизация!")
             }   
         }
     },

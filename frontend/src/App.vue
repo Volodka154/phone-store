@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import MainHeader from "./components/MainHeader.vue";
-import axios from 'axios'
+import { axiosInstance } from './index.js'
+import { mapActions } from "vuex"
+import MainHeader from "./components/MainHeader.vue"
 export default {
     name: "App",
     components: {
@@ -22,13 +22,13 @@ export default {
     },
     mounted(){
         // записываем массив категорий в стор
-        axios.get('http://localhost:8080/api/catalog/categories')
+        axiosInstance.get('/catalog/categories')
         .then(res =>{
             this.setAllCategoryList(res.data)
         })
         .catch(err => {console.log('Error\n', err)})
     }   
-};
+}
 </script>
 
 <style>
@@ -38,7 +38,6 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    /*margin-top: 70px;*/
 }
 body{
     margin: 0px;

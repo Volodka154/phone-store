@@ -62,7 +62,7 @@
 </template>
     
 <script>
-import axios from 'axios'
+import { axiosInstance } from '../index.js'
 import { mapActions, mapGetters } from 'vuex'
 import CategoryCard from './CategoryCard.vue'
 export default {
@@ -82,7 +82,7 @@ export default {
             })
         },
         clickOnUnautorization() {
-            axios.post('http://localhost:8080/api/auth/logout',
+            axiosInstance.post('/auth/logout',
             {},{
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
@@ -103,7 +103,7 @@ export default {
                     name: 'cartPage'
                 })
             } else {
-                alert("Необходима авторизация!"); 
+                alert("Необходима авторизация!")
             }
         },
         clickOnAdminBtn() {

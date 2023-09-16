@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import { axiosInstance } from '../index.js'
 import { mapActions, mapGetters} from "vuex"
 import cartButton from "./ui/CartButton.vue"
 export default {
@@ -61,7 +61,7 @@ export default {
         },
         addToCart() {
             if (this.accessToken) {
-                axios.post("http://localhost:8080/api/addProduct", {
+                axiosInstance.post("/addProduct", {
                     productId: this.product.id
                 }, {
                     headers: {
@@ -71,7 +71,7 @@ export default {
                 .then(() => this.addCart(1))
                 .catch(err => console.log('err', err))
             } else {
-                alert("Необходима авторизация!");
+                alert("Необходима авторизация!")
             }
         },
         getSlug() {

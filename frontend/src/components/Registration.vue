@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { axiosInstance } from '../index.js'
 export default {
     data() {
         return {
@@ -48,7 +48,7 @@ export default {
             this[data] = e.target.value
         },
         clickOnRegistration() {
-            axios.post("http://localhost:8080/api/auth/register", {
+            axiosInstance.post("/auth/register", {
                 firstName: this.name,
                 lastName: this.surname,
                 userEmail: this.login,
@@ -58,7 +58,7 @@ export default {
                 alert("Успешно зарегистрированы", response)
                 this.clickOnAutorization()
             })
-            .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err));
+            .catch(err => alert("Неверно введены данные или такой email уже зарегистрирован!", err))
         },
         clickOnAutorization() {
             this.$router.push({

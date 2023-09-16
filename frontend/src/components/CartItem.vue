@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import { mapActions, mapGetters } from "vuex";
+import { axiosInstance } from '../index.js'
+import { mapActions, mapGetters } from "vuex"
 export default {
     props: {
         infoItem: {
@@ -63,7 +63,7 @@ export default {
             'setNameBySubcategory'
         ]),
         countPlus() {
-            axios.put('http://localhost:8080/api/cart/addAmount',{
+            axiosInstance.put('/cart/addAmount',{
                 productId: this.product.productId
             }, {
                 headers: {
@@ -74,7 +74,7 @@ export default {
                 
         },
         countMinus() {
-            axios.post('http://localhost:8080/api/cart/reduceAmount',{
+            axiosInstance.post('/cart/reduceAmount',{
                 productId: this.product.productId
             }, {
                 headers: {
@@ -84,7 +84,7 @@ export default {
             .catch(err => console.log(err))
         },
         deleteProduct() {
-            axios.delete('http://localhost:8080/api/cart/deleteProduct', {
+            axiosInstance.delete('/cart/deleteProduct', {
                 data: {
                     productId: this.product.productId
                 },
@@ -102,7 +102,7 @@ export default {
         },
         clickOnPhone() {
             // запрос на товар
-            axios.get('http://localhost:8080/api/catalog/product/' + this.product.productId)
+            axiosInstance.get('/catalog/product/' + this.product.productId)
             .then(response => {
                 const productByAxios = response.data
                 const categoryTemp = this.allCategoryList.filter(item => (item.id === productByAxios.categoryId) ? true : false)

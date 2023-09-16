@@ -128,13 +128,13 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { axiosInstance } from '../index.js'
 import { mapActions, mapGetters } from 'vuex'
-import cartButton from "./ui/CartButton.vue";
-import ItemPageReview from "./ItemPageReview.vue";
-import RelatedProduct from "./RelatedProduct.vue";
+import cartButton from "./ui/CartButton.vue"
+import ItemPageReview from "./ItemPageReview.vue"
+import RelatedProduct from "./RelatedProduct.vue"
 import { storage } from '../firebase.js'
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 export default {
     components: {
@@ -171,12 +171,12 @@ export default {
         }
     },
     beforeMount() {
-        document.addEventListener("click", this.closeImgModal);
-        document.addEventListener("keydown", this.closeImgModal);
+        document.addEventListener("click", this.closeImgModal)
+        document.addEventListener("keydown", this.closeImgModal)
     },
     beforeUnmount() {
-        document.removeEventListener("click", this.closeImgModal);
-        document.removeEventListener("keydown", this.closeImgModal);
+        document.removeEventListener("click", this.closeImgModal)
+        document.removeEventListener("keydown", this.closeImgModal)
     },
     methods: {
         ...mapActions('navbar', [
@@ -191,7 +191,7 @@ export default {
         handleMountedPhone() {
             let ID = this.$router.currentRoute.value.params.slug
             ID = ID.split('-').pop()
-            axios.get('http://localhost:8080/api/catalog/product/' + ID)
+            axiosInstance.get('/catalog/product/' + ID)
             .then(response => {
                 this.product = response.data
                 const categoryTemp = this.allCategoryList.filter(item => (item.id === this.product.categoryId) ? true : false)
@@ -219,7 +219,7 @@ export default {
             })
             .catch(err => {console.log('Error\n', err)})
             // устанавлвиваем соответсвующие товары 
-            axios.get('http://localhost:8080/api/catalog')
+            axiosInstance.get('/catalog')
             .then(response => {
                 this.massForRelatedProducts = response.data.productDtos.filter(item => {
                     let firstWord = this.product.title.split(' ')[0]
@@ -236,7 +236,7 @@ export default {
         },
         addToCart() {
             if (this.accessToken) {
-                axios.post("http://localhost:8080/api/addProduct", {
+                axiosInstance.post("/addProduct", {
                     productId: this.product.id
                 }, {
                     headers: {
@@ -246,7 +246,7 @@ export default {
                 .then(() => this.addCart(1) )
                 .catch(err => console.log('err', err))
             } else {
-                alert("Необходима авторизация!");
+                alert("Необходима авторизация!")
             }
         },
         clickOnImg() {
@@ -314,7 +314,7 @@ export default {
                     picturesUrls: this.tempReviewsPhoto.map(file => file.dataUrl),
                 })
                 this.currentIndexForReviews++
-                axios.post(`http://localhost:8080/api/catalog/product/${this.product.id}/addFeedback`,{
+                axiosInstance.post(`/catalog/product/${this.product.id}/addFeedback`,{
                     comment: this.tempReviewsDescription,
                     feedback: this.tempReviewsScore,
                     picturesUrls: urlMass
@@ -331,24 +331,24 @@ export default {
         handleFileSelect(e) {
             const fileArr = Array.from(e.target.files)
             fileArr.forEach(file => {
-                let reader = new FileReader();
+                let reader = new FileReader()
                 reader.onload = event => {
                     const nameOfFile = new Date() + ' - ' + file.name
-                    const dataUrl = event.target.result;
+                    const dataUrl = event.target.result
                     this.tempReviewsPhoto.push({
                         name: nameOfFile,
                         file: file,
                         dataUrl: dataUrl
                     })
                 }
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(file)
             })            
         },
         removetempReviewPhoto(index) {
             this.tempReviewsPhoto.splice(index,1)
         },
         deletePicture(index) {
-            axios.delete('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deletePhotosFeedback', 
+            axiosInstance.delete('/admin/catalog/product/'+this.product.id+'/deletePhotosFeedback', 
             {
                 data:{
                     feedbackId: this.product.userFeedbackDtos[index].userFeedbackId//id отзыва сюда
@@ -361,7 +361,7 @@ export default {
             .catch(err => alert("Товара или отзыва не существует",err)) 
         },
         deleteText(index) {
-            axios.put('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deleteCommentFeedback', { //id товара сюда
+            axiosInstance.put('/admin/catalog/product/'+this.product.id+'/deleteCommentFeedback', { //id товара сюда
                 feedbackId: this.product.userFeedbackDtos[index].userFeedbackId //id отзыва сюда
             },
             {
@@ -373,7 +373,7 @@ export default {
             .catch(err => alert("Товара или отзыва не существует",err))
         },
         deleteReview(index) {
-            axios.delete('http://localhost:8080/api/admin/catalog/product/'+this.product.id+'/deleteFeedback',            
+            axiosInstance.delete('/admin/catalog/product/'+this.product.id+'/deleteFeedback',            
             {
                 data:{
                     feedbackId: this.product.userFeedbackDtos[index].userFeedbackId//id отзыва сюда

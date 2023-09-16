@@ -10,7 +10,7 @@
 </template>
   
 <script>
-import axios from "axios"
+import { axiosInstance } from '../index.js'
 import { mapActions, mapGetters } from 'vuex'
 import cartButton from "./ui/CartButton.vue"
 export default {
@@ -32,7 +32,7 @@ export default {
             'nullCart'
         ]),
         doTransaction() {
-            axios.post('http://localhost:8080/api/cart/transaction', 
+            axiosInstance.post('/cart/transaction', 
             {}, {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
@@ -42,7 +42,7 @@ export default {
                 alert("Покупка оформлена!") 
                 this.nullCart()
             })
-            .catch(err => alert("Неверно введены данные", err));
+            .catch(err => alert("Неверно введены данные", err))
         }
     },
     computed: {

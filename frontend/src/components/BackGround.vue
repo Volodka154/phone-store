@@ -24,12 +24,12 @@ export default {
                 nameOfProps: this.nameOfLink,
             }
         })
-        document.addEventListener("click", this.closeAuthorizationModal);
-        document.addEventListener("keydown", this.closeAuthorizationModal);
+        document.addEventListener("click", this.closeAuthorizationModal)
+        document.addEventListener("keydown", this.closeAuthorizationModal)
     },  
     beforeUnmount() {
-        document.removeEventListener("click", this.closeAuthorizationModal);
-        document.removeEventListener("keydown", this.closeAuthorizationModal);
+        document.removeEventListener("click", this.closeAuthorizationModal)
+        document.removeEventListener("keydown", this.closeAuthorizationModal)
     },
     methods: {
         closeAuthorizationModal(event) {

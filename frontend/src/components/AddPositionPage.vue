@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { axiosInstance } from '../index.js'
 import { mapActions, mapGetters } from 'vuex'
 export default {
     data() {
@@ -204,14 +204,14 @@ export default {
         ]),
         updateCategoryListInStore() {
             // записываем массив категорий в стор
-            axios.get('http://localhost:8080/api/catalog/categories')
+            axiosInstance.get('/catalog/categories')
             .then(res =>{
                 this.setAllCategoryList(res.data)
             })
             .catch(err => {console.log('Error\n', err)})
         },
         addCategory() {
-            axios.post("http://localhost:8080/api/admin/category",{
+            axiosInstance.post("/admin/category",{
                 id: this.categoryId,
                 title: this.categoryTitle
             },
@@ -225,7 +225,7 @@ export default {
             this.isCategoryAdd = false
         },
         redact() {
-            axios.put("http://localhost:8080/api/admin/category",{
+            axiosInstance.put("/admin/category",{
                 id: this.categoryId,
                 title: this.categoryTitle
             },
@@ -240,7 +240,7 @@ export default {
         },
         deleteCategory() {
             let id = this.categoryId
-            axios.delete('http://localhost:8080/api/admin/deleteCategory/' + id,
+            axiosInstance.delete('/admin/deleteCategory/' + id,
             {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
@@ -251,7 +251,7 @@ export default {
             this.isDeleteCategory= false
         },
         addSubCategory() {
-            axios.post("http://localhost:8080/api/admin/subcategory",{
+            axiosInstance.post("/admin/subcategory",{
                 categoryId: this.categoryIdForSub,
                 parentId: this.parentId,
                 id: this.categoryId,
@@ -267,7 +267,7 @@ export default {
             this.isSubCategoryAdd = false
         },
         subRedact() {
-                axios.put("http://localhost:8080/api/admin/subcategory",{
+            axiosInstance.put("/admin/subcategory",{
                 categoryId: this.categoryIdForSub,
                 parentId: this.parentId,
                 id: this.categoryId,
@@ -284,7 +284,7 @@ export default {
         },
         deleteSubCategory() {
             let id = this.categoryId
-            axios.delete('http://localhost:8080/api/admin/deleteSubcategory/' + id,
+            axiosInstance.delete('/admin/deleteSubcategory/' + id,
             {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
@@ -295,9 +295,9 @@ export default {
             this.isDeleteSubCategory= false
         },
         moveSub() {
-                axios.put("http://localhost:8080/api/admin/moveSubcategoryToCategory",{
-                    catId: this.categoryIdForSub,
-                    subId: this.categoryId
+            axiosInstance.put("/admin/moveSubcategoryToCategory",{
+                catId: this.categoryIdForSub,
+                subId: this.categoryId
             },
             {
                 headers: {
@@ -309,17 +309,17 @@ export default {
             this.isMoveSub = false
         },
         addProduct() {
-                axios.post("http://localhost:8080/api/admin/product",{
-                    amount: this.productAmount,
-                    description: this.productDescription,
-                    discount: this.productDiscount,
-                    discountPrice: this.productDiscountPrice,
-                    id: this.productId,
-                    pictureUrl: this.productPictureUrl,
-                    price: this.productPrice,
-                    productPropertyId: this.productPropertyId ,
-                    subcategoryId: this.productSubcategoryId,
-                    title: this.productTitle
+            axiosInstance.post("/admin/product",{
+                amount: this.productAmount,
+                description: this.productDescription,
+                discount: this.productDiscount,
+                discountPrice: this.productDiscountPrice,
+                id: this.productId,
+                pictureUrl: this.productPictureUrl,
+                price: this.productPrice,
+                productPropertyId: this.productPropertyId ,
+                subcategoryId: this.productSubcategoryId,
+                title: this.productTitle
             },
             {
                 headers: {
@@ -331,7 +331,7 @@ export default {
         },
         deleteProduct() {
             let id = this.productId
-            axios.delete('http://localhost:8080/api/admin/deleteProduct/' + id,
+            axiosInstance.delete('/admin/deleteProduct/' + id,
             {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
@@ -342,17 +342,17 @@ export default {
             this.isDeleteProduct = false
         },
         redactProduct() {
-                axios.put("http://localhost:8080/api/admin/product",{
-                    amount: this.productAmount,
-                    description: this.productDescription,
-                    discount: this.productDiscount,
-                    discountPrice: this.productDiscountPrice,
-                    id: this.productId,
-                    pictureUrl: this.productPictureUrl,
-                    price: this.productPrice,
-                    productPropertyId: this.productPropertyId ,
-                    subcategoryId: this.productSubcategoryId,
-                    title: this.productTitle
+            axiosInstance.put("/admin/product",{
+                amount: this.productAmount,
+                description: this.productDescription,
+                discount: this.productDiscount,
+                discountPrice: this.productDiscountPrice,
+                id: this.productId,
+                pictureUrl: this.productPictureUrl,
+                price: this.productPrice,
+                productPropertyId: this.productPropertyId ,
+                subcategoryId: this.productSubcategoryId,
+                title: this.productTitle
             },
             {
                 headers: {
@@ -363,7 +363,7 @@ export default {
             .catch(err => alert("Ошибка",err), this.isProductRedact = true)
         },
         productPropertyRedact() {
-            axios.put('http://localhost:8080/api/admin/property', {
+            axiosInstance.put('/admin/property', {
                 id: this.productPropertyRedactId,
                 name: this.productPropertyRedactName,
                 prodPropId: this.productPropertyId,
@@ -379,7 +379,7 @@ export default {
             this.isRedactProductProperty = false
         },
         addProperty() {
-            axios.post('http://localhost:8080/api/admin/property', {
+            axiosInstance.post('/admin/property', {
                 id: this.productPropertyId,
                 name: this.productPropertyRedactName,
                 prodPropId: this.productPropertyRedactId,
