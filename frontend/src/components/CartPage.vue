@@ -60,7 +60,6 @@ export default {
                     this.productInCartMass = response.data
                     this.productMass = this.productInCartMass.userProductDtos
                 })
-
                 .catch(err => console.log(err))
             } else {
                 alert("Необходима авторизация!")

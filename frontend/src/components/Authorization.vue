@@ -58,20 +58,27 @@ export default {
         },
         nameOnHeader(response) {
             const token = response.data
+            localStorage.setItem('tokenType', token.tokenType)
+            localStorage.setItem('accessToken', token.accessToken)
+            localStorage.setItem('refreshToken', token.refreshToken)
             this.setTokenType(token.tokenType)
             this.setAccessToken(token.accessToken)
             this.setRefreshToken(token.refreshToken)
             const [ , payloadBase64] = this.accessToken.split('.')
             const payload = JSON.parse(atob(payloadBase64))
+            localStorage.setItem('userName', payload.username + ' ' + payload.usersurname[0] +'.')
             this.setUserName(payload.username + ' ' + payload.usersurname[0] +'.') //сейчас в токене лежит id и роль, а так же время распада токена
             if (payload.roles.includes('ADMIN')) {
+                localStorage.setItem('userName', 'ADMIN')
                 this.setUserName('ADMIN')
             }
+            localStorage.setItem('userRole', payload.roles)
             this.setUserRole(payload.roles)
             this.$router.push({name: 'catalog'})
             axiosInstance.get("/cart", {
                 headers: {
-                    Authorization: `Bearer ${response.data.accessToken}` // Передаем токен в заголовке запроса
+                    //Authorization: `${token.tokenType} ${response.data.accessToken}` // Передаем токен в заголовке запроса
+                    Authorization: `${localStorage.getItem('tokenType')} ${localStorage.getItem('accessToken')}` // Передаем токен в заголовке запроса
                 }
             })
             .then(res => { 

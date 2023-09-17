@@ -69,6 +69,24 @@ export default {
     components: {
         CategoryCard
     },
+    mounted(){
+        if (localStorage.getItem('userName')) {
+            this.setTokenType(localStorage.getItem('tokenType'))
+            this.setAccessToken(localStorage.getItem('accessToken'))
+            this.setRefreshToken(localStorage.getItem('refreshToken'))
+            this.setUserName(localStorage.getItem('userName'))
+            this.setUserRole(localStorage.getItem('userRole'))
+            axiosInstance.get("/cart", {
+                headers: {
+                    Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
+                }
+            })
+            .then(response => { 
+                this.addCart(response.data.count)
+            })
+            .catch(err => console.log(err))
+        }
+    },
     methods: {
         clickOnAutorization() {
             if(this.isModalCategoryList) {
@@ -96,6 +114,7 @@ export default {
             this.removeRefreshToken()
             this.removeTokenType()
             this.nullCart()
+            localStorage.clear()
         },
         clickOnCart() {
             if (this.accessToken) {
@@ -114,6 +133,9 @@ export default {
                 }
             })
         },
+        ...mapActions('cart', [
+            'addCart',
+        ]),
         ...mapActions('navbar', [
             'changeIsModalCategoryList',
             'setNameBySubcategory'
@@ -124,6 +146,11 @@ export default {
             'removeUserRole',
             'removeRefreshToken',
             'removeTokenType',
+            'setTokenType',
+            'setUserName',
+            'setUserRole',
+            'setAccessToken',
+            'setRefreshToken'
         ]),
         ...mapActions('cart', [
             'nullCart'

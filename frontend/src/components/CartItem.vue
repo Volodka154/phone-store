@@ -45,9 +45,6 @@ export default {
             product: this.infoItem
         }
     },
-    mounted() {
-        console.log('product', this.product)
-    },
     updated() {
         this.product = this.infoItem
     },
@@ -71,7 +68,6 @@ export default {
                 }
             }).then(() => {this.$emit('update'), this.addCart(1)})
             .catch(err => console.log(err))
-                
         },
         countMinus() {
             axiosInstance.post('/cart/reduceAmount',{
