@@ -27,6 +27,13 @@ export default {
             refresh: '',
         }
     },
+    mounted() {
+        this.removePatInNavBarMass(1)       // зачистка всего в navBar 
+        localStorage.setItem('nameOfCategory', '')
+        localStorage.setItem('nameOfSubcategory', '')
+        this.setNameByCategory('')
+        this.setNameBySubcategory('')
+    },
     methods: {
         ...mapActions('user', [
             'setTokenType',
@@ -39,6 +46,11 @@ export default {
         ...mapActions('cart', [
             'addCart',
             'nullCart'
+        ]),
+        ...mapActions('navbar', [
+            'removePatInNavBarMass',
+            'setNameByCategory',
+            'setNameBySubcategory'
         ]),
         setAuthData() {
             axiosInstance.post('/auth/login', {

@@ -192,6 +192,8 @@ export default {
     },
     mounted(){
         this.removePatInNavBarMass(1)       // зачистка всего в navBar 
+        localStorage.setItem('nameOfCategory', '')
+        localStorage.setItem('nameOfSubcategory', '')
         this.setNameByCategory('')
         this.setNameBySubcategory('')
     },

@@ -106,13 +106,13 @@ export default {
                 // очищаем массив navbar
                 this.removePatInNavBarMass(1)
                 // устанавливаем значение категории
-                this.setNameByCategory(categoryTemp[0].title)
+                localStorage.setItem('nameOfCategory', categoryTemp[0].title)
                 this.addPatInNavBarMass({
                     title: categoryTemp[0].title,
                     path: '/item-list-' + categoryTemp[0].title
                 })
                 // устанавливаем значение подкатегории
-                this.setNameBySubcategory(subcategoryTemp[0].title)
+                localStorage.setItem('nameOfSubcategory', subcategoryTemp[0].title)
                 this.addPatInNavBarMass({
                     title: subcategoryTemp[0].title,
                     path: '/item-list-' + categoryTemp[0].title

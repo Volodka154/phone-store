@@ -49,9 +49,6 @@ export default {
             }
         },
     },
-    updated() {
-        console.log('updated: ', !!this.$store.getters["user/accessToken"])
-    },
     methods: {
         ...mapActions('navbar', [
             'removePatInNavBarMass',

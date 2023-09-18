@@ -42,6 +42,7 @@ export default {
             'setNameBySubcategory'
         ]),
         clickOnCatalogItem(propsCategoryName) {
+            localStorage.setItem('nameOfCategory', propsCategoryName)
             this.setNameByCategory(propsCategoryName)
             this.$router.push({
                 name: 'item-list',
@@ -53,6 +54,8 @@ export default {
     },
     mounted(){
         this.removePatInNavBarMass(1)       // зачистка всего в navBar 
+        localStorage.setItem('nameOfCategory', '')
+        localStorage.setItem('nameOfSubcategory', '')
         this.setNameByCategory('')
         this.setNameBySubcategory('')
     }

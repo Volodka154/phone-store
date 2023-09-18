@@ -78,6 +78,9 @@ export default {
         watchedSubcategory() {
             return this.$store.getters["navbar/nameOfSubcategory"]
         },
+        watchedAllCategoryList() {
+            return this.$store.getters["navbar/allCategoryList"]
+        },
         ...mapGetters('navbar', [
             'allCategoryList',
             'nameOfCategory',
@@ -93,6 +96,9 @@ export default {
             }
         },
         watchedSubcategory() {
+            this.handleCategSubcategChange()
+        },
+        watchedAllCategoryList() {
             this.handleCategSubcategChange()
         }
     }

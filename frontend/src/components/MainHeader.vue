@@ -36,7 +36,10 @@
                 </span>
                 <span class="btn-header"
                       @click="clickOnCart"
-                      >Корзина ({{ countCart }})
+                    >Корзина 
+                    <span v-if="userName"
+                        >({{ countCart }})
+                    </span>
                 </span>
                 <img class="ikon"
                      @click="clickOnCart"
@@ -70,12 +73,7 @@ export default {
         CategoryCard
     },
     mounted(){
-        if (localStorage.getItem('userName')) {
-            /*this.setTokenType(localStorage.getItem('tokenType'))
-            this.setAccessToken(localStorage.getItem('accessToken'))
-            this.setRefreshToken(localStorage.getItem('refreshToken'))
-            this.setUserName(localStorage.getItem('userName'))
-            this.setUserRole(localStorage.getItem('userRole'))*/
+        if (localStorage.getItem('accessToken')) {
             axiosInstance.get("/cart", {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
@@ -146,11 +144,6 @@ export default {
             'removeUserRole',
             'removeRefreshToken',
             'removeTokenType',
-            'setTokenType',
-            'setUserName',
-            'setUserRole',
-            'setAccessToken',
-            'setRefreshToken'
         ]),
         ...mapActions('cart', [
             'nullCart'
@@ -158,6 +151,7 @@ export default {
         movingByNavBar(itemInPath) {
             // это нужно для зануления подкатегории, если мы хотим перейти просто в категорию
             if (this.allCategoryList.findIndex(item => item.title === itemInPath.title) !== -1) {
+                localStorage.setItem('nameOfSubcategory', '')
                 this.setNameBySubcategory('')
             }
             this.$router.push(itemInPath.path)

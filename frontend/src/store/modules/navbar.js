@@ -3,8 +3,8 @@ export default {
     state() {
         return{
             allCategoryList: ['1','2'],
-            nameOfCategory: '',             // название выбранной категории для просмотра и обновления компонента с каталогом 
-            nameOfSubcategory: '',             // название выбранной категории для просмотра и обновления компонента с каталогом 
+            nameOfCategory: localStorage.getItem('nameOfCategory'),             // название выбранной категории для просмотра и обновления компонента с каталогом 
+            nameOfSubcategory: localStorage.getItem('nameOfSubcategory'),             // название выбранной категории для просмотра и обновления компонента с каталогом 
             isModalCategoryList: false,     // модальное окно категорий при клике на "Каталог" в хедере
             pathInNavBarMass: [
                 {

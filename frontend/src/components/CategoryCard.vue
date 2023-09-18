@@ -49,6 +49,8 @@ export default {
         ]),
         clickOnCategory(propsCategoryName) {
             this.changeIsModalCategoryList()
+            localStorage.setItem('nameOfCategory', propsCategoryName)
+            localStorage.setItem('nameOfSubcategory', '')
             this.setNameByCategory(propsCategoryName)
             this.setNameBySubcategory('')
             this.$router.push({
@@ -60,6 +62,8 @@ export default {
         },
         clickOnSubCategory(propsCategoryName, propsSubcategoryName) {
             this.changeIsModalCategoryList()
+            localStorage.setItem('nameOfCategory', propsCategoryName)
+            localStorage.setItem('nameOfSubcategory', propsSubcategoryName)
             this.setNameByCategory(propsCategoryName)
             this.setNameBySubcategory(propsSubcategoryName)
             this.$router.push({
