@@ -71,11 +71,11 @@ export default {
     },
     mounted(){
         if (localStorage.getItem('userName')) {
-            this.setTokenType(localStorage.getItem('tokenType'))
+            /*this.setTokenType(localStorage.getItem('tokenType'))
             this.setAccessToken(localStorage.getItem('accessToken'))
             this.setRefreshToken(localStorage.getItem('refreshToken'))
             this.setUserName(localStorage.getItem('userName'))
-            this.setUserRole(localStorage.getItem('userRole'))
+            this.setUserRole(localStorage.getItem('userRole'))*/
             axiosInstance.get("/cart", {
                 headers: {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса

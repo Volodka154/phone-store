@@ -37,7 +37,20 @@ export default {
         ...mapGetters('user', [
             'tokenType',
             'accessToken'
-        ])
+        ]),
+        computedAuthChecked() {
+            return this.$store.getters["user/accessToken"]
+        }
+    },
+    watch: {
+        computedAuthChecked() {
+            if (!this.$store.getters["user/accessToken"]) {
+                this.$router.push({name: 'catalog'})
+            }
+        },
+    },
+    updated() {
+        console.log('updated: ', !!this.$store.getters["user/accessToken"])
     },
     methods: {
         ...mapActions('navbar', [

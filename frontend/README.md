@@ -12,7 +12,11 @@ user: postgres
 password: postgres
 database: phone_shop_db
 
-После успешного подключения необходимо выполнить в консоли приложения файл ./backend/init_bd.sql
+После успешного подключения заполняем базу:
+открываем консоль внутри IDEA
+вставляем весь код из файла ./backend/init_bd.sql
+нажимаем сочетание клавиш ctrl + A, для того чтобы все выделить
+запускаем консоль (зеленый треугольник в IDEA и dataGrip)
 
 ## установить необходимые зависимости
 ```
@@ -22,11 +26,6 @@ npm install
 ## запустить проект
 ```
 npm run serve
-```
-
-## Compiles and minifies for production
-```
-npm run build
 ```
 
 ### Комментарий

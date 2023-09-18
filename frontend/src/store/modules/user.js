@@ -2,11 +2,11 @@ export default {
     namespaced: true,
     state() {
         return{
-            userName:'',
-            accessToken: '',
-            refreshToken: '',
-            userRole: '',
-            tokenType: ''
+            userName: localStorage.getItem('userName'),
+            accessToken: localStorage.getItem('accessToken'),
+            refreshToken: localStorage.getItem('refreshToken'),
+            userRole: localStorage.getItem('userRole'),
+            tokenType: localStorage.getItem('tokenType')
         }
     },
     getters: {

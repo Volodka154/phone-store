@@ -4,8 +4,15 @@
         <p class="title-finish-cart">Ваш заказ:</p>
         <p class="count">Кол-во товаров: {{ computedCount }}</p>
         <p class="finish">Итого: {{ computedPrice }} руб.</p>
-        <cart-button :isDisabled="false" v-if="!computedCount">Оформить заказ</cart-button>
-        <cart-button v-else @click="doTransaction">Оформить заказ</cart-button>
+        <cart-button v-if="!this.propsCount" 
+                     :isDisabled="true"
+            >Оформить заказ
+        </cart-button>
+        <cart-button v-else 
+                     :isDisabled="false"
+                     @click="doTransaction"
+            >Оформить заказ
+        </cart-button>
     </div>
 </template>
   

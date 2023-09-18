@@ -25,7 +25,6 @@ export default {
             login: null,
             password: null,
             refresh: '',
-            product: []
         }
     },
     methods: {
@@ -38,7 +37,8 @@ export default {
             'setRefreshToken'
         ]),
         ...mapActions('cart', [
-            'addCart'
+            'addCart',
+            'nullCart'
         ]),
         setAuthData() {
             axiosInstance.post('/auth/login', {
@@ -82,8 +82,8 @@ export default {
                 }
             })
             .then(res => { 
-                this.product = res.data.count
-                this.addCart(this.product)
+                this.nullCart()
+                this.addCart(res.data.count)
             })
             .catch(err => console.log(err))            
         }
