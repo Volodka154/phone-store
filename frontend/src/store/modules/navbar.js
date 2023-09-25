@@ -1,36 +1,23 @@
 export default {
     namespaced: true,
-    state() {
-        return{
-            allCategoryList: ['1','2'],
-            nameOfCategory: localStorage.getItem('nameOfCategory'),             // название выбранной категории для просмотра и обновления компонента с каталогом 
-            nameOfSubcategory: localStorage.getItem('nameOfSubcategory'),             // название выбранной категории для просмотра и обновления компонента с каталогом 
-            isModalCategoryList: false,     // модальное окно категорий при клике на "Каталог" в хедере
-            pathInNavBarMass: [
-                {
-                    title: 'Главная',
-                    path: '/catalog'
-                }
-            ],
-            
-        }
-    },
+    state: () => ({
+        allCategoryList: ['1','2'],
+        nameOfCategory: localStorage.getItem('nameOfCategory'),             // название выбранной категории для просмотра и обновления компонента с каталогом 
+        nameOfSubcategory: localStorage.getItem('nameOfSubcategory'),             // название выбранной категории для просмотра и обновления компонента с каталогом 
+        isModalCategoryList: false,     // модальное окно категорий при клике на "Каталог" в хедере
+        pathInNavBarMass: [
+            {
+                title: 'Главная',
+                path: '/catalog'
+            }
+        ],
+    }),
     getters: {
-        allCategoryList(state){
-            return state.allCategoryList
-        },
-        nameOfCategory(state){
-            return state.nameOfCategory
-        },
-        nameOfSubcategory(state){
-            return state.nameOfSubcategory
-        },
-        isModalCategoryList(state){
-            return state.isModalCategoryList
-        },
-        pathInNavBarMass(state){
-            return state.pathInNavBarMass
-        }
+        allCategoryList: state => state.allCategoryList,
+        nameOfCategory: state => state.nameOfCategory,
+        nameOfSubcategory: state => state.nameOfSubcategory,
+        isModalCategoryList: state => state.isModalCategoryList,
+        pathInNavBarMass: state => state.pathInNavBarMass
     },
     mutations: {
         setAllCategoryList(state, payload){

@@ -104,15 +104,10 @@ export default {
                     Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                 }       
             })
-            .then(res =>{console.log(res)})
-            .catch(err => {console.log(err)})
-            this.removeUserName()
-            this.removeAccessToken()
-            this.removeUserRole()
-            this.removeRefreshToken()
-            this.removeTokenType()
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+            this.resetUserState()
             this.nullCart()
-            localStorage.clear()
         },
         clickOnCart() {
             if (this.accessToken) {
@@ -131,23 +126,6 @@ export default {
                 }
             })
         },
-        ...mapActions('cart', [
-            'addCart',
-        ]),
-        ...mapActions('navbar', [
-            'changeIsModalCategoryList',
-            'setNameBySubcategory'
-        ]),
-        ...mapActions('user', [
-            'removeUserName',
-            'removeAccessToken',
-            'removeUserRole',
-            'removeRefreshToken',
-            'removeTokenType',
-        ]),
-        ...mapActions('cart', [
-            'nullCart'
-        ]),
         movingByNavBar(itemInPath) {
             // это нужно для зануления подкатегории, если мы хотим перейти просто в категорию
             if (this.allCategoryList.findIndex(item => item.title === itemInPath.title) !== -1) {
@@ -155,7 +133,18 @@ export default {
                 this.setNameBySubcategory('')
             }
             this.$router.push(itemInPath.path)
-        }
+        },
+        ...mapActions('cart', [
+            'addCart',
+            'nullCart'
+        ]),
+        ...mapActions('navbar', [
+            'changeIsModalCategoryList',
+            'setNameBySubcategory'
+        ]),
+        ...mapActions('user', [
+            'resetUserState'
+        ]),
     },
     computed:{
         ...mapGetters('navbar', [
