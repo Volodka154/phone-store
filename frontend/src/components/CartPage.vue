@@ -11,6 +11,19 @@
         <cart-finish :propsCount="productInCartMass.count"
                      :propsPrice="productInCartMass.fullPrice" 
                      @update="handleMountedCart()"/>
+        <div class="text-center">
+            <v-overlay
+                :model-value="overlay"
+                class="align-center justify-center"
+            >
+                <v-progress-circular
+                    color="#4c8fc8"
+                    indeterminate
+                    size="64"
+                ></v-progress-circular>
+            </v-overlay>
+        </div>
+
     </div>
 </template>
 
@@ -26,6 +39,7 @@ export default {
     },
     data() {
         return {
+            overlay: true,
             productInCartMass: {},
             productMass: []
         }
@@ -66,7 +80,8 @@ export default {
                         Authorization: `${this.tokenType} ${this.accessToken}` // Передаем токен в заголовке запроса
                     }
                 })
-                .then(response => { 
+                .then(response => {
+                    this.overlay = false
                     this.productInCartMass = response.data
                     this.productMass = this.productInCartMass.userProductDtos
                 })

@@ -208,6 +208,7 @@ export default {
                 })
                 // устанавливаем значение подкатегории
                 localStorage.setItem('nameOfSubcategory', subcategoryTemp[0].title)
+                this.setNameBySubcategory(subcategoryTemp[0].title)
                 this.addPatInNavBarMass({
                     title: subcategoryTemp[0].title,
                     path: '/item-list-' + categoryTemp[0].title

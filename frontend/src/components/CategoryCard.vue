@@ -19,7 +19,7 @@
                      v-if="indexShowSubcategories > -1">
                     <h4 v-for="(item,index) in categoryList[indexShowSubcategories].subcategoryDtos" 
                         :key="index"
-                        class="category-card__title"
+                        class="category-card__title cursor-pointer"
                         @click="clickOnSubCategory(categoryList[indexShowSubcategories].title, item.title)"
                         >{{ item.title }}
                     </h4>

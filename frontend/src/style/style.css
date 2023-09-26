@@ -1,11 +1,12 @@
 input {
-    background-color: rgb(238, 238, 238);
-    width: 100%;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1.5px solid;
-    border-color:rgb(97, 97, 97);
-    box-sizing: border-box;
+    background-color: rgb(238, 238, 238) !important;
+    width: 100% !important;
+    padding: 5px !important;
+    margin-top: 5px;
+    border-radius: 5px !important;
+    border: 1.5px solid !important;
+    border-color:rgb(97, 97, 97) !important;
+    box-sizing: border-box !important;
 }
 
 .item-page {
@@ -159,11 +160,10 @@ input {
 }
 
 .ikon {
-    width: 24px;
-    height: 24px;
+    width: 24px !important;
+    height: 24px !important;
     align-self: center;
     cursor: pointer;
-    padding: 10px;
 }
 
 .ikon__menu{
@@ -514,14 +514,18 @@ input {
 
 .category-card{
     text-align: left;
-    padding: 0px 20px;
+    padding: 5px 10px;
     border-radius: 5px;
     border: 1px solid  #b6b6b6;
     background-color: rgba(255, 255, 255, 0.85);
 }
 
 .category-card__title{
+    margin-bottom: 5px;
     color: #000000;
+}
+.category-card__title:last-child{
+    margin-bottom: 0px;
 }
 
 .category-card__title:hover{

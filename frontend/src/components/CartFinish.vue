@@ -2,9 +2,10 @@
 <template>
     <div id="cart-finish">
         <p class="title-finish-cart">Ваш заказ:</p>
-        <p class="count">Кол-во товаров: {{ computedCount }}</p>
-        <p class="finish">Итого: {{ computedPrice }} руб.</p>
+        <p class="count">Кол-во товаров: {{ propsCount }}</p>
+        <p class="finish">Итого: {{ propsPrice }} руб.</p>
         <cart-button 
+            @click="doTransaction"
             :isDisabled="!this.propsCount ? true : false"
             >Оформить заказ
         </cart-button>
@@ -48,16 +49,10 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('user',[
+        ...mapGetters('user', [
             'accessToken',
             'tokenType'
-        ]),
-        computedCount() {
-            return this.propsCount
-        },
-        computedPrice() {
-            return this.propsPrice
-        }
+        ])
     },
 }
 </script>
